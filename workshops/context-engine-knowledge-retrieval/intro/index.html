@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1280">
+<title>Context Engine: Knowledge Indicators</title>
+
+<style>
+@font-face { font-family: 'Space Grotesk'; font-weight: 700; font-style: normal; font-display: swap; src: url('./fonts/SpaceGrotesk/weight-700.woff2') format('woff2'); }
+@font-face { font-family: 'Inter'; font-weight: 400; font-style: normal; font-display: swap; src: url('./fonts/Inter/weight-400.woff2') format('woff2'); }
+@font-face { font-family: 'Inter'; font-weight: 600; font-style: normal; font-display: swap; src: url('./fonts/Inter/weight-600.woff2') format('woff2'); }
+@font-face { font-family: 'Space Mono'; font-weight: 400; font-style: normal; font-display: swap; src: url('./fonts/SpaceMono/weight-400.woff2') format('woff2'); }
+@font-face { font-family: 'Space Mono'; font-weight: 700; font-style: normal; font-display: swap; src: url('./fonts/SpaceMono/weight-700.woff2') format('woff2'); }
+
+:root {
+  --elastic-blue:    #0B64DD;
+  --light-teal:      #48EFCF;
+  --light-poppy:     #FF957D;
+  --pink:            #F04E98;
+  --yellow:          #FEC514;
+  --midnight:        #153385;
+  --developer-blue:  #101C3F;
+  --dark-ink: #1C1E23;
+  --ink:      #343741;
+  --white:    #FFFFFF;
+  --light-grey:  #F5F7FA;
+  --medium-grey: #DCE2EA;
+  --dark-grey:   #ABB4C4;
+  --font-headline: 'Space Grotesk', 'Inter', Arial, sans-serif;
+  --font-body:     'Inter', Arial, sans-serif;
+  --font-code:     'Space Mono', ui-monospace, monospace;
+  --fs-display:  clamp(40px, 5.5vw, 72px);
+  --fs-h1:       clamp(32px, 3.6vw, 48px);
+  --fs-h2:       clamp(24px, 2.4vw, 32px);
+  --fs-h3:       20px;
+  --fs-body:     16px;
+  --fs-small:    14px;
+  --lh-tight: 1.14;
+  --lh-snug:  1.25;
+  --lh-body:  1.55;
+  --s-1:  4px; --s-2:  8px; --s-3:  12px; --s-4:  16px; --s-5:  24px;
+  --s-6:  32px; --s-7:  48px; --s-8:  64px; --s-9:  96px;
+  --r-sm:  6px; --r-md:  8px; --r-lg:  12px;
+  --shadow-md: 0 4px 12px rgba(16, 28, 63, 0.08);
+  --shadow-lg: 0 12px 32px rgba(16, 28, 63, 0.12);
+}
+
+html { box-sizing: border-box; }
+*, *::before, *::after { box-sizing: inherit; }
+body { margin: 0; font-family: var(--font-body); font-size: var(--fs-body); line-height: var(--lh-body); color: var(--ink); background: var(--white); -webkit-font-smoothing: antialiased; }
+html, body { height: 100%; overflow: hidden; }
+body { background: var(--developer-blue); display: flex; flex-direction: column; }
+
+.deck { flex: 1; position: relative; overflow: hidden; }
+
+.slide { position: absolute; inset: 0; display: none; flex-direction: column; padding: clamp(16px, 2.5vh, 40px) clamp(24px, 3vw, 52px); font-size: clamp(15px, 1.4vw, 20px); line-height: var(--lh-body); }
+.slide.active { display: flex; animation: slideIn 200ms ease both; }
+@keyframes slideIn { from { opacity: 0.6; transform: translateX(12px); } to { opacity: 1; transform: none; } }
+
+.slide[data-layout="title"] { background: var(--elastic-blue); color: var(--white); justify-content: center; gap: var(--s-4); }
+.slide[data-layout="problem"] { background: var(--white); color: var(--dark-ink); flex-direction: row; align-items: center; gap: var(--s-7); }
+.slide[data-layout="concept"] { background: var(--white); color: var(--dark-ink); flex-direction: row; align-items: center; gap: var(--s-6); }
+.slide[data-layout="done"] { background: var(--developer-blue); color: var(--white); align-items: center; justify-content: center; gap: var(--s-5); }
+.slide[data-layout="terms"] { background: var(--light-grey); color: var(--dark-ink); flex-direction: row; align-items: center; gap: var(--s-6); }
+
+.slide-title { font-family: var(--font-headline); font-weight: 700; font-size: var(--fs-h1); line-height: var(--lh-tight); margin: 0; }
+.slide-subtitle { font-family: var(--font-body); font-size: var(--fs-h3); font-weight: 400; opacity: 0.85; margin: 0; }
+.track-code { font-family: var(--font-code); font-size: var(--fs-small); letter-spacing: 0.08em; opacity: 0.7; margin: 0; }
+.slide-heading { font-family: var(--font-headline); font-weight: 700; font-size: clamp(18px, 2vw, 28px); line-height: var(--lh-tight); margin: 0 0 var(--s-3); color: var(--elastic-blue); }
+.slide-body { font-size: clamp(15px, 1.4vw, 20px); line-height: var(--lh-body); margin: 0; max-width: 50ch; }
+
+.slide[data-layout="title"] .slide-heading { color: var(--light-teal); }
+.slide[data-layout="done"] .slide-heading { color: var(--light-teal); }
+
+.col-diagram { flex: 0 0 54%; display: flex; align-items: center; justify-content: center; min-width: 0; }
+.col-text    { flex: 1; display: flex; flex-direction: column; justify-content: center; gap: var(--s-3); min-width: 0; }
+.col-left    { flex: 1; display: flex; align-items: center; justify-content: center; min-width: 0; }
+.col-right   { flex: 0 0 42%; display: flex; flex-direction: column; justify-content: center; gap: var(--s-3); min-width: 0; }
+
+.terminal-block { background: var(--developer-blue); color: var(--light-teal); font-family: var(--font-code); font-size: clamp(12px, 1.1vw, 14px); line-height: 1.6; padding: var(--s-5); border-radius: var(--r-md); border: 1.5px solid rgba(72, 239, 207, 0.3); white-space: pre; overflow: auto; width: 100%; }
+.terminal-block .wrong { color: var(--light-poppy); }
+.terminal-block .dim   { color: var(--dark-grey); font-size: 11px; }
+
+.stat-row { display: flex; gap: var(--s-6); margin-top: var(--s-4); }
+.stat-item { display: flex; flex-direction: column; align-items: flex-start; gap: 2px; }
+.stat-number { font-family: var(--font-code); font-weight: 700; font-size: clamp(22px, 2.6vw, 36px); color: var(--elastic-blue); line-height: 1; }
+.stat-label  { font-size: var(--fs-small); color: var(--dark-grey); }
+
+.arch-flow { display: flex; flex-direction: column; gap: var(--s-3); width: 100%; max-width: 340px; }
+.arch-box { background: var(--white); border: 2px solid var(--medium-grey); border-radius: var(--r-md); padding: var(--s-3) var(--s-4); font-size: var(--fs-small); font-family: var(--font-body); color: var(--ink); }
+.arch-box.highlight { border-color: var(--elastic-blue); background: rgba(11, 100, 221, 0.05); font-weight: 600; color: var(--elastic-blue); }
+.arch-arrow { text-align: center; color: var(--dark-grey); font-size: 18px; line-height: 1; }
+
+.kv-table { border-collapse: collapse; width: 100%; font-size: clamp(14px, 1.3vw, 17px); }
+.kv-table td { padding: var(--s-3) var(--s-4); border-bottom: 1px solid var(--medium-grey); vertical-align: top; }
+.kv-table td:first-child { font-family: var(--font-code); font-size: 0.9em; color: var(--elastic-blue); white-space: nowrap; font-weight: 700; width: 38%; }
+.kv-table tr:last-child td { border-bottom: none; }
+
+.lab-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: var(--s-3); max-width: 640px; }
+.lab-list li { display: flex; align-items: baseline; gap: var(--s-3); font-size: clamp(16px, 1.5vw, 22px); }
+.lab-num { font-family: var(--font-code); font-weight: 700; color: var(--light-teal); flex-shrink: 0; min-width: 28px; }
+
+.cost-pill { display: inline-block; font-family: var(--font-code); font-size: var(--fs-small); padding: 2px 10px; border-radius: 999px; background: rgba(72, 239, 207, 0.15); color: var(--light-teal); border: 1px solid rgba(72, 239, 207, 0.4); margin-top: var(--s-2); }
+
+.elastic-logo { position: absolute; bottom: var(--s-5); right: var(--s-6); width: 100px; opacity: 0.85; }
+
+#nav-bar { background: var(--developer-blue); color: var(--white); display: flex; align-items: center; justify-content: space-between; padding: var(--s-2) var(--s-6); flex-shrink: 0; border-top: 1px solid rgba(255,255,255,0.1); }
+#nav-bar button { background: transparent; color: var(--white); border: 1px solid rgba(255,255,255,0.25); border-radius: var(--r-sm); padding: 4px 14px; font-family: var(--font-body); font-size: var(--fs-small); cursor: pointer; transition: background 120ms; }
+#nav-bar button:hover { background: rgba(255,255,255,0.1); }
+#nav-bar button:disabled { opacity: 0.3; cursor: default; }
+#slide-counter { font-family: var(--font-code); font-size: var(--fs-small); opacity: 0.7; }
+
+#overview { display: none; position: fixed; inset: 0; background: rgba(16,28,63,0.96); z-index: 100; overflow-y: auto; padding: var(--s-6); }
+#overview.open { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: var(--s-4); }
+.overview-thumb { background: var(--white); border-radius: var(--r-sm); padding: var(--s-3); cursor: pointer; font-size: 11px; border: 2px solid transparent; transition: border-color 120ms; aspect-ratio: 16/9; display: flex; flex-direction: column; overflow: hidden; }
+.overview-thumb:hover, .overview-thumb.current { border-color: var(--light-teal); }
+.overview-num { font-family: var(--font-code); font-size: 10px; color: var(--dark-grey); margin-bottom: 4px; }
+</style>
+</head>
+<body>
+
+<div class="deck" id="deck">
+
+<!-- Slide 1: Title -->
+<section class="slide" data-layout="title" data-index="0">
+  <p class="track-code">Context Engine Fundamentals</p>
+  <h1 class="slide-title">Accurate Results from Any Agent<br>at Lower Cost</h1>
+  <p class="slide-subtitle">Learn how Knowledge Indicators eliminate the discovery tax, fix interpretation failures, and give every agent shared, governed context.</p>
+  <div style="margin-top:auto;padding:10px 16px;background:rgba(255,255,255,0.12);border-radius:8px;border:1px solid rgba(255,255,255,0.25);font-size:13px;display:flex;align-items:center;gap:10px;max-width:420px;">
+    <span style="font-size:18px;">&#8592;</span>
+    <span><strong>Tip:</strong> Select <strong>Hide Instructions</strong> in the top bar to give these slides full width.</span>
+  </div>
+  <img class="elastic-logo" alt="Elastic" src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjgwIiBoZWlnaHQ9IjI4MCIgdmlld0JveD0iMCAwIDI4MCAyODAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxwYXRoIGQ9Ik0yMjAgMTQzLjQ5NEMyMjAuMDE0IDEzNy4wMDIgMjE4LjAyIDEzMC42NjQgMjE0LjI5MSAxMjUuMzQ4QzIxMC41NjMgMTIwLjAzMyAyMDUuMjgyIDExNiAxOTkuMTczIDExMy44MDJDMTk5LjczMSAxMTAuOTcgMjAwLjAxMiAxMDguMDkgMjAwLjAxNCAxMDUuMjA0QzIwMC4wMTYgOTUuNjQ2NiAxOTYuOTg5IDg2LjMzNDUgMTkxLjM2NyA3OC42MDZDMTg1Ljc0NCA3MC44Nzc0IDE3Ny44MTYgNjUuMTMwNCAxNjguNzIzIDYyLjE5MDhDMTU5LjYyOSA1OS4yNTExIDE0OS44MzcgNTkuMjcwMyAxNDAuNzU0IDYyLjI0NTZDMTMxLjY3MiA2NS4yMjA4IDEyMy43NjcgNzAuOTk4OSAxMTguMTc1IDc4Ljc0OTVDMTE0LjA1MSA3NS41NTUzIDEwOC45OTkgNzMuNzkxOSAxMDMuNzgzIDczLjcyNjRDOTguNTY2OSA3My42NjA5IDkzLjQ3MTkgNzUuMjk2OCA4OS4yNjkxIDc4LjM4NjRDODUuMDY2NCA4MS40NzYxIDgxLjk4NSA4NS44NTExIDgwLjQ5MTUgOTAuODQ5Qzc4Ljk5OCA5NS44NDY4IDc5LjE3MzggMTAxLjE5NSA4MC45OTI0IDEwNi4wODRDNzQuODY2NyAxMDguMzEzIDY5LjU3MSAxMTIuMzY1IDY1LjgxNzkgMTE3LjY5NUM2Mi4wNjQ3IDEyMy4wMjUgNjAuMDM0NCAxMjkuMzc2IDYwLjAwMDIgMTM1Ljg5NEM1OS45Nzk2IDE0Mi40MTMgNjEuOTgwNSAxNDguNzc4IDY1LjcyNzMgMTU0LjExM0M2OS40NzQxIDE1OS40NDcgNzQuNzgyNSAxNjMuNDg5IDgwLjkyMTYgMTY1LjY4MUM4MC4zODk2IDE2OC41MTQgODAuMTI2NCAxNzEuMzkgODAuMTM1NyAxNzQuMjcxQzgwLjExODYgMTgzLjgyNiA4My4xMzg5IDE5My4xMzkgODguNzYwMyAyMDAuODY2Qzk0LjM4MTggMjA4LjU5MiAxMDIuMzEzIDIxNC4zMzEgMTExLjQxIDIxNy4yNTVDMTIwLjUwNiAyMjAuMTc5IDEzMC4yOTcgMjIwLjEzNyAxMzkuMzY3IDIxNy4xMzNDMTQ4LjQzOCAyMTQuMTI5IDE1Ni4zMTkgMjA4LjMyIDE2MS44NzMgMjAwLjU0NUMxNjUuOTg0IDIwMy43NTMgMTcxLjAzIDIwNS41MzMgMTc2LjI0NSAyMDUuNjEzQzE4MS40NiAyMDUuNjkzIDE4Ni41NTggMjA0LjA3IDE5MC43NjcgMjAwLjk4OUMxOTQuOTc1IDE5Ny45MDkgMTk4LjA2NCAxOTMuNTQgMTk5LjU2NCAxODguNTQ1QzIwMS4wNjQgMTgzLjU1IDIwMC44OTQgMTc4LjIwMiAxOTkuMDc4IDE3My4zMTNDMjA1LjE5MiAxNzEuMDcyIDIxMC40NzQgMTY3LjAxMyAyMTQuMjEzIDE2MS42ODNDMjE3Ljk1MyAxNTYuMzUzIDIxOS45NzMgMTUwLjAwNiAyMjAgMTQzLjQ5NFoiIGZpbGw9IndoaXRlIj48L3BhdGg+Cjwvc3ZnPg=="/>
+</section>
+
+<!-- Slide 2: The Problem -->
+<section class="slide" data-layout="problem" data-index="1">
+  <div class="col-diagram">
+    <div class="terminal-block">list_indices            → 40+ candidates
+get_mapping × 4        → which field is case number?
+execute_esql × 6       → cases, feeds, issues, comments
+<span class="wrong">  ↳ 2 failures: unknown column, unknown index</span>
+reconcile conflicting results
+Answer
+
+<span class="dim">236,825 input tokens · 123s · factuality 0.49
+76.7% of trials hit ≥1 tool failure</span></div>
+  </div>
+  <div class="col-text">
+    <h2 class="slide-heading">Three costs on every query</h2>
+    <div style="display:flex;flex-direction:column;gap:var(--s-4);">
+      <div>
+        <div style="font-weight:600;font-size:var(--fs-small);text-transform:uppercase;letter-spacing:.06em;color:var(--elastic-blue);margin-bottom:4px;">01 — Discovery cost</div>
+        <p class="slide-body" style="font-size:var(--fs-small);">Agents re-probe what data exists, what fields mean, and how sources relate — on every query, even when nothing changed.</p>
+      </div>
+      <div>
+        <div style="font-weight:600;font-size:var(--fs-small);text-transform:uppercase;letter-spacing:.06em;color:var(--elastic-blue);margin-bottom:4px;">02 — Interpretation failures</div>
+        <p class="slide-body" style="font-size:var(--fs-small);">Without business context, agents guess. Does <code style="font-family:var(--font-code);font-size:.88em;background:rgba(11,100,221,.08);padding:1px 5px;border-radius:3px;">arr</code> mean annual recurring revenue or array length? Wrong inference, wrong answer.</p>
+      </div>
+      <div>
+        <div style="font-weight:600;font-size:var(--fs-small);text-transform:uppercase;letter-spacing:.06em;color:var(--elastic-blue);margin-bottom:4px;">03 — Knowledge silos</div>
+        <p class="slide-body" style="font-size:var(--fs-small);">What one agent learns never improves another. Quality doesn't compound, costs don't fall.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Slide 3: Design principle -->
+<section class="slide" data-layout="concept" data-index="2">
+  <div class="col-left">
+    <div style="max-width:380px;text-align:center;">
+      <div style="font-size:clamp(28px,4vw,52px);font-family:var(--font-headline);font-weight:700;color:var(--elastic-blue);line-height:1.2;margin-bottom:var(--s-5);">Precompute the durable.<br>Keep the volatile live.</div>
+      <div style="font-size:var(--fs-small);color:var(--dark-grey);font-style:italic;">Don't make your agent wander the whole library — hand it the card catalog.</div>
+    </div>
+  </div>
+  <div class="col-right">
+    <h2 class="slide-heading">The design principle</h2>
+    <div style="display:flex;flex-direction:column;gap:var(--s-3);">
+      <div style="display:flex;gap:var(--s-3);align-items:flex-start;">
+        <div style="flex-shrink:0;width:8px;height:8px;border-radius:50%;background:var(--elastic-blue);margin-top:6px;"></div>
+        <p class="slide-body" style="font-size:var(--fs-small);">Schema definitions, field meanings, index routing — these are stable. Compute them once.</p>
+      </div>
+      <div style="display:flex;gap:var(--s-3);align-items:flex-start;">
+        <div style="flex-shrink:0;width:8px;height:8px;border-radius:50%;background:var(--elastic-blue);margin-top:6px;"></div>
+        <p class="slide-body" style="font-size:var(--fs-small);">Live data stays live — agents query sources directly using the patterns KIs provide.</p>
+      </div>
+      <div style="display:flex;gap:var(--s-3);align-items:flex-start;">
+        <div style="flex-shrink:0;width:8px;height:8px;border-radius:50%;background:var(--elastic-blue);margin-top:6px;"></div>
+        <p class="slide-body" style="font-size:var(--fs-small);">Build context once, reuse on every query. Quality compounds as KIs improve.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Slide 4: Context Engine architecture + results -->
+<section class="slide" data-layout="concept" data-index="3">
+  <div class="col-left">
+    <div class="arch-flow">
+      <div class="arch-box" style="background:var(--light-grey);color:var(--ink);">
+        <strong>Sources</strong><br>
+        <span style="font-size:var(--fs-small);color:var(--dark-grey);">ES indices · Connectors (Drive, SharePoint…)</span>
+      </div>
+      <div class="arch-arrow">↓</div>
+      <div class="arch-box" style="background:var(--light-grey);color:var(--ink);">
+        <strong>Automations</strong><br>
+        <span style="font-size:var(--fs-small);color:var(--dark-grey);">Specialized agent + workflow · scheduled or triggered</span>
+      </div>
+      <div class="arch-arrow">↓</div>
+      <div class="arch-box highlight">
+        <strong>AI Index</strong><br>
+        <span style="font-size:var(--fs-small);">Knowledge Indicators · queried via ES|QL</span>
+      </div>
+      <div class="arch-arrow">↓</div>
+      <div class="arch-box" style="background:var(--light-grey);color:var(--ink);">
+        <strong>Agents</strong><br>
+        <span style="font-size:var(--fs-small);color:var(--dark-grey);">Agent Builder · Claude · LangChain · any harness</span>
+      </div>
+    </div>
+  </div>
+  <div class="col-right">
+    <h2 class="slide-heading">The Context Engine</h2>
+    <p class="slide-body" style="font-size:var(--fs-small);">A continuously optimizing knowledge layer between your data and any agent. Sources feed Automations that extract Knowledge Indicators into an AI Index. Agents retrieve KIs instead of probing raw data.</p>
+    <div class="stat-row" style="margin-top:var(--s-5);">
+      <div class="stat-item">
+        <div class="stat-number" style="color:var(--elastic-blue);">▼58%</div>
+        <div class="stat-label">input tokens</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number" style="color:var(--elastic-blue);">▼40%</div>
+        <div class="stat-label">latency</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number" style="color:var(--elastic-blue);">▼63%</div>
+        <div class="stat-label">tool failures</div>
+      </div>
+    </div>
+    <p style="font-size:11px;color:var(--dark-grey);margin-top:var(--s-3);">Measured on RCA agent benchmark vs. baseline</p>
+  </div>
+</section>
+
+<!-- Slide 5: What you'll build -->
+<section class="slide" data-layout="done" data-index="4">
+  <h2 class="slide-heading">What you'll build today</h2>
+  <ul class="lab-list">
+    <li><span class="lab-num">Lab 1</span><span>Watch an agent search blind — measure the discovery tax</span></li>
+    <li><span class="lab-num">Lab 2</span><span>Create an AI Index and generate routing KIs with Suggest Automation</span></li>
+    <li><span class="lab-num">Lab 3</span><span>Extract per-document fact KIs from your corpus</span></li>
+    <li><span class="lab-num">Lab 4</span><span>Measure token savings with and without KIs</span></li>
+    <li><span class="lab-num">Lab 5</span><span>Load your KI skill into Kibana Agent Builder</span></li>
+  </ul>
+</section>
+
+<!-- Slide 6: Key terms -->
+<section class="slide" data-layout="terms" data-index="5">
+  <div class="col-left" style="flex-direction:column;align-items:flex-start;justify-content:center;gap:var(--s-4);">
+    <h2 class="slide-heading">Key Terms</h2>
+    <p class="slide-body" style="font-size:var(--fs-small);color:var(--dark-grey);">You'll see these throughout the labs.</p>
+  </div>
+  <div class="col-right" style="flex:1;">
+    <table class="kv-table">
+      <tbody>
+        <tr><td>AI Index</td><td>An Elasticsearch index (named <code style="font-family:var(--font-code);font-size:.88em;background:rgba(11,100,221,.08);padding:1px 4px;border-radius:3px;">ai-index-idx-*</code>) that stores pre-computed Knowledge Indicators. Created via the Context Engine UI.</td></tr>
+        <tr><td>KI</td><td>Knowledge Indicator — a document in the AI Index containing pre-computed context: routing profiles, per-document summaries, or atomic facts.</td></tr>
+        <tr><td>Suggest Automation</td><td>The built-in Context Engine feature that uses an AI agent to analyze your source and generate a KI automation automatically.</td></tr>
+        <tr><td>ES|QL</td><td>Elasticsearch's pipe-based query language. Agents use it to retrieve KIs and search source data. Supports FORK + FUSE for hybrid retrieval.</td></tr>
+        <tr><td>Agent Skill</td><td>A portable <code style="font-family:var(--font-code);font-size:.88em;background:rgba(11,100,221,.08);padding:1px 4px;border-radius:3px;">SKILL.md</code> file — instructions plus allowed-tools list — any compatible agent harness can load.</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+</div><!-- /deck -->
+
+<div id="nav-bar">
+  <button id="btn-prev">&#8592; Prev</button>
+  <span id="slide-counter">1 / 6</span>
+  <button id="btn-next">Next &#8594;</button>
+</div>
+
+<div id="overview"></div>
+
+<script>
+(function () {
+  'use strict';
+  var slides, current, stepIndex, steps;
+
+  function init() {
+    slides = Array.from(document.querySelectorAll('.deck > section[data-index]'));
+    if (!slides.length) return;
+    var hash = window.location.hash.replace('#/', '');
+    current = (parseInt(hash, 10) - 1) || 0;
+    current = Math.max(0, Math.min(current, slides.length - 1));
+    goTo(current, true);
+    buildOverview();
+    document.addEventListener('keydown', onKey);
+    document.getElementById('btn-prev').addEventListener('click', prev);
+    document.getElementById('btn-next').addEventListener('click', next);
+  }
+
+  function goTo(idx, skipReveal) {
+    slides.forEach(function (s) { s.classList.remove('active'); });
+    current = Math.max(0, Math.min(idx, slides.length - 1));
+    slides[current].classList.add('active');
+    steps = Array.from(slides[current].querySelectorAll('.step'));
+    stepIndex = skipReveal ? steps.length : 0;
+    steps.forEach(function (s) { s.classList.toggle('visible', !!skipReveal); });
+    updateNav();
+    history.replaceState(null, '', '#/' + (current + 1));
+    updateOverviewCurrent();
+  }
+
+  function next() {
+    if (stepIndex < steps.length) { steps[stepIndex].classList.add('visible'); stepIndex++; return; }
+    if (current < slides.length - 1) goTo(current + 1);
+  }
+
+  function prev() { if (current > 0) goTo(current - 1); }
+
+  function onKey(e) {
+    if (document.getElementById('overview').classList.contains('open')) {
+      if (e.key === 'Escape' || e.key === 'o') { document.getElementById('overview').classList.remove('open'); }
+      return;
+    }
+    switch (e.key) {
+      case 'ArrowRight': case 'ArrowDown': case ' ': e.preventDefault(); next(); break;
+      case 'ArrowLeft':  case 'ArrowUp':            e.preventDefault(); prev(); break;
+      case 'o': document.getElementById('overview').classList.toggle('open'); updateOverviewCurrent(); break;
+    }
+  }
+
+  function updateNav() {
+    document.getElementById('btn-prev').disabled = current === 0;
+    document.getElementById('btn-next').disabled = current === slides.length - 1 && stepIndex >= steps.length;
+    document.getElementById('slide-counter').textContent = (current + 1) + ' / ' + slides.length;
+  }
+
+  function buildOverview() {
+    var grid = document.getElementById('overview');
+    slides.forEach(function (slide, i) {
+      var thumb = document.createElement('div');
+      thumb.className = 'overview-thumb';
+      var num = document.createElement('div'); num.className = 'overview-num'; num.textContent = i + 1;
+      var title = slide.querySelector('.slide-title, .slide-heading, h2, h3');
+      var label = document.createElement('div');
+      label.textContent = title ? title.textContent.slice(0, 60) : '';
+      label.style.cssText = 'font-size:11px;color:#343741;';
+      thumb.appendChild(num); thumb.appendChild(label);
+      thumb.addEventListener('click', function () { goTo(i); document.getElementById('overview').classList.remove('open'); });
+      grid.appendChild(thumb);
+    });
+  }
+
+  function updateOverviewCurrent() {
+    document.querySelectorAll('.overview-thumb').forEach(function (t, i) { t.classList.toggle('current', i === current); });
+  }
+
+  document.addEventListener('DOMContentLoaded', init);
+}());
+</script>
+</body>
+</html>
