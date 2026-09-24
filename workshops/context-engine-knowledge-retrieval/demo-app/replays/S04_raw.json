@@ -1,0 +1,19 @@
+{
+  "scenario": "S04",
+  "mode": "raw",
+  "source": "replay",
+  "answer_markdown": "## Knowledge Base Coverage of Top Support Categories\n\nAfter exploring the `precision-kb-articles` index, I found partial coverage of the top ticket categories. The KB index stores articles with `category` and `tags` fields, but cross-referencing with ticket volumes required multiple attempts.\n\n**Top ticket categories and KB article counts found:**\n\n| Category | Ticket Count | KB Articles |\n|---|---|---|\n| Integration | 847 | 12 articles |\n| Performance | 612 | 4 articles |\n| Billing | 521 | 8 articles |\n| API | 389 | 19 articles |\n| Data quality | 298 | 3 articles |\n\n**Observations:**\n\nThe API category is relatively well-documented (19 articles) despite lower ticket volume, suggesting good self-service coverage. Data quality is the most under-documented category — only 3 articles for 298 tickets. Integration articles exist but may not cover the specific connector failures driving the high ticket volume.\n\n*Note: The KB index does not have a full-text search field — querying required filtering by `category` and `tags` fields separately. Several query attempts failed before the correct field structure was identified.*",
+  "turns": [
+    {"n": 1, "tool": "list_indices", "summary": "Discovering available indices", "input": "", "cumulative_input_tokens": 3900, "tokens_estimated": false},
+    {"n": 2, "tool": "get_mapping", "summary": "Reading schema for precision-support-tickets", "input": "precision-support-tickets", "cumulative_input_tokens": 8400, "tokens_estimated": false},
+    {"n": 3, "tool": "get_mapping", "summary": "Reading schema for precision-kb-articles", "input": "precision-kb-articles", "cumulative_input_tokens": 14200, "tokens_estimated": false},
+    {"n": 4, "tool": "execute_esql", "summary": "Getting top ticket categories by volume", "input": "FROM precision-support-tickets | STATS count = COUNT(*) BY category | SORT count DESC | LIMIT 5", "cumulative_input_tokens": 19600, "tokens_estimated": false},
+    {"n": 5, "tool": "execute_esql", "summary": "Searching KB by text match — failed (no text field)", "input": "FROM precision-kb-articles | WHERE content MATCH \"integration\" | STATS count = COUNT(*)", "cumulative_input_tokens": 23100, "tokens_estimated": false},
+    {"n": 6, "tool": "execute_esql", "summary": "Counting KB articles by category field", "input": "FROM precision-kb-articles | STATS count = COUNT(*) BY category | SORT count DESC", "cumulative_input_tokens": 27300, "tokens_estimated": false},
+    {"n": 7, "tool": "execute_esql", "summary": "Filtering KB articles for integration category", "input": "FROM precision-kb-articles | WHERE category == \"integration\" | KEEP title, tags | LIMIT 10", "cumulative_input_tokens": 31800, "tokens_estimated": false},
+    {"n": 8, "tool": "execute_esql", "summary": "Filtering KB articles for billing category", "input": "FROM precision-kb-articles | WHERE category == \"billing\" | KEEP title, tags | LIMIT 10", "cumulative_input_tokens": 36200, "tokens_estimated": false},
+    {"n": 9, "tool": "execute_esql", "summary": "Searching KB by tags for performance issues", "input": "FROM precision-kb-articles | WHERE tags LIKE \"*performance*\" | KEEP title, category, tags | LIMIT 10", "cumulative_input_tokens": 40100, "tokens_estimated": false},
+    {"n": 10, "tool": "execute_esql", "summary": "Getting full KB coverage summary across all categories", "input": "FROM precision-kb-articles | STATS count = COUNT(*) BY category | SORT count DESC | LIMIT 10", "cumulative_input_tokens": 43500, "tokens_estimated": false}
+  ],
+  "metrics": {"turns": 6, "tool_calls": 10, "input_tokens": 43500, "seconds": 61.4, "tokens_estimated": false}
+}

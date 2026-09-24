@@ -1,0 +1,17 @@
+{
+  "scenario": "S01",
+  "mode": "raw",
+  "source": "replay",
+  "answer_markdown": "## Enterprise Churn Risk Analysis\n\nAfter searching the available indices, I found four Enterprise accounts with the highest churn risk scores:\n\n| Account | Churn Risk | ARR |\n|---|---|---|\n| Apex Dynamics | 0.87 | $420,000 |\n| Meridian Corp | 0.84 | $385,000 |\n| Sterling Global | 0.82 | $510,000 |\n| Vantage Systems | 0.79 | $295,000 |\n\n**What they're calling about:**\n\nAcross these four accounts, their support tickets fall into three dominant categories:\n\n- **Billing** (34%) — disputes and invoicing questions, especially around usage-based charges\n- **Integration** (28%) — API connectivity issues and third-party connector failures\n- **Data quality** (21%) — ingestion errors, schema mismatches, and missing records\n\nApex Dynamics alone has 7 open tickets, six of which are billing or integration related. Meridian Corp's tickets skew heavily toward data quality — they appear to be mid-migration to a new data pipeline.\n\n**Note:** The agent required multiple index discovery calls before locating the relevant fields (`churn_risk`, `account_tier`) in `precision-crm-accounts` and needed an additional join step to cross-reference ticket categories via `account_id` in `precision-support-tickets`.",
+  "turns": [
+    {"n": 1, "tool": "list_indices", "summary": "Discovering available Elasticsearch indices", "input": "", "cumulative_input_tokens": 3800, "tokens_estimated": false},
+    {"n": 2, "tool": "get_mapping", "summary": "Reading schema for precision-crm-accounts", "input": "precision-crm-accounts", "cumulative_input_tokens": 9200, "tokens_estimated": false},
+    {"n": 3, "tool": "get_mapping", "summary": "Reading schema for precision-support-tickets", "input": "precision-support-tickets", "cumulative_input_tokens": 17400, "tokens_estimated": false},
+    {"n": 4, "tool": "execute_esql", "summary": "Ranking all accounts by churn_risk", "input": "FROM precision-crm-accounts | SORT churn_risk DESC | LIMIT 20", "cumulative_input_tokens": 21800, "tokens_estimated": false},
+    {"n": 5, "tool": "execute_esql", "summary": "Filtering to Enterprise tier only", "input": "FROM precision-crm-accounts | WHERE account_tier == \"Enterprise\" | SORT churn_risk DESC | LIMIT 10", "cumulative_input_tokens": 24100, "tokens_estimated": false},
+    {"n": 6, "tool": "execute_esql", "summary": "Joining tickets via account_id", "input": "FROM precision-support-tickets | WHERE account_id IN (\"ACC-0042\", \"ACC-0117\", \"ACC-0231\", \"ACC-0089\") | STATS count = COUNT(*) BY category", "cumulative_input_tokens": 28600, "tokens_estimated": false},
+    {"n": 7, "tool": "execute_esql", "summary": "Getting category breakdown per account", "input": "FROM precision-support-tickets | WHERE account_id IN (\"ACC-0042\", \"ACC-0117\", \"ACC-0231\", \"ACC-0089\") | STATS count = COUNT(*) BY account_id, category | SORT account_id, count DESC", "cumulative_input_tokens": 33100, "tokens_estimated": false},
+    {"n": 8, "tool": "execute_esql", "summary": "Ranking top categories for top-risk accounts", "input": "FROM precision-support-tickets | WHERE account_id IN (\"ACC-0042\", \"ACC-0117\", \"ACC-0231\", \"ACC-0089\") | STATS count = COUNT(*) BY category | SORT count DESC | LIMIT 5", "cumulative_input_tokens": 36200, "tokens_estimated": false}
+  ],
+  "metrics": {"turns": 5, "tool_calls": 8, "input_tokens": 36200, "seconds": 52.3, "tokens_estimated": false}
+}

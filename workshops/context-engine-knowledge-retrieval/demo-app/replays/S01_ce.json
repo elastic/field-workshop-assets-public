@@ -1,0 +1,12 @@
+{
+  "scenario": "S01",
+  "mode": "ce",
+  "source": "replay",
+  "answer_markdown": "## Enterprise Churn Risk Analysis\n\nThe four Enterprise accounts with the highest churn risk are:\n\n| Account | Churn Risk | ARR | Top Support Category |\n|---|---|---|---|\n| Apex Dynamics | 0.87 | $420,000 | Billing (7 tickets) |\n| Meridian Corp | 0.84 | $385,000 | Data quality (5 tickets) |\n| Sterling Global | 0.82 | $510,000 | Integration (6 tickets) |\n| Vantage Systems | 0.79 | $295,000 | Integration (4 tickets) |\n\n**Top categories across all four accounts:**\n\n- **Billing** — 34% of tickets\n- **Integration** — 28% of tickets  \n- **Data quality** — 21% of tickets\n\nApex Dynamics is the highest-risk account with 7 open tickets, primarily billing disputes tied to usage-based overage charges. Meridian Corp's data quality issues suggest an ongoing migration. Both Sterling Global and Vantage Systems are experiencing API connectivity failures classified under integration.",
+  "turns": [
+    {"n": 1, "tool": "query_ki", "summary": "Retrieving routing KIs for CRM accounts and support tickets", "input": "Enterprise accounts churn risk support ticket categories", "cumulative_input_tokens": 5200, "tokens_estimated": false},
+    {"n": 2, "tool": "execute_esql", "summary": "Querying Enterprise accounts ranked by churn risk", "input": "FROM precision-crm-accounts | WHERE account_tier == \"Enterprise\" | SORT churn_risk DESC | LIMIT 10 | KEEP account_id, company_name, churn_risk, arr", "cumulative_input_tokens": 8900, "tokens_estimated": false},
+    {"n": 3, "tool": "execute_esql", "summary": "Getting ticket categories for high-risk accounts", "input": "FROM precision-support-tickets | WHERE account_id IN (\"ACC-0042\", \"ACC-0117\", \"ACC-0231\", \"ACC-0089\") | STATS count = COUNT(*) BY category | SORT count DESC", "cumulative_input_tokens": 11400, "tokens_estimated": false}
+  ],
+  "metrics": {"turns": 2, "tool_calls": 3, "input_tokens": 11400, "seconds": 18.7, "tokens_estimated": false}
+}

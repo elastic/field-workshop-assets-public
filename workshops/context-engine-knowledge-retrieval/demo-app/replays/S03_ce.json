@@ -1,0 +1,13 @@
+{
+  "scenario": "S03",
+  "mode": "ce",
+  "source": "replay",
+  "answer_markdown": "## Accounts with Open P1 Tickets and High Churn Risk\n\nFour accounts have both high churn risk and open P1 tickets right now:\n\n| Account | Churn Risk | Open P1 Tickets |\n|---|---|---|\n| Apex Dynamics | 0.87 | 3 |\n| Meridian Corp | 0.84 | 2 |\n| Pinnacle Industries | 0.78 | 4 |\n| Quantum Logistics | 0.76 | 1 |\n\n**Immediate action recommended:** Apex Dynamics and Pinnacle Industries are highest priority — Apex has the highest churn risk score while Pinnacle has the most unresolved P1 incidents. Escalate both to CSM attention today. Meridian Corp's data migration issues (source of their P1 tickets) are likely directly contributing to their elevated churn risk.",
+  "turns": [
+    {"n": 1, "tool": "query_ki", "summary": "Retrieving routing KIs for CRM accounts and support tickets", "input": "accounts open P1 tickets high churn risk correlation", "cumulative_input_tokens": 5400, "tokens_estimated": false},
+    {"n": 2, "tool": "execute_esql", "summary": "Querying high-churn accounts (churn_risk > 0.7)", "input": "FROM precision-crm-accounts | WHERE churn_risk > 0.7 | SORT churn_risk DESC | KEEP account_id, company_name, churn_risk, account_tier", "cumulative_input_tokens": 9100, "tokens_estimated": false},
+    {"n": 3, "tool": "execute_esql", "summary": "Finding open P1 tickets grouped by account", "input": "FROM precision-support-tickets | WHERE priority == \"P1\" AND status == \"open\" | STATS open_p1 = COUNT(*) BY account_id | SORT open_p1 DESC", "cumulative_input_tokens": 11800, "tokens_estimated": false},
+    {"n": 4, "tool": "execute_esql", "summary": "Filtering P1 tickets to high-churn account list", "input": "FROM precision-support-tickets | WHERE priority == \"P1\" AND status == \"open\" AND account_id IN (\"ACC-0042\", \"ACC-0117\", \"ACC-0231\", \"ACC-0089\", \"ACC-0198\") | STATS open_p1 = COUNT(*) BY account_id, company_name | SORT open_p1 DESC", "cumulative_input_tokens": 13200, "tokens_estimated": false}
+  ],
+  "metrics": {"turns": 2, "tool_calls": 4, "input_tokens": 13200, "seconds": 21.4, "tokens_estimated": false}
+}
