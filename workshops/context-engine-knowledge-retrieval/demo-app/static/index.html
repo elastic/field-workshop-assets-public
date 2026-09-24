@@ -544,6 +544,10 @@ header {
     <span class="masthead-title">CS Intelligence</span>
   </div>
   <div class="header-right">
+    <div id="mode-toggle" style="display:none;align-items:center;gap:4px;margin-right:6px;border:1px solid var(--ink);padding:2px">
+      <button id="replay-btn" onclick="setMode('replay')" style="font-size:11px;font-family:var(--mono);padding:3px 9px;border:none;background:var(--ink);color:var(--bg);cursor:pointer">Replay</button>
+      <button id="live-btn" onclick="setMode('live')" style="font-size:11px;font-family:var(--mono);padding:3px 9px;border:none;background:var(--bg);color:var(--ink);cursor:pointer">Live</button>
+    </div>
     <div class="ce-pill on" id="ce-toggle" onclick="toggleCE()">
       <span class="ce-dot"></span>
       <span id="ce-label">Context Engine ON</span>
@@ -707,11 +711,24 @@ const SCENARIOS = {
 const STATE = {
   scenario: 's01',
   ce: true,
+  live_mode: false,
   running: false,
   done: false,
   metricsOpen: false,
   runs: {}   // keyed as `${scenario}_raw` or `${scenario}_ce`
 };
+
+// ══════════════════════════════════════════════════
+// MODE TOGGLE (Replay / Live)
+// ══════════════════════════════════════════════════
+function setMode(m) {
+  if (STATE.running) return;
+  STATE.live_mode = m === 'live';
+  const rb = document.getElementById('replay-btn');
+  const lb = document.getElementById('live-btn');
+  if (rb) { rb.style.background = STATE.live_mode ? 'var(--bg)' : 'var(--ink)'; rb.style.color = STATE.live_mode ? 'var(--ink)' : 'var(--bg)'; }
+  if (lb) { lb.style.background = STATE.live_mode ? 'var(--ink)' : 'var(--bg)'; lb.style.color = STATE.live_mode ? 'var(--bg)' : 'var(--ink)'; }
+}
 
 // ══════════════════════════════════════════════════
 // CE TOGGLE
@@ -778,15 +795,25 @@ async function askAgent() {
     if (spinEl && spinEl.isConnected) spinEl.textContent = frames[spinI++ % frames.length];
   }, 300);
 
-  // Minimum display time so the spinner is visible
-  const minDelay = new Promise(r => setTimeout(r, 1500));
+  const minDelay = new Promise(r => setTimeout(r, STATE.live_mode ? 500 : 1500));
 
   try {
-    const [resp] = await Promise.all([
-      fetch(`/api/replay/${scenario}/${mode}`),
-      minDelay,
-    ]);
+    const apiUrl = STATE.live_mode ? `/api/live/${scenario}/${mode}` : `/api/replay/${scenario}/${mode}`;
+    const [resp] = await Promise.all([fetch(apiUrl), minDelay]);
     const result = await resp.json();
+
+    // Live fallback: if server returned fallback:replay, fetch replay instead
+    if (result && result.fallback === 'replay' && STATE.live_mode) {
+      console.warn('Live mode failed, falling back to replay:', result.error);
+      const fresp = await fetch(`/api/replay/${scenario}/${mode}`);
+      const freplay = await fresp.json();
+      freplay.source = 'replay (live failed: ' + (result.error || 'unknown') + ')';
+      STATE.runs[scenario + '_' + mode] = freplay;
+      finishRun(freplay);
+      STATE.done = true;
+      return;
+    }
+
     if (!resp.ok) throw new Error(result.error || 'HTTP ' + resp.status);
 
     const modeKey = scenario + '_' + mode;
@@ -818,9 +845,10 @@ async function askAgent() {
 // BUILD UI SHELLS
 // ══════════════════════════════════════════════════
 function buildRunningUI(question) {
+  const sourceLabel = STATE.live_mode ? 'Live run' : 'Captured run';
   const modeLabel = STATE.ce
-    ? 'Captured run &nbsp;&middot;&nbsp; Context Engine ON &nbsp;&middot;&nbsp; ' + STATE.scenario.toUpperCase()
-    : 'Captured run &nbsp;&middot;&nbsp; Raw agent &nbsp;&middot;&nbsp; ' + STATE.scenario.toUpperCase();
+    ? sourceLabel + ' &nbsp;&middot;&nbsp; Context Engine ON &nbsp;&middot;&nbsp; ' + STATE.scenario.toUpperCase()
+    : sourceLabel + ' &nbsp;&middot;&nbsp; Raw agent &nbsp;&middot;&nbsp; ' + STATE.scenario.toUpperCase();
 
   return `
     <div class="question-display">${escHtml(question)}</div>
@@ -843,7 +871,7 @@ function buildRunningUI(question) {
       <div class="turn-trace-panel" id="trace-panel">
         <div class="running-indicator" id="running-indicator">
           <span class="spin-dots" id="spin-dots">·</span>
-          <span id="running-label">Loading captured run…</span>
+          <span id="running-label">${STATE.live_mode ? 'Live agent running… 30–90s depending on mode' : 'Loading captured run…'}</span>
         </div>
       </div>
     </div>`;
@@ -1164,9 +1192,10 @@ window.addEventListener('DOMContentLoaded', () => {
   fetch('/api/config')
     .then(r => r.json())
     .then(config => {
-      // Live mode switch: not shown in Tier 1 replay builds (live_enabled=false)
-      const liveSwitch = document.getElementById('mode-switch');
-      if (liveSwitch) liveSwitch.style.display = config.live_enabled ? '' : 'none';
+      if (config.live_enabled) {
+        const mt = document.getElementById('mode-toggle');
+        if (mt) mt.style.display = 'flex';
+      }
     })
     .catch(() => {}); // non-blocking
   // no auto-select: user clicks a scenario card to run
