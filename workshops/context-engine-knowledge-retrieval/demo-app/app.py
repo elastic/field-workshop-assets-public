@@ -2,11 +2,14 @@
 Precision Labs CS Intelligence — Context Engine demo app.
 
 Serves static/index.html (Newsprint UI) and replay-mode scenario endpoints.
-Live mode (DEMO_LIVE_ENABLED=true) is Tier 2b — not active in workshop replay mode.
+Live mode (DEMO_LIVE_ENABLED=true) calls the actual Agent Builder agents
+(precision-cs-baseline for raw, precision-cs-context for CE mode) via the
+Kibana converse API — so CE improvement is real, not simulated.
 
 Environment:
     ES_URL              — Elasticsearch endpoint URL
-    ES_API_KEY          — Elasticsearch API key
+    ES_API_KEY          — Elasticsearch API key (also used for Kibana auth)
+    KIBANA_URL          — Kibana endpoint URL (required for live mode)
     CE_AI_INDEX         — AI index id (default: ai-index-idx-precision-corpus)
     DEMO_LIVE_ENABLED   — "true" to enable live agent calls (default: false)
     DEMO_PORT           — port to listen on (default: 5001)
@@ -14,15 +17,11 @@ Environment:
 import json
 import os
 import pathlib
-import sys
 import time
 
-from flask import Flask, jsonify, request, abort
+from flask import Flask, jsonify, abort
 
 BASE = pathlib.Path(__file__).parent
-# Add harness/ to path so context_lab is importable when live mode is active
-sys.path.insert(0, str(BASE / 'harness'))
-
 app = Flask(__name__, static_folder='static')
 
 REPLAYS_DIR = BASE / 'replays'
@@ -30,8 +29,8 @@ REPLAYS_DIR = BASE / 'replays'
 SCENARIOS = [
     {"id": "s01", "label": "S01", "name": "Churn Risk",
      "question": "Which Enterprise accounts have the highest churn risk, and what are they mostly calling us about?"},
-    {"id": "s02", "label": "S02", "name": "Pro-Tier Issues",
-     "question": "What are the most common support issues for Pro-tier accounts this quarter?"},
+    {"id": "s02", "label": "S02", "name": "Mid-Market Issues",
+     "question": "What are the most common support issues for Mid-Market accounts this quarter?"},
     {"id": "s03", "label": "S03", "name": "P1 + Churn",
      "question": "Which accounts have open P1 tickets and high churn risk right now?"},
     {"id": "s04", "label": "S04", "name": "KB Coverage",
@@ -40,6 +39,8 @@ SCENARIOS = [
 
 _run_count = {"count": 0}
 _live_enabled = os.environ.get("DEMO_LIVE_ENABLED", "false").lower() == "true"
+KIBANA_URL = os.environ.get("KIBANA_URL", "")
+AI_INDEX = os.environ.get("CE_AI_INDEX", "ai-index-idx-precision-corpus")
 
 
 def _es_reachable():
@@ -65,7 +66,6 @@ def _ki_count():
     try:
         es_url = os.environ.get("ES_URL", "")
         api_key = os.environ.get("ES_API_KEY", "")
-        ai_index = os.environ.get("CE_AI_INDEX", "ai-index-idx-precision-corpus")
         if not es_url or not api_key:
             return None
         import urllib.request, json as _json
@@ -74,7 +74,7 @@ def _ki_count():
             {"term": {"type": "index_metadata_entry"}}
         ], "minimum_should_match": 1}}}).encode()
         req = urllib.request.Request(
-            f"{es_url.rstrip('/')}/{ai_index}/_count",
+            f"{es_url.rstrip('/')}/{AI_INDEX}/_count",
             data=body,
             headers={"Authorization": f"ApiKey {api_key}", "Content-Type": "application/json"}
         )
@@ -82,6 +82,75 @@ def _ki_count():
             return _json.loads(r.read()).get("count", 0)
     except Exception:
         return None
+
+
+def _call_ab_agent(agent_id: str, question: str) -> dict:
+    """Call an Agent Builder agent via the Kibana converse API.
+
+    Payload shape: {"agent_id": "...", "input": "<plain string question>"}
+    Ref: POST /api/agent_builder/converse
+    """
+    import requests as _requests
+    kibana_url = KIBANA_URL.rstrip('/')
+    api_key = os.environ.get("ES_API_KEY", "")
+    if not kibana_url or not api_key:
+        raise RuntimeError("KIBANA_URL and ES_API_KEY must be set for live mode")
+    try:
+        resp = _requests.post(
+            f"{kibana_url}/api/agent_builder/converse",
+            headers={
+                "Authorization": f"ApiKey {api_key}",
+                "Content-Type": "application/json",
+                "kbn-xsrf": "true",
+            },
+            json={"agent_id": agent_id, "input": question},
+            timeout=120,
+        )
+        resp.raise_for_status()
+        return resp.json()
+    except _requests.HTTPError as e:
+        raise RuntimeError(f"AB API {e.response.status_code}: {e.response.text[:300]}")
+
+
+def _ab_to_replay_shape(ab_resp: dict, scenario: str, mode: str, elapsed: float) -> dict:
+    """Convert an AB converse API response to the replay JSON shape the UI expects."""
+    tool_steps = [s for s in ab_resp.get("steps", []) if s.get("type") == "tool_call"]
+    usage = ab_resp.get("model_usage", {})
+    input_tokens = usage.get("input_tokens", 0)
+    per = input_tokens // max(len(tool_steps), 1)
+
+    turns = []
+    for i, s in enumerate(tool_steps):
+        tool_id = s.get("tool_id", "?")
+        params = s.get("params", {})
+        try:
+            params_str = json.dumps(params, separators=(',', ':'))[:500]
+        except Exception:
+            params_str = str(params)[:500]
+        turns.append({
+            "n": i + 1,
+            "tool": tool_id,
+            "summary": tool_id,
+            "input": params_str,
+            "cumulative_input_tokens": per * (i + 1),
+            "tokens_estimated": True,
+        })
+
+    answer = (ab_resp.get("response") or {}).get("message") or "(no answer returned)"
+    return {
+        "scenario": scenario.upper(),
+        "mode": mode,
+        "source": "live",
+        "answer_markdown": answer,
+        "turns": turns,
+        "metrics": {
+            "turns": usage.get("llm_calls", len(tool_steps)),
+            "tool_calls": len(tool_steps),
+            "input_tokens": input_tokens,
+            "seconds": round(elapsed, 1),
+            "tokens_estimated": True,
+        },
+    }
 
 
 @app.route("/")
@@ -95,7 +164,7 @@ def health():
         "status": "ok",
         "mode_live_available": _live_enabled,
         "es_reachable": _es_reachable(),
-        "ki_count": _ki_count()
+        "ki_count": _ki_count(),
     })
 
 
@@ -108,7 +177,7 @@ def ready():
 def config():
     return jsonify({
         "live_enabled": _live_enabled,
-        "scenarios": SCENARIOS
+        "scenarios": SCENARIOS,
     })
 
 
@@ -127,144 +196,6 @@ def replay(scenario, mode):
     return jsonify(data)
 
 
-@app.route("/api/runs/count")
-def runs_count():
-    return jsonify({"count": _run_count["count"]})
-
-
-@app.route("/api/runs/mark-solved", methods=["POST"])
-def mark_solved():
-    _run_count["count"] = max(_run_count["count"], 2)
-    return jsonify({"count": _run_count["count"]})
-
-
-AI_INDEX = os.environ.get("CE_AI_INDEX", "ai-index-idx-precision-corpus")
-
-SYSTEM_PROMPT_BASE = (
-    "You are a customer success AI assistant for Precision Labs. "
-    "You have access to three data sources: precision-crm-accounts (customer accounts with "
-    "ARR, churn risk, tier), precision-support-tickets (support tickets linked by account_id), "
-    "and precision-kb-articles (knowledge base articles). "
-    "Answer questions accurately. When referencing accounts, include company name, tier, and ARR."
-)
-SYSTEM_PROMPT_WITH_KI = SYSTEM_PROMPT_BASE + (
-    " IMPORTANT: Call query_ki as your VERY FIRST tool call before any other tool. "
-    "Use the KI content to learn field names, join keys, and access patterns before querying."
-)
-
-_configured = False
-_current_model = os.environ.get("EIS_INFERENCE_ID", ".anthropic-claude-4.5-haiku-chat_completion")
-_context_lab = None
-
-
-def _ensure_context_lab():
-    global _context_lab, _configured, _current_model
-    if _context_lab is not None:
-        return _context_lab
-    try:
-        import context_lab as cl
-        cl.configure(
-            es_url=os.environ.get("ES_URL", ""),
-            api_key=os.environ.get("ES_API_KEY", ""),
-            inference_id=_current_model,
-        )
-        _context_lab = cl
-        _configured = True
-        return cl
-    except Exception:
-        return None
-
-
-def _make_query_ki_tool():
-    def _query_ki(query: str, k: int = 8):
-        from elasticsearch import Elasticsearch
-        es_url = os.environ.get("ES_URL", "")
-        api_key = os.environ.get("ES_API_KEY", "")
-        client = Elasticsearch(hosts=[es_url], api_key=api_key)
-        resp = client.search(
-            index=AI_INDEX,
-            query={"multi_match": {"query": query, "fields": ["content", "title", "description"]}},
-            size=k,
-        )
-        results = []
-        for hit in resp["hits"]["hits"]:
-            src = hit["_source"]
-            limit = 2500 if src.get("type") in ("index_metadata", "index_metadata_entry") else 600
-            results.append({
-                "_id": hit["_id"],
-                "type": src.get("type", ""),
-                "content": str(src.get("content", ""))[:limit],
-            })
-        return results
-
-    return {
-        "fn": _query_ki,
-        "schema": {
-            "type": "function",
-            "function": {
-                "name": "query_ki",
-                "description": (
-                    "Search the AI Index for Knowledge Indicators relevant to your query. "
-                    "Returns routing KIs (index profiles with field names and join keys). "
-                    "Always call this before searching source indices directly."
-                ),
-                "parameters": {
-                    "type": "object",
-                    "required": ["query"],
-                    "properties": {
-                        "query": {"type": "string", "description": "Natural language query"},
-                        "k": {"type": "integer", "description": "Max KIs to return (default 8)"},
-                    },
-                },
-            },
-        },
-    }
-
-
-def _result_to_replay_shape(result, scenario, mode, elapsed):
-    import json as _json
-    cumulative = 0
-    turns = []
-    call_n = 0
-    turn_tokens = result.turn_input_tokens if hasattr(result, 'turn_input_tokens') else []
-    turn_idx = 0
-    for msg in (result.messages if hasattr(result, 'messages') else []):
-        if msg.get("role") == "assistant" and msg.get("tool_calls"):
-            per = turn_tokens[turn_idx] if turn_idx < len(turn_tokens) else 0
-            cumulative += per
-            turn_idx += 1
-            for tc in msg["tool_calls"]:
-                call_n += 1
-                fn = tc.get("function", {})
-                args = fn.get("arguments", "")
-                try:
-                    args_str = _json.dumps(_json.loads(args), separators=(',', ':'))[:500]
-                except Exception:
-                    args_str = str(args)[:500]
-                turns.append({
-                    "n": call_n,
-                    "tool": fn.get("name", "?"),
-                    "summary": fn.get("name", "?"),
-                    "input": args_str,
-                    "cumulative_input_tokens": cumulative,
-                })
-    answer = getattr(result, 'answer', None) or "(agent hit turn limit)"
-    return {
-        "scenario": scenario.upper(),
-        "mode": mode,
-        "source": "live",
-        "answer_markdown": answer,
-        "turns": turns,
-        "metrics": {
-            "turns": getattr(result, 'turns', len(turns)),
-            "tool_calls": call_n,
-            "input_tokens": getattr(result, 'input_tokens', cumulative),
-            "seconds": round(elapsed, 1),
-            "tokens_estimated": False,
-        },
-    }
-
-
 @app.route("/api/live/<scenario>/<mode>")
 def live_run(scenario, mode):
     if not _live_enabled:
@@ -277,68 +208,29 @@ def live_run(scenario, mode):
     sc = next((s for s in SCENARIOS if s["id"] == scenario.lower()), None)
     if not sc:
         return jsonify({"error": "scenario not found", "fallback": "replay"})
+
+    agent_id = "precision-cs-context" if mode.lower() == "ce" else "precision-cs-baseline"
     question = sc["question"]
 
     try:
-        cl = _ensure_context_lab()
-        if cl is None:
-            raise RuntimeError("context_lab not available")
-
         t0 = time.time()
-        if mode.lower() == "ce":
-            query_ki_tool = _make_query_ki_tool()
-            tools = [query_ki_tool, cl.ESQL_TOOL]
-            sys_prompt = SYSTEM_PROMPT_WITH_KI
-        else:
-            tools = [cl.ESQL_TOOL, cl.MAPPING_TOOL]
-            sys_prompt = SYSTEM_PROMPT_BASE
-
-        result = cl.run_agent(
-            system_prompt=sys_prompt,
-            question=question,
-            tools=tools,
-            max_turns=12,
-        )
+        ab_resp = _call_ab_agent(agent_id, question)
         elapsed = time.time() - t0
         _run_count["count"] += 1
-        return jsonify(_result_to_replay_shape(result, scenario, mode, elapsed))
-
+        return jsonify(_ab_to_replay_shape(ab_resp, scenario, mode, elapsed))
     except Exception as exc:
         return jsonify({"error": str(exc), "fallback": "replay"})
 
 
-if _live_enabled:
-    try:
-        @app.route("/ask", methods=["POST"])
-        def ask():
-            payload = request.get_json(force=True)
-            question = payload.get("question", "").strip()
-            use_ki = bool(payload.get("use_ki", False))
-            if not question:
-                return jsonify({"error": "question is required"}), 400
-            try:
-                cl = _ensure_context_lab()
-                if cl is None:
-                    raise RuntimeError("context_lab not available")
-                sys_prompt = SYSTEM_PROMPT_WITH_KI if use_ki else SYSTEM_PROMPT_BASE
-                tools = [cl.ESQL_TOOL, cl.MAPPING_TOOL]
-                result = cl.run_agent(system_prompt=sys_prompt, question=question, tools=tools, max_turns=12)
-                _run_count["count"] += 1
-                return jsonify({
-                    "answer": result.answer or "(agent hit turn limit)",
-                    "turn_count": result.turns,
-                    "input_tokens": result.input_tokens,
-                    "tool_calls": [],
-                    "turn_input_tokens": result.turn_input_tokens,
-                })
-            except Exception as exc:
-                return jsonify({"error": str(exc)}), 500
-    except Exception:
-        pass
-else:
-    @app.route("/ask", methods=["POST"])
-    def ask_disabled():
-        return jsonify({"error": "live mode disabled"}), 404
+@app.route("/api/runs/count")
+def runs_count():
+    return jsonify({"count": _run_count["count"]})
+
+
+@app.route("/api/runs/mark-solved", methods=["POST"])
+def mark_solved():
+    _run_count["count"] = max(_run_count["count"], 2)
+    return jsonify({"count": _run_count["count"]})
 
 
 if __name__ == "__main__":
