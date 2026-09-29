@@ -2,109 +2,69 @@
   "scenario": "S01",
   "mode": "raw",
   "source": "live",
-  "recorded_at": "20260929T162612Z",
+  "recorded_at": "20260929T205257Z",
   "model": "google-gemini-3.0-flash",
-  "label": "Median of 3 recorded runs \u00b7 learner-built agents \u00b7 2026-09-29 \u00b7 google-gemini-3.0-flash",
-  "answer_markdown": "The Enterprise accounts with the highest churn risk (risk scores > 0.90) are dominated by companies experiencing significant technical friction. \n\n### **Enterprise Accounts at Highest Risk**\nBased on CRM data, these are the top 5 accounts by churn risk score:\n\n| Company Name | Risk Score | ARR | Account Owner |\n| :--- | :--- | :--- | :--- |\n| **Bluepeak Technologies** | **1.00** | $923k | Omar Haddad |\n| **Hearthstone Co** | **0.99** | $1.47M | Lena Fischer |\n| **Nimbus Labs** | **0.97** | $1.76M | Omar Haddad |\n| **Aurora Labs** | **0.96** | $1.05M | Priya Nair |\n| **Wavelength Partners** | **0.95** | $1.45M | Lena Fischer |\n\n### **Common Support Themes**\nAnalysis of support tickets for these high-risk accounts reveals that they are primarily calling about **bugs** and **integration issues**.\n\n1.  **Bugs (56 tickets):** This is the most frequent category. High-risk accounts like *Bluepeak Technologies* and *Solace Analytics* are consistently reporting software defects.\n2.  **Integration (54 tickets):** Companies such as *Northstar Technologies* and *Solace Analytics* have the highest volume of tickets related to connecting our platform with their existing stacks.\n3.  **Performance & Billing (48 tickets each):** Significant concerns regarding system stability (*Aurora Labs* and *Cascade Co*) and billing discrepancies (*Nimbus Labs* and *Fathom Partners*) are also key drivers of dissatisfaction.\n\n**Reasoning:** The combination of near-maximum churn risk scores and high volumes of \"bug\" and \"integration\" tickets suggests these Enterprise customers are struggling with the core reliability and interoperability of the product, likely leading to the high risk scores reported in the CRM.",
+  "label": "Median of 3 recorded runs \u00b7 2026-09-29 \u00b7 google-gemini-3.0-flash",
+  "answer_markdown": "Based on our current CRM data and support ticket history, the Enterprise accounts with the highest churn risk are primarily struggling with **performance issues**, **integration failures**, and **billing discrepancies**.\n\n### Top Enterprise Accounts by Churn Risk\n| Company Name | Customer ID | Churn Risk Score | Account Owner |\n| :--- | :--- | :---: | :--- |\n| **Bluepeak Technologies** | CUST-0012 | **1.00** | Omar Haddad |\n| **Hearthstone Co** | CUST-0285 | **0.99** | Lena Fischer |\n| **Nimbus Labs** | CUST-0481 | **0.97** | Omar Haddad |\n| **Aurora Labs** | CUST-0396 | **0.96** | Priya Nair |\n| **Meridian Co** | CUST-0183 | **0.95** | Omar Haddad |\n\n### Primary Support Themes for High-Risk Accounts\n\n1.  **Performance Degradation & Stability**\n    *   **Timeouts:** Multiple accounts (Bluepeak, Meridian, Cascade) report that reports with date ranges over 90 days are now timing out, impacting board-level reporting.\n    *   **Automation Delays:** Aurora Labs and Nimbus Labs are seeing workflow automation and bulk exports stall for large datasets (50k+ rows).\n    *   **Latency:** Meridian and Northstar report significant degradation in dashboard load times (from 2 seconds to 20 seconds).\n\n2.  **Integration & Data Reliability**\n    *   **Pipeline Failures:** Following a recent platform update, several accounts (Bluepeak, Northstar, Hearthstone Labs) are experiencing an 8% data drop on ingests, specifically for records with nested array fields.\n    *   **Connector Issues:** Hearthstone Labs and Wavelength Partners report intermittent Salesforce sync failures (connection resets) and SCIM connector OAuth loops.\n    *   **Data Quality:** Aurora Labs is reporting missing historical data (pre-June 2024) following a migration.\n\n3.  **Billing & Onboarding Friction**\n    *   **Invoice Accuracy:** Nearly all top-risk accounts have active tickets regarding overcharges for seat counts (e.g., being billed for 45 seats when only 38 are active) or missing contractually agreed discounts.\n    *   **Role Management:** Bluepeak and Nimbus Labs are struggling with role permissions that don't map to their organizational structures, specifically needing more granular analyst access.\n\n**Summary Reasoning:** The combination of technical platform regressions (timeouts/data drops) following updates and administrative friction (billing/permissions) has created a high-risk environment for these large accounts. Bluepeak Technologies, in particular, is at maximum risk (1.0) due to a mix of performance timeouts and data pipeline gaps.",
   "turns": [
     {
       "n": 1,
-      "tool": "write_todos",
-      "summary": "write_todos",
-      "input": "{\"todos\":[{\"content\":\"Identify Enterprise accounts with high churn risk\",\"status\":\"in_progress\"},{\"content\":\"Analyze support tickets for those high-risk accounts to find common themes\",\"status\":\"pending\"},{\"content\":\"Summarize findings and explain reasoning\",\"status\":\"pending\"}]}",
-      "cumulative_input_tokens": 16263,
+      "tool": "platform.core.generate_esql",
+      "summary": "platform.core.generate_esql",
+      "input": "{\"query\":\"find Enterprise accounts with the highest churn risk from precision- indices\"}",
+      "cumulative_input_tokens": 23416,
       "tokens_estimated": true
     },
     {
       "n": 2,
-      "tool": "platform.core.generate_esql",
-      "summary": "platform.core.generate_esql",
-      "input": "{\"query\":\"Find Enterprise accounts with high churn risk from precision- indices\"}",
-      "cumulative_input_tokens": 32526,
+      "tool": "platform.core.execute_esql",
+      "summary": "platform.core.execute_esql",
+      "input": "{\"query\":\"FROM precision-crm-accounts\\n| WHERE account_tier == \\\"Enterprise\\\"\\n| SORT churn_risk_score DESC\\n| LIMIT 10\"}",
+      "cumulative_input_tokens": 46832,
       "tokens_estimated": true
     },
     {
       "n": 3,
-      "tool": "platform.core.execute_esql",
-      "summary": "platform.core.execute_esql",
-      "input": "{\"query\":\"FROM precision-crm-accounts\\n| WHERE account_tier == \\\"Enterprise\\\" AND churn_risk_score > 0.7\\n| KEEP company_name, churn_risk_score, account_owner, arr, region\\n| SORT churn_risk_score DESC\\n| LIMIT 100\"}",
-      "cumulative_input_tokens": 48789,
+      "tool": "platform.core.generate_esql",
+      "summary": "platform.core.generate_esql",
+      "input": "{\"query\":\"find support tickets for customer IDs CUST-0012, CUST-0285, CUST-0481, CUST-0396, CUST-0183, CUST-0109, CUST-0303, CUST-0110, CUST-0484, CUST-0334 in precision- indices and summarize the topics\",\"context\":\"The high-risk accounts are: Bluepeak Technologies (CUST-0012), Hearthstone Co (CUST-0285), Nimbus Labs (CUST-0481), Aurora Labs (CUST-0396), Meridian Co (CUST-0183), Cascade Co (CUST-0109), Hearthstone Labs (CUST-0303), Redwood Technologies (CUST-0110), Wavelength Partners (CUST-0484",
+      "cumulative_input_tokens": 70248,
       "tokens_estimated": true
     },
     {
       "n": 4,
-      "tool": "write_todos",
-      "summary": "write_todos",
-      "input": "{\"todos\":[{\"content\":\"Identify Enterprise accounts with high churn risk\",\"status\":\"completed\"},{\"content\":\"Analyze support tickets for those high-risk accounts to find common themes\",\"status\":\"in_progress\"},{\"content\":\"Summarize findings and explain reasoning\",\"status\":\"pending\"}]}",
-      "cumulative_input_tokens": 65052,
+      "tool": "platform.core.execute_esql",
+      "summary": "platform.core.execute_esql",
+      "input": "{\"query\":\"FROM precision-support-tickets\\n| WHERE account_id IN (\\\"CUST-0012\\\", \\\"CUST-0285\\\", \\\"CUST-0481\\\", \\\"CUST-0396\\\", \\\"CUST-0183\\\", \\\"CUST-0109\\\", \\\"CUST-0303\\\", \\\"CUST-0110\\\", \\\"CUST-0484\\\", \\\"CUST-0334\\\")\\n| KEEP account_id, category, subject, description\\n| LIMIT 1000\"}",
+      "cumulative_input_tokens": 93664,
       "tokens_estimated": true
     },
     {
       "n": 5,
-      "tool": "platform.core.generate_esql",
-      "summary": "platform.core.generate_esql",
-      "input": "{\"query\":\"Find common support ticket themes for Enterprise accounts with churn_risk_score > 0.7 from precision- indices\"}",
-      "cumulative_input_tokens": 81315,
+      "tool": "platform.core.get_index_mapping",
+      "summary": "platform.core.get_index_mapping",
+      "input": "{\"indices\":[\"precision-support-tickets\"]}",
+      "cumulative_input_tokens": 117080,
       "tokens_estimated": true
     },
     {
       "n": 6,
-      "tool": "platform.core.list_indices",
-      "summary": "platform.core.list_indices",
-      "input": "{\"pattern\":\"precision-*\"}",
-      "cumulative_input_tokens": 97578,
-      "tokens_estimated": true
-    },
-    {
-      "n": 7,
-      "tool": "platform.core.get_index_mapping",
-      "summary": "platform.core.get_index_mapping",
-      "input": "{\"indices\":[\"precision-support-tickets\"]}",
-      "cumulative_input_tokens": 113841,
-      "tokens_estimated": true
-    },
-    {
-      "n": 8,
       "tool": "platform.core.execute_esql",
       "summary": "platform.core.execute_esql",
-      "input": "{\"query\":\"FROM precision-support-tickets\\n| WHERE account_tier == \\\"Enterprise\\\"\\n| JOIN [FROM precision-crm-accounts | WHERE churn_risk_score > 0.7 | KEEP account_id, churn_risk_score] ON account_id\\n| STATS ticket_count = COUNT(*) BY category\\n| SORT ticket_count DESC\\n| LIMIT 10\"}",
-      "cumulative_input_tokens": 130104,
-      "tokens_estimated": true
-    },
-    {
-      "n": 9,
-      "tool": "platform.core.execute_esql",
-      "summary": "platform.core.execute_esql",
-      "input": "{\"query\":\"FROM precision-support-tickets\\n| WHERE account_tier == \\\"Enterprise\\\"\\n| STATS ticket_count = COUNT(*) BY category\\n| SORT ticket_count DESC\\n| LIMIT 10\"}",
-      "cumulative_input_tokens": 146367,
-      "tokens_estimated": true
-    },
-    {
-      "n": 10,
-      "tool": "platform.core.execute_esql",
-      "summary": "platform.core.execute_esql",
-      "input": "{\"query\":\"FROM precision-support-tickets\\n| WHERE account_tier == \\\"Enterprise\\\"\\n| STATS ticket_count = COUNT(*) BY category, company_name.keyword\\n| SORT ticket_count DESC\\n| LIMIT 20\"}",
-      "cumulative_input_tokens": 162630,
-      "tokens_estimated": true
-    },
-    {
-      "n": 11,
-      "tool": "platform.core.execute_esql",
-      "summary": "platform.core.execute_esql",
-      "input": "{\"query\":\"FROM precision-support-tickets\\n| WHERE company_name.keyword IN (\\\"Bluepeak Technologies\\\", \\\"Hearthstone Co\\\", \\\"Nimbus Labs\\\", \\\"Aurora Labs\\\", \\\"Wavelength Partners\\\", \\\"Hearthstone Labs\\\", \\\"Cascade Co\\\", \\\"Meridian Co\\\", \\\"Redwood Technologies\\\")\\n| STATS ticket_count = COUNT(*) BY category\\n| SORT ticket_count DESC\"}",
-      "cumulative_input_tokens": 178893,
+      "input": "{\"query\":\"FROM precision-support-tickets\\n| WHERE account_id IN (\\\"CUST-0012\\\", \\\"CUST-0285\\\", \\\"CUST-0481\\\", \\\"CUST-0396\\\", \\\"CUST-0183\\\", \\\"CUST-0109\\\", \\\"CUST-0303\\\", \\\"CUST-0110\\\", \\\"CUST-0484\\\", \\\"CUST-0334\\\")\\n| KEEP account_id, category, subject, body\\n| LIMIT 1000\"}",
+      "cumulative_input_tokens": 140496,
       "tokens_estimated": true
     }
   ],
   "metrics": {
-    "turns": 16,
-    "llm_calls": 16,
-    "tool_calls": 11,
-    "input_tokens": 178900,
-    "cached_input_tokens": 119872,
-    "effective_tokens": 71015,
-    "output_tokens": 1429,
-    "seconds": 37.3,
+    "turns": 13,
+    "llm_calls": 13,
+    "tool_calls": 6,
+    "input_tokens": 140498,
+    "cached_input_tokens": 73131,
+    "effective_tokens": 74680,
+    "output_tokens": 1662,
+    "seconds": 28.9,
     "tokens_estimated": true,
     "cache_read_mult": 0.1
   }

@@ -2,165 +2,101 @@
   "scenario": "S02",
   "mode": "raw",
   "source": "live",
-  "recorded_at": "20260929T162612Z",
+  "recorded_at": "20260929T205257Z",
   "model": "google-gemini-3.0-flash",
-  "label": "Median of 3 recorded runs \u00b7 learner-built agents \u00b7 2026-09-29 \u00b7 google-gemini-3.0-flash",
-  "answer_markdown": "Based on the current date (September 29, 2026), I have identified the Enterprise accounts renewing within the next 60 days that have open or in-progress critical (P1) tickets. \n\n### **Renewing Enterprise Accounts with Open P1 Tickets**\n\n| Account Name | Renewal Date | Ticket ID | Issue Subject | Status |\n| :--- | :--- | :--- | :--- | :--- |\n| **Meridian Networks** | Oct 1, 2026 | TICK-01246 | User invites failing with no error message | Open |\n| **Granite Systems** | Oct 7, 2026 | TICK-00022 | Data pipeline drop after platform update | Open |\n| **Sablefield Technologies** | Oct 11, 2026 | TICK-00904 | API rate limit documentation unclear | Open |\n| **Vertex Networks** | Oct 22, 2026 | TICK-01321 | Zapier integration timing out on large payloads | Open |\n| **Wavelength Group** | Nov 1, 2026 | TICK-02166 | OAuth token refresh loop on SCIM connector | Open |\n| **Vertex Technologies** | Nov 1, 2026 | TICK-02654 | Onboarding checklist \u2014 which integrations to prioritize? | Open |\n| **Hearthstone Networks** | Nov 8, 2026 | TICK-01756 | Renewal quote doesn't match agreed pricing | In-Progress |\n| **Latticework Labs** | Oct 20, 2026 | TICK-02377 | Bulk export stalling on datasets over 50k rows | In-Progress |\n\n---\n\n### **Relevant Knowledge Base Articles**\n\nThe following articles directly address the technical issues faced by these accounts:\n\n*   **OAuth Token Refresh Loop (Wavelength Group)**\n    *   **KB-0014: Troubleshooting: OAuth Token Refresh Loop**\n    *   *Summary:* Covers causes like rotated client secrets, clock skew, and version-specific platform bugs (requires version 3.2.0+).\n*   **API & Rate Limits (Sablefield Technologies)**\n    *   **KB-0013: Troubleshooting: API Returning 429 Rate Limit Errors**\n    *   *Summary:* Defines Enterprise limits (1,200 req/min) and explains how to request increases via support tickets.\n*   **Zapier & Large Payloads (Vertex Networks)**\n    *   **KB-0009: Zapier Integration: Common Triggers and Actions**\n    *   *Summary:* Notes a 10MB payload limit for Zapier and suggests using the native API or Webhooks for larger datasets.\n*   **Bulk Export Stalling (Latticework Labs)**\n    *   **KB-0015: Troubleshooting: Bulk Export Stalling on Large Datasets**\n    *   *Summary:* Explains the 100k row limit for UI exports and recommends the `/v2/exports/async` endpoint for larger files.\n*   **Data Pipeline/Sync Issues (Granite Systems)**\n    *   **KB-0005: Salesforce Connector: Setup and Sync Configuration**\n    *   *Summary:* Provides troubleshooting for sync failures, including API limits and field type changes.\n\n**Recommendation:** For **Hearthstone Networks**, the P1 ticket is related to a billing discrepancy (\"Renewal quote doesn't match\"). I suggest immediate escalation to their Account Owner to resolve the pricing conflict before the November 8 renewal date.",
+  "label": "Median of 3 recorded runs \u00b7 2026-09-29 \u00b7 google-gemini-3.0-flash",
+  "answer_markdown": "Based on my analysis of Enterprise accounts renewing by November 28, 2026, here are the accounts currently facing critical **P1 issues**, along with the knowledge base articles that address them:\n\n### **Enterprise Accounts with Open P1 Tickets**\n\n1.  **Wavelength Group (CUST-0353)**\n    *   **Renewal Date:** 2026-11-01\n    *   **P1 Ticket:** **TICK-02166** \u2013 \"OAuth token refresh loop on SCIM connector.\"\n    *   **Issue Summary:** The SCIM connector is stuck in a loop, refreshing tokens repeatedly instead of using them, possibly triggered by a recent client secret rotation.\n    *   **Relevant KB Article:** **[KB-0014] Troubleshooting: OAuth Token Refresh Loop**. This article notes that client secret rotation in the source system is a primary cause and recommends re-authenticating the connector.\n\n2.  **Granite Systems (CUST-0005)**\n    *   **Renewal Date:** 2026-10-07\n    *   **P1 Ticket:** **TICK-00022** \u2013 \"Data pipeline drop after platform update.\"\n    *   **Issue Summary:** Approximately 8% of records (specifically those with nested array fields) are being dropped during ingest following a platform update.\n    *   **Relevant KB Article:** **[KB-0148] Data Quality Monitoring: Step-by-Step Setup Guide**. While there isn't a direct \"dropped record\" guide, this article covers data validation and monitoring to identify material gaps in analytics.\n\n### **Other High-Priority Situations**\nWhile not explicitly labeled as \"P1,\" the following Enterprise accounts have renewals within 60 days and critical issues currently marked as **\"open\"** or **\"in_progress\"**:\n\n*   **Northstar Partners (CUST-0085)** \u2013 Renewing 2026-11-28. Open ticket **TICK-00502** regarding API key rotation compliance.\n    *   *Article:* **[KB-0008] REST API: Rotating API Keys Without Downtime**.\n*   **Redwood Networks (CUST-0442)** \u2013 Renewing 2026-11-14. Open ticket **TICK-02677** regarding broken weekly digest emails.\n    *   *Article:* **[KB-0022] Alerts: Setting Up Threshold and Anomaly Notifications** (covers notification channel configuration).\n\n### **Summary Table**\n\n| Account Name | Renewal Date | Ticket ID | Issue Category | Relevant KB |\n| :--- | :--- | :--- | :--- | :--- |\n| **Wavelength Group** | 2026-11-01 | TICK-02166 | Integration (OAuth Loop) | KB-0014 |\n| **Granite Systems** | 2026-10-07 | TICK-00022 | Integration (Data Ingest) | KB-0148 |\n| **Northstar Partners**| 2026-11-28 | TICK-00502 | Security (API Rotation) | KB-0008 |\n| **Redwood Networks** | 2026-11-14 | TICK-02677 | Bug (Email Delivery) | KB-0022 |\n\n**Reasoning:** I filtered the `precision-crm-accounts` index for Enterprise tier accounts with renewal dates in the next 60 days, then cross-referenced these with the `precision-support-tickets` index to identify open P1/High priority issues. Finally, I searched the `precision-kb-articles` for the specific technical terms mentioned in the active tickets.",
   "turns": [
     {
       "n": 1,
       "tool": "write_todos",
       "summary": "write_todos",
-      "input": "{\"todos\":[{\"content\":\"Find Enterprise accounts renewing in the next 60 days\",\"status\":\"in_progress\"},{\"content\":\"Identify open P1 tickets for those accounts\",\"status\":\"pending\"},{\"content\":\"Find knowledge base articles covering the ticket issues\",\"status\":\"pending\"},{\"content\":\"Summarize findings for the user\",\"status\":\"pending\"}]}",
-      "cumulative_input_tokens": 18184,
+      "input": "{\"todos\":[{\"content\":\"Find Enterprise accounts renewing in the next 60 days\",\"status\":\"in_progress\"},{\"content\":\"Identify open P1 tickets for those accounts\",\"status\":\"pending\"},{\"content\":\"Search knowledge base articles for issues mentioned in the tickets\",\"status\":\"pending\"},{\"content\":\"Summarize findings for the user\",\"status\":\"pending\"}]}",
+      "cumulative_input_tokens": 28828,
       "tokens_estimated": true
     },
     {
       "n": 2,
       "tool": "platform.core.generate_esql",
       "summary": "platform.core.generate_esql",
-      "input": "{\"time_range\":{\"from\":\"now\",\"to\":\"now+60d\"},\"query\":\"Find accounts in indices starting with 'precision-' where the type is 'Enterprise' and renewal_date is between now and the next 60 days\"}",
-      "cumulative_input_tokens": 36368,
+      "input": "{\"query\":\"Find accounts with tier 'Enterprise' and renewal_date between '2026-09-29' and '2026-11-28'\"}",
+      "cumulative_input_tokens": 57656,
       "tokens_estimated": true
     },
     {
       "n": 3,
       "tool": "platform.core.execute_esql",
       "summary": "platform.core.execute_esql",
-      "input": "{\"query\":\"FROM precision-*\\n| WHERE account_tier == \\\"Enterprise\\\" AND renewal_date >= NOW() AND renewal_date <= NOW() + 60 days\\n| KEEP account_id, account_name, renewal_date\\n| LIMIT 100\"}",
-      "cumulative_input_tokens": 54552,
+      "input": "{\"query\":\"FROM precision-crm-accounts\\n| WHERE account_tier == \\\"Enterprise\\\" AND renewal_date >= \\\"2026-09-29\\\" AND renewal_date <= \\\"2026-11-28\\\"\\n| LIMIT 100\"}",
+      "cumulative_input_tokens": 86484,
       "tokens_estimated": true
     },
     {
       "n": 4,
-      "tool": "platform.core.get_index_mapping",
-      "summary": "platform.core.get_index_mapping",
-      "input": "{\"indices\":[\"precision-*\"]}",
-      "cumulative_input_tokens": 72736,
+      "tool": "write_todos",
+      "summary": "write_todos",
+      "input": "{\"todos\":[{\"content\":\"Find Enterprise accounts renewing in the next 60 days\",\"status\":\"completed\"},{\"content\":\"Identify open P1 tickets for those accounts\",\"status\":\"in_progress\"},{\"content\":\"Search knowledge base articles for issues mentioned in the tickets\",\"status\":\"pending\"},{\"content\":\"Summarize findings for the user\",\"status\":\"pending\"}]}",
+      "cumulative_input_tokens": 115312,
       "tokens_estimated": true
     },
     {
       "n": 5,
-      "tool": "write_todos",
-      "summary": "write_todos",
-      "input": "{\"todos\":[{\"content\":\"Find Enterprise accounts renewing in the next 60 days\",\"status\":\"in_progress\"},{\"content\":\"Identify open P1 tickets for those accounts\",\"status\":\"pending\"},{\"content\":\"Find knowledge base articles covering the ticket issues\",\"status\":\"pending\"},{\"content\":\"Summarize findings for the user\",\"status\":\"pending\"}]}",
-      "cumulative_input_tokens": 90920,
+      "tool": "platform.core.generate_esql",
+      "summary": "platform.core.generate_esql",
+      "input": "{\"query\":\"Find open tickets with priority 'P1' for customers CUST-0179, CUST-0353, CUST-0442, CUST-0085, CUST-0162, CUST-0318, CUST-0027, CUST-0087, CUST-0098, CUST-0208, CUST-0315, CUST-0317, CUST-0359, CUST-0412, CUST-0005, CUST-0016, CUST-0049, CUST-0088, CUST-0113, CUST-0296, CUST-0356, CUST-0020, CUST-0185, CUST-0220, CUST-0439, CUST-0110, CUST-0125, CUST-0190, CUST-0391\"}",
+      "cumulative_input_tokens": 144140,
       "tokens_estimated": true
     },
     {
       "n": 6,
       "tool": "platform.core.execute_esql",
       "summary": "platform.core.execute_esql",
-      "input": "{\"query\":\"FROM precision-*\\n| WHERE account_tier == \\\"Enterprise\\\" AND renewal_date >= NOW() AND renewal_date <= NOW() + 60 days\\n| STATS count() BY account_id, company_name, renewal_date\\n| LIMIT 100\"}",
-      "cumulative_input_tokens": 109104,
+      "input": "{\"query\":\"FROM precision-support-tickets\\n| WHERE status == \\\"open\\\" AND priority == \\\"P1\\\" AND account_id IN (\\n    \\\"CUST-0179\\\", \\\"CUST-0353\\\", \\\"CUST-0442\\\", \\\"CUST-0085\\\", \\\"CUST-0162\\\", \\n    \\\"CUST-0318\\\", \\\"CUST-0027\\\", \\\"CUST-0087\\\", \\\"CUST-0098\\\", \\\"CUST-0208\\\", \\n    \\\"CUST-0315\\\", \\\"CUST-0317\\\", \\\"CUST-0359\\\", \\\"CUST-0412\\\", \\\"CUST-0005\\\", \\n    \\\"CUST-0016\\\", \\\"CUST-0049\\\", \\\"CUST-0088\\\", \\\"CUST-0113\\\", \\\"CUST-0296\\\", \\n    \\\"CUST-0356\\\", \\\"CUST-0020\\\", \\\"CUST-0185\\\", \\\"CUST-0220\\\",",
+      "cumulative_input_tokens": 172968,
       "tokens_estimated": true
     },
     {
       "n": 7,
-      "tool": "write_todos",
-      "summary": "write_todos",
-      "input": "{\"todos\":[{\"content\":\"Find Enterprise accounts renewing in the next 60 days\",\"status\":\"completed\"},{\"content\":\"Identify open P1 tickets for those accounts\",\"status\":\"in_progress\"},{\"content\":\"Find knowledge base articles covering the ticket issues\",\"status\":\"pending\"},{\"content\":\"Summarize findings for the user\",\"status\":\"pending\"}]}",
-      "cumulative_input_tokens": 127288,
+      "tool": "platform.core.generate_esql",
+      "summary": "platform.core.generate_esql",
+      "input": "{\"query\":\"Find all tickets for accounts CUST-0179, CUST-0353, CUST-0442, CUST-0085, CUST-0162, CUST-0318, CUST-0027, CUST-0087, CUST-0098, CUST-0208, CUST-0315, CUST-0317, CUST-0359, CUST-0412, CUST-0005, CUST-0016, CUST-0049, CUST-0088, CUST-0113, CUST-0296, CUST-0356, CUST-0020, CUST-0185, CUST-0220, CUST-0439, CUST-0110, CUST-0125, CUST-0190, CUST-0391 regardless of priority or status to verify ticket presence.\"}",
+      "cumulative_input_tokens": 201796,
       "tokens_estimated": true
     },
     {
       "n": 8,
       "tool": "platform.core.execute_esql",
       "summary": "platform.core.execute_esql",
-      "input": "{\"query\":\"FROM precision-*\\n| WHERE account_tier == \\\"Enterprise\\\" \\n  AND renewal_date >= NOW() AND renewal_date <= NOW() + 60 days\\n  AND status == \\\"open\\\" \\n  AND priority == \\\"critical\\\"\\n| KEEP company_name, ticket_id, subject, body\\n| LIMIT 100\"}",
-      "cumulative_input_tokens": 145472,
+      "input": "{\"query\":\"FROM precision-support-tickets\\n| WHERE account_id IN (\\n    \\\"CUST-0179\\\", \\\"CUST-0353\\\", \\\"CUST-0442\\\", \\\"CUST-0085\\\", \\\"CUST-0162\\\", \\n    \\\"CUST-0318\\\", \\\"CUST-0027\\\", \\\"CUST-0087\\\", \\\"CUST-0098\\\", \\\"CUST-0208\\\", \\n    \\\"CUST-0315\\\", \\\"CUST-0317\\\", \\\"CUST-0359\\\", \\\"CUST-0412\\\", \\\"CUST-0005\\\", \\n    \\\"CUST-0016\\\", \\\"CUST-0049\\\", \\\"CUST-0088\\\", \\\"CUST-0113\\\", \\\"CUST-0296\\\", \\n    \\\"CUST-0356\\\", \\\"CUST-0020\\\", \\\"CUST-0185\\\", \\\"CUST-0220\\\", \\\"CUST-0439\\\", \\n    \\\"CUST-0110\\\", \\\"CUST-01",
+      "cumulative_input_tokens": 230624,
       "tokens_estimated": true
     },
     {
       "n": 9,
-      "tool": "platform.core.execute_esql",
-      "summary": "platform.core.execute_esql",
-      "input": "{\"query\":\"FROM precision-*\\n| WHERE account_tier == \\\"Enterprise\\\" \\n  AND renewal_date >= NOW() AND renewal_date <= NOW() + 60 days\\n| STATS count() BY company_name, ticket_id, priority, status, subject\\n| WHERE status != \\\"resolved\\\" AND status != \\\"closed\\\"\\n| LIMIT 100\"}",
-      "cumulative_input_tokens": 163656,
+      "tool": "platform.core.generate_esql",
+      "summary": "platform.core.generate_esql",
+      "input": "{\"query\":\"Search knowledge base articles for \\\"SCIM connector OAuth token refresh loop\\\", \\\"data pipeline drop ingest\\\", \\\"API response deleted records tombstones\\\", \\\"API rate limit documentation\\\", \\\"API rotation grace period\\\"\"}",
+      "cumulative_input_tokens": 259452,
       "tokens_estimated": true
     },
     {
       "n": 10,
-      "tool": "platform.core.search",
-      "summary": "platform.core.search",
-      "input": "{\"time_range\":{\"from\":\"now-1y\",\"to\":\"now+60d\"},\"query\":\"Enterprise accounts renewing in next 60 days with open critical tickets\",\"index\":\"precision-*\"}",
-      "cumulative_input_tokens": 181840,
-      "tokens_estimated": true
-    },
-    {
-      "n": 11,
       "tool": "platform.core.execute_esql",
       "summary": "platform.core.execute_esql",
-      "input": "{\"query\":\"FROM precision-*\\n| WHERE account_tier == \\\"Enterprise\\\"\\n| WHERE status == \\\"open\\\" OR status == \\\"in_progress\\\"\\n| WHERE priority == \\\"critical\\\" OR priority == \\\"high\\\"\\n| KEEP company_name, ticket_id, priority, status, subject, renewal_date\\n| LIMIT 100\"}",
-      "cumulative_input_tokens": 200024,
-      "tokens_estimated": true
-    },
-    {
-      "n": 12,
-      "tool": "write_todos",
-      "summary": "write_todos",
-      "input": "{\"todos\":[{\"content\":\"Find Enterprise accounts renewing in the next 60 days\",\"status\":\"completed\"},{\"content\":\"Identify open P1 tickets for those accounts\",\"status\":\"completed\"},{\"content\":\"Find knowledge base articles covering the ticket issues\",\"status\":\"in_progress\"},{\"content\":\"Summarize findings for the user\",\"status\":\"pending\"}]}",
-      "cumulative_input_tokens": 218208,
-      "tokens_estimated": true
-    },
-    {
-      "n": 13,
-      "tool": "platform.core.execute_esql",
-      "summary": "platform.core.execute_esql",
-      "input": "{\"query\":\"FROM precision-*\\n| WHERE renewal_date >= NOW() AND renewal_date <= NOW() + 60 days\\n  AND account_tier == \\\"Enterprise\\\"\\n  AND (status == \\\"open\\\" OR status == \\\"in_progress\\\")\\n  AND priority == \\\"critical\\\"\\n| KEEP company_name, ticket_id, subject, priority, status, renewal_date\\n| SORT renewal_date ASC\\n| LIMIT 100\"}",
-      "cumulative_input_tokens": 236392,
-      "tokens_estimated": true
-    },
-    {
-      "n": 14,
-      "tool": "platform.core.execute_esql",
-      "summary": "platform.core.execute_esql",
-      "input": "{\"query\":\"FROM precision-*\\n| WHERE renewal_date >= \\\"2026-09-29\\\" AND renewal_date <= \\\"2026-11-29\\\"\\n  AND account_tier == \\\"Enterprise\\\"\\n  AND (status == \\\"open\\\" OR status == \\\"in_progress\\\")\\n  AND priority == \\\"critical\\\"\\n| KEEP company_name, ticket_id, subject, priority, status, renewal_date\\n| SORT renewal_date ASC\\n| LIMIT 100\"}",
-      "cumulative_input_tokens": 254576,
-      "tokens_estimated": true
-    },
-    {
-      "n": 15,
-      "tool": "platform.core.execute_esql",
-      "summary": "platform.core.execute_esql",
-      "input": "{\"query\":\"FROM precision-*\\n| WHERE renewal_date >= \\\"2026-09-29\\\" AND renewal_date <= \\\"2026-11-29\\\"\\n  AND account_tier == \\\"Enterprise\\\"\\n| STATS count() BY company_name, ticket_id, priority, status, subject, renewal_date\\n| WHERE status == \\\"open\\\" OR status == \\\"in_progress\\\"\\n| WHERE priority == \\\"critical\\\"\\n| SORT renewal_date ASC\\n| LIMIT 100\"}",
-      "cumulative_input_tokens": 272760,
-      "tokens_estimated": true
-    },
-    {
-      "n": 16,
-      "tool": "platform.core.execute_esql",
-      "summary": "platform.core.execute_esql",
-      "input": "{\"query\":\"FROM precision-*\\n| WHERE renewal_date >= \\\"2026-09-29\\\" AND renewal_date <= \\\"2026-11-29\\\"\\n  AND account_tier == \\\"Enterprise\\\"\\n| KEEP company_name, ticket_id, priority, status, subject, renewal_date\\n| LIMIT 1000\"}",
-      "cumulative_input_tokens": 290944,
-      "tokens_estimated": true
-    },
-    {
-      "n": 17,
-      "tool": "platform.core.execute_esql",
-      "summary": "platform.core.execute_esql",
-      "input": "{\"query\":\"FROM precision-*\\n| WHERE company_name IN (\\\"Coppervale Technologies\\\", \\\"Cobalt Co\\\", \\\"Vertex Networks\\\", \\\"Vertex Technologies\\\", \\\"Redwood Technologies\\\", \\\"Wavelength Analytics\\\", \\\"Sablefield Technologies\\\", \\\"Latticework Labs\\\", \\\"Redwood Networks\\\", \\\"Anchorpoint Partners\\\", \\\"Hearthstone Networks\\\", \\\"Meridian Networks\\\", \\\"Granite Labs\\\", \\\"Hearthstone Analytics\\\", \\\"Sablefield Co\\\", \\\"Granite Systems\\\", \\\"Latticework Systems\\\", \\\"Coppervale Group\\\", \\\"Solace Partners\\\", \\\"Fa",
-      "cumulative_input_tokens": 309128,
-      "tokens_estimated": true
-    },
-    {
-      "n": 18,
-      "tool": "platform.core.search",
-      "summary": "platform.core.search",
-      "input": "{\"query\":\"HubSpot field mapping not applying, Zapier integration timing out, Onboarding checklist integrations, API rate limit documentation, Renewal quote doesn't match, user invites failing, SCIM connector OAuth token refresh loop, Salesforce sync failing, bulk export stalling, Snowflake connector missing rows, numeric field rounding, search latency spike, dashboard load times, date picker timezone, v2 API migration, joined data null fields, CSV export encoding, data pipeline drop, API respons",
-      "cumulative_input_tokens": 327312,
+      "input": "{\"query\":\"FROM precision-kb-articles\\n| WHERE MATCH(content, \\\"SCIM connector OAuth token refresh loop data pipeline drop ingest API response deleted records tombstones API rate limit documentation API rotation grace period\\\", {\\\"operator\\\": \\\"OR\\\"})\\n| KEEP article_id, title, content, category, tags\\n| LIMIT 100\"}",
+      "cumulative_input_tokens": 288280,
       "tokens_estimated": true
     }
   ],
   "metrics": {
-    "turns": 22,
-    "llm_calls": 22,
-    "tool_calls": 18,
-    "input_tokens": 327313,
-    "cached_input_tokens": 213634,
-    "effective_tokens": 135042,
-    "output_tokens": 2991,
-    "seconds": 60.3,
+    "turns": 21,
+    "llm_calls": 21,
+    "tool_calls": 10,
+    "input_tokens": 288289,
+    "cached_input_tokens": 156020,
+    "effective_tokens": 147871,
+    "output_tokens": 3600,
+    "seconds": 45.2,
     "tokens_estimated": true,
     "cache_read_mult": 0.1
   }

@@ -2,93 +2,53 @@
   "scenario": "S03",
   "mode": "ce",
   "source": "live",
-  "recorded_at": "20260929T162612Z",
+  "recorded_at": "20260929T205257Z",
   "model": "google-gemini-3.0-flash",
-  "label": "Median of 3 recorded runs \u00b7 learner-built agents \u00b7 2026-09-29 \u00b7 google-gemini-3.0-flash",
-  "answer_markdown": "Based on current data, there are several high-value accounts that both have open critical (P1) support tickets and are at high risk of churning (defined here as a churn risk score > 0.7).\n\n### High-Risk Accounts with Critical Issues\n\n| Company Name | Account ID | Churn Risk | Ticket ID | Priority |\n| :--- | :--- | :--- | :--- | :--- |\n| **Hearthstone Co** | `CUST-0285` | **0.99** | `TICK-01717` | Critical |\n| **Vertex Group** | `CUST-0131` | **0.95** | `TICK-0792` | Critical |\n| **Redwood Labs** | `CUST-0009` | **0.91** | `TICK-00049` | Critical |\n| **Meridian Systems** | `CUST-0312` | **0.83** | `TICK-01881` | Critical |\n| **Solace Analytics** | `CUST-0242` | **0.82** | `TICK-01467` | Critical |\n| **Nimbus Networks** | `CUST-0314` | **0.80** | `TICK-01905` | Critical |\n\n**Summary of Findings:**\n*   **Hearthstone Co** (`CUST-0285`) is the most critical, with a churn risk score of **0.99** and an active critical ticket.\n*   **Vertex Group** and **Redwood Labs** also show extremely high risk scores (> 0.90) coupled with critical support issues.\n*   The search identified a total of 6 accounts matching both criteria (Open P1/Critical ticket AND Churn Risk > 0.7).\n\nThese accounts require immediate attention from their respective Customer Success Managers to mitigate the high risk of loss.",
+  "label": "Median of 3 recorded runs \u00b7 2026-09-29 \u00b7 google-gemini-3.0-flash",
+  "answer_markdown": "I have identified several accounts that have both an open (or in-progress) P1 (critical) ticket and a high churn risk score (above 0.7).\n\nHere are the accounts currently facing this situation:\n\n| Account Name | Customer ID | Churn Risk | Ticket ID | Ticket Status | Account Owner |\n| :--- | :--- | :--- | :--- | :--- | :--- |\n| **Hearthstone Co** | CUST-0285 | 0.99 | TICK-01717 | open | Lena Fischer |\n| **Nimbus Partners** | CUST-0245 | 0.94 | TICK-01480 | open | Lena Fischer |\n| **Bluepeak Networks** | CUST-0247 | 0.94 | TICK-01493 | resolved* | Lena Fischer |\n| **Northstar Technologies** | CUST-0334 | 0.94 | TICK-02030 | in_progress | Dana Reyes |\n| **Redwood Labs** | CUST-0009 | 0.91 | TICK-00049 | open | Omar Haddad |\n| **Granite Networks** | CUST-0053 | 0.90 | TICK-00327 | in_progress | Omar Haddad |\n| **Solace Systems** | CUST-0383 | 0.84 | TICK-02341 | open | Ji-Woo Kang |\n| **Meridian Systems** | CUST-0312 | 0.83 | TICK-01881 | open | Ji-Woo Kang |\n| **Solace Analytics** | CUST-0242 | 0.82 | TICK-01467 | open | Dana Reyes |\n| **Granite Analytics** | CUST-0280 | 0.82 | TICK-01689 | in_progress | Lena Fischer |\n| **Latticework Analytics** | CUST-0328 | 0.81 | TICK-01998 | in_progress | Lena Fischer |\n| **Vertex Group** | CUST-0131 | 0.95 | TICK-00792 | open | Priya Nair |\n| **Wavelength Technologies** | CUST-0463 | 0.96 | TICK-02798 | open | Lena Fischer |\n| **Sablefield Co** | CUST-0141 | 0.98 | TICK-00839 | in_progress | Dana Reyes |\n\n*Note: While TICK-01493 for Bluepeak Networks is marked \"resolved\", other critical tickets like TICK-01717 for Hearthstone Co and TICK-01480 for Nimbus Partners are still in an \"open\" status.*\n\n### Reasoning:\n1.  **Support Tickets:** I searched the `precision-support-tickets` index for all tickets where `priority == \"critical\"` and the status was not `closed`. This gave me a list of accounts experiencing high-priority issues.\n2.  **Churn Risk:** I then cross-referenced these accounts with the `precision-crm-accounts` index to find those with a `churn_risk_score` greater than 0.7.\n3.  **Synthesis:** The accounts listed above represent the intersection of these two risk factors, indicating they require immediate attention from their respective Customer Success Managers.",
   "turns": [
     {
       "n": 1,
-      "tool": "load_skill",
-      "summary": "load_skill",
-      "input": "{\"skill\":\"ki-retrieval\"}",
-      "cumulative_input_tokens": 10430,
+      "tool": "platform.context_engine.query_ai_indices",
+      "summary": "platform.context_engine.query_ai_indices",
+      "input": "{\"query\":\"FROM ai-index-idx-precision-corpus\\n| WHERE type == \\\"index_metadata\\\"\\n| KEEP title, content\"}",
+      "cumulative_input_tokens": 14684,
       "tokens_estimated": true
     },
     {
       "n": 2,
-      "tool": "write_todos",
-      "summary": "write_todos",
-      "input": "{\"todos\":[{\"content\":\"Retrieve Knowledge Indicators for accounts, tickets, and churn risk schemas\",\"status\":\"in_progress\"},{\"content\":\"Identify relevant indices and fields from KIs\",\"status\":\"pending\"},{\"content\":\"Query for accounts with open P1 tickets and high churn risk\",\"status\":\"pending\"},{\"content\":\"Analyze and present the results\",\"status\":\"pending\"}]}",
-      "cumulative_input_tokens": 20860,
+      "tool": "platform.core.execute_esql",
+      "summary": "platform.core.execute_esql",
+      "input": "{\"query\":\"FROM precision-support-tickets\\n| WHERE priority == \\\"critical\\\" AND status != \\\"closed\\\"\\n| ENRICH precision-crm-accounts-enrich ON account_id\\n| WHERE churn_risk_score > 0.7\\n| KEEP company_name, ticket_id, priority, status, churn_risk_score, account_owner\\n| SORT churn_risk_score DESC\"}",
+      "cumulative_input_tokens": 29368,
       "tokens_estimated": true
     },
     {
       "n": 3,
-      "tool": "platform.context_engine.query_ai_indices",
-      "summary": "platform.context_engine.query_ai_indices",
-      "input": "{\"query\":\"FROM ai-index-idx-precision-corpus METADATA _id, _index, _score\\n| WHERE type == \\\"index_metadata\\\"\\n| FORK\\n    ( WHERE content:\\\"accounts tickets churn risk\\\" OR title:\\\"accounts tickets churn risk\\\" | SORT _score DESC | LIMIT 20 )\\n    ( WHERE content.semantic:\\\"accounts tickets churn risk\\\" OR title.semantic:\\\"accounts tickets churn risk\\\" | SORT _score DESC | LIMIT 20 )\\n| FUSE\\n| SORT _score DESC, _id ASC\\n| KEEP title, description, content, type, tags\\n| LIMIT 5\"}",
-      "cumulative_input_tokens": 31290,
+      "tool": "platform.core.execute_esql",
+      "summary": "platform.core.execute_esql",
+      "input": "{\"query\":\"FROM precision-support-tickets\\n| WHERE priority == \\\"critical\\\" AND status != \\\"closed\\\"\\n| KEEP account_id, ticket_id, priority, status\\n| LIMIT 100\"}",
+      "cumulative_input_tokens": 44052,
       "tokens_estimated": true
     },
     {
       "n": 4,
-      "tool": "write_todos",
-      "summary": "write_todos",
-      "input": "{\"todos\":[{\"content\":\"Retrieve Knowledge Indicators for accounts, tickets, and churn risk schemas\",\"status\":\"completed\"},{\"content\":\"Identify relevant indices and fields from KIs\",\"status\":\"completed\"},{\"content\":\"Query for accounts with open P1 tickets and high churn risk\",\"status\":\"in_progress\"},{\"content\":\"Analyze and present the results\",\"status\":\"pending\"}]}",
-      "cumulative_input_tokens": 41720,
-      "tokens_estimated": true
-    },
-    {
-      "n": 5,
       "tool": "platform.core.execute_esql",
       "summary": "platform.core.execute_esql",
-      "input": "{\"query\":\"FROM precision-support-tickets\\n| WHERE status == \\\"open\\\" AND (priority == \\\"P1\\\" OR priority == \\\"critical\\\")\\n| ENRICH precision-crm-accounts-enrich ON account_id\\n| WHERE churn_risk_score > 0.7\\n| KEEP company_name, ticket_id, priority, churn_risk_score, status\\n| SORT churn_risk_score DESC\"}",
-      "cumulative_input_tokens": 52150,
-      "tokens_estimated": true
-    },
-    {
-      "n": 6,
-      "tool": "platform.core.execute_esql",
-      "summary": "platform.core.execute_esql",
-      "input": "{\"query\":\"FROM precision-support-tickets\\n| WHERE status == \\\"open\\\" AND (priority == \\\"P1\\\" OR priority == \\\"critical\\\")\\n| KEEP account_id, ticket_id, priority, status\\n| JOIN [FROM precision-crm-accounts | WHERE churn_risk_score > 0.7 | KEEP customer_id, company_name, churn_risk_score] ON account_id == customer_id\\n| SORT churn_risk_score DESC\\n| LIMIT 20\"}",
-      "cumulative_input_tokens": 62580,
-      "tokens_estimated": true
-    },
-    {
-      "n": 7,
-      "tool": "platform.core.execute_esql",
-      "summary": "platform.core.execute_esql",
-      "input": "{\"query\":\"FROM precision-support-tickets\\n| WHERE status == \\\"open\\\" AND (priority == \\\"P1\\\" OR priority == \\\"critical\\\")\\n| KEEP account_id, ticket_id, priority, status\\n| LIMIT 50\"}",
-      "cumulative_input_tokens": 73010,
-      "tokens_estimated": true
-    },
-    {
-      "n": 8,
-      "tool": "platform.core.execute_esql",
-      "summary": "platform.core.execute_esql",
-      "input": "{\"query\":\"FROM precision-crm-accounts\\n| WHERE churn_risk_score > 0.7\\n| KEEP customer_id, company_name, churn_risk_score\\n| LIMIT 50\"}",
-      "cumulative_input_tokens": 83440,
-      "tokens_estimated": true
-    },
-    {
-      "n": 9,
-      "tool": "write_todos",
-      "summary": "write_todos",
-      "input": "{\"todos\":[{\"content\":\"Retrieve Knowledge Indicators for accounts, tickets, and churn risk schemas\",\"status\":\"completed\"},{\"content\":\"Identify relevant indices and fields from KIs\",\"status\":\"completed\"},{\"content\":\"Query for accounts with open P1 tickets and high churn risk\",\"status\":\"completed\"},{\"content\":\"Analyze and present the results\",\"status\":\"in_progress\"}]}",
-      "cumulative_input_tokens": 93870,
+      "input": "{\"query\":\"FROM precision-crm-accounts\\n| WHERE churn_risk_score > 0.7\\n| KEEP customer_id, company_name, churn_risk_score, account_owner\\n| SORT churn_risk_score DESC\\n| LIMIT 100\"}",
+      "cumulative_input_tokens": 58736,
       "tokens_estimated": true
     }
   ],
   "metrics": {
-    "turns": 7,
-    "llm_calls": 7,
-    "tool_calls": 9,
-    "input_tokens": 93876,
-    "cached_input_tokens": 57162,
-    "effective_tokens": 42430,
-    "output_tokens": 1319,
-    "seconds": 30.1,
+    "turns": 5,
+    "llm_calls": 5,
+    "tool_calls": 4,
+    "input_tokens": 58736,
+    "cached_input_tokens": 34168,
+    "effective_tokens": 27985,
+    "output_tokens": 1332,
+    "seconds": 20.1,
     "tokens_estimated": true,
     "cache_read_mult": 0.1
   }

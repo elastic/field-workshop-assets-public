@@ -2,85 +2,45 @@
   "scenario": "S01",
   "mode": "ce",
   "source": "live",
-  "recorded_at": "20260929T162612Z",
+  "recorded_at": "20260929T205257Z",
   "model": "google-gemini-3.0-flash",
-  "label": "Median of 3 recorded runs \u00b7 learner-built agents \u00b7 2026-09-29 \u00b7 google-gemini-3.0-flash",
-  "answer_markdown": "Based on the CRM and support data, several high-value Enterprise accounts are at critical risk of churning, primarily due to recurring technical issues.\n\n### **Top Enterprise Accounts at Risk**\nThe following accounts have the highest churn risk scores (0.90+) and represent significant revenue:\n\n| Company Name | Churn Risk | ARR |\n| :--- | :--- | :--- |\n| **Bluepeak Technologies** | 1.00 | $923,342 |\n| **Hearthstone Co** | 0.99 | $1,467,294 |\n| **Nimbus Labs** | 0.97 | $1,762,422 |\n| **Aurora Labs** | 0.96 | $1,050,428 |\n| **Wavelength Partners** | 0.95 | $1,453,597 |\n| **Hearthstone Labs** | 0.95 | $1,657,591 |\n\n### **Primary Support Concerns**\nAnalysis of support tickets for these high-risk accounts reveals three dominant themes:\n\n1.  **Performance Degradation (28 tickets):** Customers are reporting significant search latency spikes, dashboard load delays, and workflow automation jobs queuing for hours. While some index hints have been applied, these issues remain a top frustration.\n2.  **Integration Failures (27 tickets):** There is a recurring pattern of \"OAuth token refresh loops\" and sync failures across key connectors like SCIM, Snowflake, and Salesforce. Several notes indicate these were introduced by recent deployments, leading to platform instability.\n3.  **Core Product Bugs (24 tickets):** Frequent reports of UI-breaking bugs, such as filters resetting unexpectedly, broken date pickers, and failed user invites, are contributing to a negative user experience.\n\n**Summary:** The risk is driven by **platform stability and performance**, particularly following recent deployments that impacted critical data integrations and dashboard speeds for our largest customers.",
+  "label": "Median of 3 recorded runs \u00b7 2026-09-29 \u00b7 google-gemini-3.0-flash",
+  "answer_markdown": "The Enterprise accounts with the highest churn risk are primarily facing issues related to **performance**, **integration**, and **bugs**.\n\n### Top Enterprise Accounts at Risk\nBased on the churn risk scores (0.0 to 1.0), here are the highest-risk accounts:\n\n| Company Name | Customer ID | Churn Risk Score | ARR | Account Owner |\n| :--- | :--- | :--- | :--- | :--- |\n| **Bluepeak Technologies** | CUST-0012 | **1.00** | $923,342 | Omar Haddad |\n| **Hearthstone Co** | CUST-0285 | **0.99** | $1,467,294 | Lena Fischer |\n| **Nimbus Labs** | CUST-0481 | **0.97** | $1,762,422 | Omar Haddad |\n| **Aurora Labs** | CUST-0396 | **0.96** | $1,050,428 | Priya Nair |\n| **Hearthstone Labs** | CUST-0303 | **0.95** | $1,657,591 | Dana Reyes |\n\n### Primary Support Themes\nFor these high-risk accounts, the most frequent support ticket categories are:\n\n1.  **Performance (Critical Friction):** **Aurora Labs** (8 tickets), **Meridian Co** (4 tickets), and **Hearthstone Labs** (4 tickets) are heavily impacted by performance-related issues.\n2.  **Integrations & Bugs:** **Wavelength Partners** (5 integration tickets), **Hearthstone Co** (4 bug tickets), and **Nimbus Labs** (4 bug tickets) are struggling with technical stability and connectivity.\n3.  **Billing Inquiries:** **Nimbus Labs** and **Hearthstone Co** each have 4 billing-related tickets, which often correlate with high churn risk during renewal cycles.\n\n**Reasoning:**\nI first identified the highest-risk Enterprise accounts using the `precision-crm-accounts` index. I then joined this list with the `precision-support-tickets` index to aggregate ticket counts by category. The data shows a clear trend: the highest-risk accounts are experiencing significant technical friction (Performance and Bugs) or configuration hurdles (Integrations).",
   "turns": [
     {
       "n": 1,
-      "tool": "write_todos",
-      "summary": "write_todos",
-      "input": "{\"todos\":[{\"content\":\"Retrieve index metadata and playbooks from precision-corpus AI Index\",\"status\":\"in_progress\"},{\"content\":\"Identify high-churn-risk Enterprise accounts\",\"status\":\"pending\"},{\"content\":\"Query support tickets for those accounts to identify common issues\",\"status\":\"pending\"},{\"content\":\"Synthesize findings and answer the user's question\",\"status\":\"pending\"}]}",
-      "cumulative_input_tokens": 7300,
+      "tool": "platform.context_engine.query_ai_indices",
+      "summary": "platform.context_engine.query_ai_indices",
+      "input": "{\"query\":\"FROM ai-index-idx-precision-corpus\\n| WHERE type == \\\"index_metadata\\\"\\n| KEEP title, content\"}",
+      "cumulative_input_tokens": 13905,
       "tokens_estimated": true
     },
     {
       "n": 2,
-      "tool": "platform.context_engine.query_ai_indices",
-      "summary": "platform.context_engine.query_ai_indices",
-      "input": "{\"query\":\"FROM ai-index-idx-precision-corpus | WHERE type IN (\\\"index_metadata\\\", \\\"playbook\\\") | KEEP type, title, content\"}",
-      "cumulative_input_tokens": 14600,
+      "tool": "platform.core.execute_esql",
+      "summary": "platform.core.execute_esql",
+      "input": "{\"query\":\"FROM precision-crm-accounts\\n| WHERE account_tier == \\\"Enterprise\\\"\\n| SORT churn_risk_score DESC\\n| LIMIT 10\\n| KEEP company_name, customer_id, churn_risk_score, arr, account_owner\"}",
+      "cumulative_input_tokens": 27810,
       "tokens_estimated": true
     },
     {
       "n": 3,
-      "tool": "write_todos",
-      "summary": "write_todos",
-      "input": "{\"todos\":[{\"content\":\"Retrieve index metadata and playbooks from precision-corpus AI Index\",\"status\":\"completed\"},{\"content\":\"Identify high-churn-risk Enterprise accounts\",\"status\":\"in_progress\"},{\"content\":\"Query support tickets for those accounts to identify common issues\",\"status\":\"pending\"},{\"content\":\"Synthesize findings and answer the user's question\",\"status\":\"pending\"}]}",
-      "cumulative_input_tokens": 21900,
-      "tokens_estimated": true
-    },
-    {
-      "n": 4,
       "tool": "platform.core.execute_esql",
       "summary": "platform.core.execute_esql",
-      "input": "{\"query\":\"FROM precision-crm-accounts | WHERE account_tier == \\\"Enterprise\\\" AND churn_risk_score > 0.7 | KEEP customer_id, company_name, churn_risk_score, arr | SORT churn_risk_score DESC\"}",
-      "cumulative_input_tokens": 29200,
-      "tokens_estimated": true
-    },
-    {
-      "n": 5,
-      "tool": "write_todos",
-      "summary": "write_todos",
-      "input": "{\"todos\":[{\"content\":\"Retrieve index metadata and playbooks from precision-corpus AI Index\",\"status\":\"completed\"},{\"content\":\"Identify high-churn-risk Enterprise accounts\",\"status\":\"completed\"},{\"content\":\"Query support tickets for those accounts to identify common issues\",\"status\":\"in_progress\"},{\"content\":\"Synthesize findings and answer the user's question\",\"status\":\"pending\"}]}",
-      "cumulative_input_tokens": 36500,
-      "tokens_estimated": true
-    },
-    {
-      "n": 6,
-      "tool": "platform.core.execute_esql",
-      "summary": "platform.core.execute_esql",
-      "input": "{\"query\":\"FROM precision-support-tickets\\n| WHERE account_id IN (\\\"CUST-0012\\\", \\\"CUST-0285\\\", \\\"CUST-0481\\\", \\\"CUST-0396\\\", \\\"CUST-0183\\\", \\\"CUST-0484\\\", \\\"CUST-0303\\\", \\\"CUST-0109\\\", \\\"CUST-0110\\\", \\\"CUST-0255\\\")\\n| STATS ticket_count = COUNT(ticket_id) BY category\\n| SORT ticket_count DESC\"}",
-      "cumulative_input_tokens": 43800,
-      "tokens_estimated": true
-    },
-    {
-      "n": 7,
-      "tool": "write_todos",
-      "summary": "write_todos",
-      "input": "{\"todos\":[{\"content\":\"Retrieve index metadata and playbooks from precision-corpus AI Index\",\"status\":\"completed\"},{\"content\":\"Identify high-churn-risk Enterprise accounts\",\"status\":\"completed\"},{\"content\":\"Query support tickets for those accounts to identify common issues\",\"status\":\"in_progress\"},{\"content\":\"Synthesize findings and answer the user's question\",\"status\":\"pending\"}]}",
-      "cumulative_input_tokens": 51100,
-      "tokens_estimated": true
-    },
-    {
-      "n": 8,
-      "tool": "platform.core.execute_esql",
-      "summary": "platform.core.execute_esql",
-      "input": "{\"query\":\"FROM precision-support-tickets\\n| WHERE account_id IN (\\\"CUST-0012\\\", \\\"CUST-0285\\\", \\\"CUST-0481\\\", \\\"CUST-0396\\\", \\\"CUST-0183\\\", \\\"CUST-0484\\\", \\\"CUST-0303\\\", \\\"CUST-0109\\\", \\\"CUST-0110\\\", \\\"CUST-0255\\\")\\n| WHERE category IN (\\\"performance\\\", \\\"integration\\\", \\\"bug\\\")\\n| KEEP account_id, category, subject, resolution_notes\\n| LIMIT 20\"}",
-      "cumulative_input_tokens": 58400,
+      "input": "{\"query\":\"FROM precision-support-tickets\\n| WHERE account_id IN (\\\"CUST-0012\\\", \\\"CUST-0285\\\", \\\"CUST-0481\\\", \\\"CUST-0396\\\", \\\"CUST-0303\\\", \\\"CUST-0110\\\", \\\"CUST-0183\\\", \\\"CUST-0109\\\", \\\"CUST-0484\\\", \\\"CUST-0255\\\")\\n| STATS ticket_count = COUNT(*) BY account_id, category\\n| SORT ticket_count DESC\"}",
+      "cumulative_input_tokens": 41715,
       "tokens_estimated": true
     }
   ],
   "metrics": {
-    "turns": 5,
-    "llm_calls": 5,
-    "tool_calls": 8,
-    "input_tokens": 58404,
-    "cached_input_tokens": 37715,
-    "effective_tokens": 24460,
-    "output_tokens": 1469,
-    "seconds": 30.0,
+    "turns": 4,
+    "llm_calls": 4,
+    "tool_calls": 3,
+    "input_tokens": 41717,
+    "cached_input_tokens": 22584,
+    "effective_tokens": 21391,
+    "output_tokens": 939,
+    "seconds": 20.0,
     "tokens_estimated": true,
     "cache_read_mult": 0.1
   }

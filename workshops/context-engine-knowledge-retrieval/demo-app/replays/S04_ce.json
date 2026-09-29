@@ -2,69 +2,93 @@
   "scenario": "S04",
   "mode": "ce",
   "source": "live",
-  "recorded_at": "20260929T162612Z",
+  "recorded_at": "20260929T205257Z",
   "model": "google-gemini-3.0-flash",
-  "label": "Median of 3 recorded runs \u00b7 learner-built agents \u00b7 2026-09-29 \u00b7 google-gemini-3.0-flash",
-  "answer_markdown": "Based on the support ticket data and knowledge base articles, here is a summary of our top ticket categories and what the KB provides for them:\n\n### **Top Support Ticket Categories**\n1.  **Bugs (481 tickets):** The most frequent category. These often require direct support intervention.\n2.  **Integrations (461 tickets):** Includes complex setups like Salesforce, Snowflake, and Zapier.\n3.  **API (372 tickets):** Often related to performance and rate limiting.\n4.  **Performance (368 tickets):** Frequently overlaps with API and large-scale data processing.\n5.  **Billing (362 tickets):** Primarily focuses on payment methods and invoice management.\n\n### **Knowledge Base Coverage for Top Issues**\n\n*   **Integrations:** This is a high-value area in our KB. The guide for **Connector Version Management (KB-0141)** and **Salesforce Integration (KB-0108/KB-0027)** are among the most helpful resources (470+ helpful votes), indicating that users frequently rely on these step-by-step guides to avoid common setup errors.\n*   **API & Performance:** A key resource is the **API Rate Limits migration guide (KB-0081)**. It addresses performance concerns by explaining configuration and troubleshooting for rate limiting, which is a major driver of API-related support requests.\n*   **Billing:** The KB provides clear, self-service instructions for **Updating Payment Methods and Billing Contacts (KB-0017)**. This likely helps deflect common administrative questions, though 362 tickets still reached support, potentially due to reseller-managed accounts where the fields are read-only.\n*   **Bugs:** While the KB has many \"How-to\" guides, high-volume bug reports are usually handled via support tickets. The KB articles (like KB-0141 and KB-0081) explicitly instruct users to open a ticket if they encounter an issue not covered in the documentation.\n\n### **Reasoning**\nThe data shows a strong correlation between complex technical tasks (Integrations/API) and ticket volume. Our KB is well-equipped with highly-voted guides for these areas, suggesting that while the topics are difficult, the documentation is actively used to support customers. The volume of \"Bug\" tickets suggests that users are following the KB's advice to report uncovered issues to the support team.",
+  "label": "Median of 3 recorded runs \u00b7 2026-09-29 \u00b7 google-gemini-3.0-flash",
+  "answer_markdown": "Based on the data from support tickets and the knowledge base, here are the top support ticket categories and what the knowledge base provides for each:\n\n### **Top Support Ticket Categories**\n1.  **Bug** (481 tickets)\n2.  **Integration** (461 tickets)\n3.  **API** (372 tickets)\n4.  **Performance** (368 tickets)\n5.  **Billing** (362 tickets)\n\n---\n\n### **Knowledge Base Coverage**\n\nThe knowledge base contains 150 articles, with significant coverage for the primary ticket drivers, particularly **Integrations** and **API**.\n\n#### **1. Integrations (41 Articles)**\nThis is one of the most well-documented areas, matching its high ticket volume.\n*   **Key Articles:** High-performing guides include setup for **Salesforce**, **Snowflake**, and **Zapier**.\n*   **Focus:** The documentation emphasizes step-by-step setup, version management, and common triggers/actions.\n*   **Support Guidance:** Articles explicitly instruct users to open tickets under the \"integrations\" category if they face issues not covered in the KB, which likely contributes to the high ticket count.\n\n#### **2. API (21 Articles)**\nAs the third-highest ticket category, the KB provides targeted resources for developers.\n*   **Key Articles:** Most helpful content centers on **API Authentication** and **Rate Limits**.\n*   **Focus:** Troubleshooting migration to new rate limits and resolving authentication failures are common themes.\n\n#### **3. Billing (4 Articles)**\nDespite being the fifth-highest ticket category, there are relatively few articles, suggesting that billing issues may be more transactional or require direct agent intervention.\n*   **Key Article:** \"Updating Payment Method and Billing Contact\" is highly rated.\n*   **Focus:** Self-service instructions for credit card updates and billing contacts via the Stripe integration.\n\n#### **4. Troubleshooting/Bugs (11 Articles)**\nWhile \"Bug\" is the top ticket category, the knowledge base addresses this through \"troubleshooting\" runbooks.\n*   **Focus:** These articles generally cover common platform errors and provide diagnostic steps before a user is directed to open a bug report.\n\n### **Summary of Findings**\nThe knowledge base is heavily weighted toward **Integrations** and **API** support, which aligns with the high volume of tickets in those areas. However, the high number of **Bug** and **Performance** tickets compared to their KB article count (11 troubleshooting articles and 0 performance-specific articles found in my summary) suggests an opportunity to expand documentation in these areas to reduce ticket volume.",
   "turns": [
     {
       "n": 1,
-      "tool": "load_skill",
-      "summary": "load_skill",
-      "input": "{\"skill\":\"ki-retrieval\"}",
-      "cumulative_input_tokens": 15790,
+      "tool": "write_todos",
+      "summary": "write_todos",
+      "input": "{\"todos\":[{\"content\":\"Retrieve Knowledge Indicators for support tickets and knowledge base articles from precision-corpus.\",\"status\":\"in_progress\"},{\"content\":\"Identify top support ticket categories using the discovered indices.\",\"status\":\"pending\"},{\"content\":\"Query the knowledge base for information regarding those top ticket categories.\",\"status\":\"pending\"},{\"content\":\"Synthesize findings into a final response for the user.\",\"status\":\"pending\"}]}",
+      "cumulative_input_tokens": 7189,
       "tokens_estimated": true
     },
     {
       "n": 2,
       "tool": "platform.context_engine.query_ai_indices",
       "summary": "platform.context_engine.query_ai_indices",
-      "input": "{\"query\":\"FROM ai-index-idx-precision-corpus METADATA _id, _index, _score\\n| FORK\\n    ( WHERE content:\\\"support ticket categories\\\" OR title:\\\"support ticket categories\\\" OR description:\\\"support ticket categories\\\" | SORT _score DESC | LIMIT 20 )\\n    ( WHERE content.semantic:\\\"support ticket categories top issues\\\" OR title.semantic:\\\"support ticket categories top issues\\\" OR description.semantic:\\\"support ticket categories top issues\\\" | SORT _score DESC | LIMIT 20 )\\n| FUSE\\n| SORT _score D",
-      "cumulative_input_tokens": 31580,
+      "input": "{\"query\":\"FROM ai-index-idx-precision-corpus \\n| WHERE type == \\\"index_metadata\\\" \\n| KEEP title, content\"}",
+      "cumulative_input_tokens": 14378,
       "tokens_estimated": true
     },
     {
       "n": 3,
-      "tool": "platform.core.execute_esql",
-      "summary": "platform.core.execute_esql",
-      "input": "{\"query\":\"FROM precision-support-tickets\\n| STATS ticket_count = COUNT(*) BY category\\n| SORT ticket_count DESC\\n| LIMIT 5\"}",
-      "cumulative_input_tokens": 47370,
+      "tool": "write_todos",
+      "summary": "write_todos",
+      "input": "{\"todos\":[{\"content\":\"Retrieve Knowledge Indicators for support tickets and knowledge base articles from precision-corpus.\",\"status\":\"completed\"},{\"content\":\"Identify top support ticket categories using the discovered indices.\",\"status\":\"in_progress\"},{\"content\":\"Query the knowledge base for information regarding those top ticket categories.\",\"status\":\"pending\"},{\"content\":\"Synthesize findings into a final response for the user.\",\"status\":\"pending\"}]}",
+      "cumulative_input_tokens": 21567,
       "tokens_estimated": true
     },
     {
       "n": 4,
       "tool": "platform.core.execute_esql",
       "summary": "platform.core.execute_esql",
-      "input": "{\"query\":\"FROM precision-kb-articles\\n| WHERE category IN (\\\"features\\\", \\\"integrations\\\", \\\"api\\\") OR MV_CONTAINS(tags, \\\"performance\\\") OR MV_CONTAINS(tags, \\\"billing\\\")\\n| KEEP article_id, title, category, tags, helpful_votes\\n| SORT helpful_votes DESC\\n| LIMIT 10\"}",
-      "cumulative_input_tokens": 63160,
+      "input": "{\"query\":\"FROM `precision-support-tickets`\\n| STATS ticket_count = COUNT(*) BY category\\n| SORT ticket_count DESC\\n| LIMIT 5\"}",
+      "cumulative_input_tokens": 28756,
       "tokens_estimated": true
     },
     {
       "n": 5,
-      "tool": "read_file",
-      "summary": "read_file",
-      "input": "{\"path\":\"/tool_calls/platform.core.execute_esql_TZSPZc/result.json\"}",
-      "cumulative_input_tokens": 78950,
+      "tool": "platform.core.execute_esql",
+      "summary": "platform.core.execute_esql",
+      "input": "{\"query\":\"FROM \\\"precision-support-tickets\\\"\\n| STATS ticket_count = COUNT(*) BY category\\n| SORT ticket_count DESC\\n| LIMIT 5\"}",
+      "cumulative_input_tokens": 35945,
       "tokens_estimated": true
     },
     {
       "n": 6,
+      "tool": "write_todos",
+      "summary": "write_todos",
+      "input": "{\"todos\":[{\"content\":\"Retrieve Knowledge Indicators for support tickets and knowledge base articles from precision-corpus.\",\"status\":\"completed\"},{\"content\":\"Identify top support ticket categories using the discovered indices.\",\"status\":\"completed\"},{\"content\":\"Query the knowledge base for information regarding those top ticket categories.\",\"status\":\"in_progress\"},{\"content\":\"Synthesize findings into a final response for the user.\",\"status\":\"pending\"}]}",
+      "cumulative_input_tokens": 43134,
+      "tokens_estimated": true
+    },
+    {
+      "n": 7,
       "tool": "platform.core.execute_esql",
       "summary": "platform.core.execute_esql",
-      "input": "{\"query\":\"FROM precision-kb-articles\\n| WHERE article_id IN (\\\"KB-0081\\\", \\\"KB-0017\\\", \\\"KB-0141\\\")\\n| KEEP article_id, title, content, helpful_votes\"}",
-      "cumulative_input_tokens": 94740,
+      "input": "{\"query\":\"FROM \\\"precision-kb-articles\\\"\\n| WHERE category IN (\\\"troubleshooting\\\", \\\"integrations\\\", \\\"api\\\", \\\"performance\\\", \\\"billing\\\")\\n| STATS article_count = COUNT(*) BY category\\n| SORT article_count DESC\"}",
+      "cumulative_input_tokens": 50323,
+      "tokens_estimated": true
+    },
+    {
+      "n": 8,
+      "tool": "write_todos",
+      "summary": "write_todos",
+      "input": "{\"todos\":[{\"content\":\"Retrieve Knowledge Indicators for support tickets and knowledge base articles from precision-corpus.\",\"status\":\"completed\"},{\"content\":\"Identify top support ticket categories using the discovered indices.\",\"status\":\"completed\"},{\"content\":\"Query the knowledge base for information regarding those top ticket categories.\",\"status\":\"in_progress\"},{\"content\":\"Synthesize findings into a final response for the user.\",\"status\":\"pending\"}]}",
+      "cumulative_input_tokens": 57512,
+      "tokens_estimated": true
+    },
+    {
+      "n": 9,
+      "tool": "platform.core.execute_esql",
+      "summary": "platform.core.execute_esql",
+      "input": "{\"query\":\"FROM \\\"precision-kb-articles\\\"\\n| WHERE category IN (\\\"troubleshooting\\\", \\\"integrations\\\", \\\"api\\\", \\\"billing\\\")\\n| SORT helpful_votes DESC\\n| KEEP title, category, content, helpful_votes\\n| LIMIT 8\"}",
+      "cumulative_input_tokens": 64701,
       "tokens_estimated": true
     }
   ],
   "metrics": {
-    "turns": 7,
-    "llm_calls": 7,
-    "tool_calls": 6,
-    "input_tokens": 94745,
-    "cached_input_tokens": 57580,
-    "effective_tokens": 42923,
-    "output_tokens": 1221,
-    "seconds": 25.0,
+    "turns": 6,
+    "llm_calls": 6,
+    "tool_calls": 9,
+    "input_tokens": 64708,
+    "cached_input_tokens": 41024,
+    "effective_tokens": 27786,
+    "output_tokens": 1529,
+    "seconds": 25.1,
     "tokens_estimated": true,
     "cache_read_mult": 0.1
   }

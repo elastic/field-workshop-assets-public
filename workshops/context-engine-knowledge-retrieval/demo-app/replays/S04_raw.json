@@ -2,53 +2,29 @@
   "scenario": "S04",
   "mode": "raw",
   "source": "live",
-  "recorded_at": "20260929T162612Z",
+  "recorded_at": "20260929T205257Z",
   "model": "google-gemini-3.0-flash",
-  "label": "Median of 3 recorded runs \u00b7 learner-built agents \u00b7 2026-09-29 \u00b7 google-gemini-3.0-flash",
-  "answer_markdown": "Based on my analysis of the `precision-support-tickets` index, the top support ticket categories are:\n\n1.  **Bug** (481 tickets)\n2.  **Integration** (461 tickets)\n3.  **API** (372 tickets)\n4.  **Performance** (368 tickets)\n5.  **Billing** (362 tickets)\n\nI then searched the knowledge base (`precision-kb-articles`) for information related to these categories. Here is what the knowledge base says about these top areas:\n\n### 1. API (Ranking: #3)\nThe KB is quite extensive on API-related issues, which aligns with it being a top category:\n*   **Rate Limiting (HTTP 429):** There is a dedicated guide (KB-0013) explaining rate limits by account tier (e.g., Enterprise at 1,200 requests/min). It notes that \"unbounded loops\" and sharing keys across services are common causes for these errors.\n*   **Key Management:** Article KB-0008 provides a process for rotating API keys without downtime using a grace period.\n*   **Error Handling:** Several articles (KB-0138, KB-0075) focus on best practices for API error handling and migration.\n\n### 2. Billing (Ranking: #5)\nThe KB provides clear self-service instructions for the most common billing tasks:\n*   **Payment & Contacts:** KB-0017 explains how to update credit cards via Stripe and how to add PO numbers to invoices.\n*   **Invoice Clarity:** KB-0016 clarifies that billing is based on \"peak active seat count\" and explains how deactivating users can result in prorated credits.\n*   **Disputes:** There is a formal process for disputing invoices, requiring a support ticket with the category 'billing' (KB-0016).\n\n### 3. Performance (Ranking: #4)\nKnowledge base coverage for performance is primarily focused on **Dashboards**:\n*   Articles KB-0051, KB-0033, and KB-0098 provide setup guides, best practices, and release updates specifically for \"dashboard performance.\"\n*   Interestingly, these articles suggest opening support tickets under the 'troubleshooting' category for performance issues not covered in the KB, rather than a specific 'performance' category.\n\n### 4. Integration (Ranking: #2)\nWhile 'Integration' is the second most frequent ticket category, the KB articles found (like KB-0051 and KB-0112) mention integrations primarily in the context of **Prerequisites**, stating that users need appropriate credentials for source systems. There were fewer direct \"how-to\" guides for specific integrations in the initial search results compared to API or Billing.\n\n### 5. Bug (Ranking: #1)\nThe knowledge base does not have a \"Bug\" category for articles. Instead, most KB articles (e.g., KB-0051, KB-0138) instruct users to open a support ticket under specific categories (like 'api' or 'troubleshooting') when they encounter an issue not covered by the documentation.\n\n**Summary of Reasoning:**\n*   **Data Source:** I used ES|QL to aggregate and count tickets by `category` in `precision-support-tickets`.\n*   **KB Search:** I used natural language search in `precision-kb-articles` to find articles matching the top categories identified.\n*   **Finding:** The KB is well-equipped for **API** and **Billing** (likely high-volume but solvable via documentation), but may have a documentation gap for **Integrations**, which is a high-volume ticket area but has less specific KB coverage in these results.",
+  "label": "Median of 3 recorded runs \u00b7 2026-09-29 \u00b7 google-gemini-3.0-flash",
+  "answer_markdown": "I have analyzed the Precision Labs knowledge base articles, and while there isn't a single article specifically listing the \"top\" support ticket categories, the knowledge base consistently directs users to file tickets under four primary categories depending on the nature of their issue:\n\n1.  **Integrations**: The most frequently mentioned category. Users are advised to use this for issues involving the Snowflake connector, Postgres connector, Salesforce migration, connector version management, and general integration health monitoring.\n2.  **Troubleshooting**: This category is designated for performance-related issues, specifically regarding dashboard performance and general system optimization.\n3.  **Features**: Used for general functionality inquiries and configuration help, such as alert configuration and CSV data import processes.\n4.  **Security**: Specifically mentioned for authentication and access control issues, such as two-factor authentication (2FA).\n\n**Reasoning:**\nI searched the `precision-kb-articles` index for documentation regarding ticket categories. The search results showed a standardized \"Getting help\" section across multiple articles (e.g., KB-0030, KB-0032, KB-0033, KB-0121) that maps specific technical topics to these four distinct support categories.",
   "turns": [
     {
       "n": 1,
-      "tool": "platform.core.list_indices",
-      "summary": "platform.core.list_indices",
-      "input": "{\"pattern\":\"precision-*\"}",
-      "cumulative_input_tokens": 20424,
-      "tokens_estimated": true
-    },
-    {
-      "n": 2,
-      "tool": "platform.core.generate_esql",
-      "summary": "platform.core.generate_esql",
-      "input": "{\"query\":\"What are the top 5 support ticket categories by count?\",\"index\":\"precision-support-tickets\"}",
-      "cumulative_input_tokens": 40848,
-      "tokens_estimated": true
-    },
-    {
-      "n": 3,
-      "tool": "platform.core.execute_esql",
-      "summary": "platform.core.execute_esql",
-      "input": "{\"query\":\"FROM \\\"precision-support-tickets\\\"\\n| STATS category_count = COUNT(*) BY category\\n| SORT category_count DESC\\n| LIMIT 5\"}",
-      "cumulative_input_tokens": 61272,
-      "tokens_estimated": true
-    },
-    {
-      "n": 4,
       "tool": "platform.core.search",
       "summary": "platform.core.search",
-      "input": "{\"query\":\"articles about support ticket categories: bug, integration, API, performance, billing\",\"index\":\"precision-kb-articles\"}",
-      "cumulative_input_tokens": 81696,
+      "input": "{\"query\":\"support ticket categories knowledge base articles\"}",
+      "cumulative_input_tokens": 28333,
       "tokens_estimated": true
     }
   ],
   "metrics": {
-    "turns": 8,
-    "llm_calls": 8,
-    "tool_calls": 4,
-    "input_tokens": 81696,
-    "cached_input_tokens": 53906,
-    "effective_tokens": 33181,
-    "output_tokens": 1360,
-    "seconds": 30.4,
+    "turns": 3,
+    "llm_calls": 3,
+    "tool_calls": 1,
+    "input_tokens": 28333,
+    "cached_input_tokens": 10940,
+    "effective_tokens": 18487,
+    "output_tokens": 344,
+    "seconds": 20.5,
     "tokens_estimated": true,
     "cache_read_mult": 0.1
   }
