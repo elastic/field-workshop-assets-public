@@ -1,18 +1,127 @@
 {
   "scenario": "S03",
   "mode": "raw",
-  "source": "replay",
-  "answer_markdown": "## Accounts with Open P1 Tickets and High Churn Risk\n\nAfter correlating two separate indices — `precision-crm-accounts` (for churn risk) and `precision-support-tickets` (for open P1 tickets) — I identified four accounts that meet both criteria:\n\n| Account | Churn Risk | Open P1 Tickets |\n|---|---|---|\n| Apex Dynamics | 0.87 | 3 |\n| Meridian Corp | 0.84 | 2 |\n| Pinnacle Industries | 0.78 | 4 |\n| Quantum Logistics | 0.76 | 1 |\n\n**Risk summary:**\n\nApex Dynamics and Meridian Corp are the most urgent — both show very high churn risk AND unresolved P1 incidents. Pinnacle Industries has the most P1 tickets (4) despite a slightly lower churn risk score, suggesting unresolved incidents are likely contributing to their churn risk. Quantum Logistics has only one P1 ticket but its churn risk has risen steadily over the past two quarters.\n\n*Note: Cross-referencing these indices required discovering account IDs first in `precision-crm-accounts`, then filtering `precision-support-tickets` by those IDs — a multi-step join the agent had to construct from scratch.*",
+  "source": "live",
+  "recorded_at": "20260928T212305Z",
+  "model": "google-gemini-3.0-flash",
+  "label": "Median of 3 recorded runs \u00b7 2026-09-28 \u00b7 google-gemini-3.0-flash",
+  "answer_markdown": "The following accounts currently have at least one **open P1 (Critical) support ticket** and a **high churn risk score (\u2265 0.70)**. \n\n| Company Name | Customer ID | Churn Risk Score | Ticket ID | Priority | Ticket Subject |\n| :--- | :--- | :--- | :--- | :--- | :--- |\n| **Granite Analytics** | CUST-0280 | 0.82 | TICK-01688 | critical | REST API returning 401 on valid tokens after midnight |\n| **Redwood Labs** | CUST-0009 | 0.91 | TICK-00049 | critical | Data not refreshing after manual trigger |\n| **Solace Systems** | CUST-0383 | 0.84 | TICK-02347 | critical | OAuth token refresh loop on SCIM connector |\n| **Solace Systems** | CUST-0383 | 0.84 | TICK-02341 | critical | Data import format questions |\n| **Northstar Partners** | CUST-0425 | 0.93 | TICK-02574 | critical | Salesforce sync failing intermittently |\n| **Solace Analytics** | CUST-0401 | 0.77 | TICK-02436 | critical | Salesforce sync failing intermittently |\n| **Nimbus Partners** | CUST-0245 | 0.94 | TICK-01480 | critical | Salesforce sync failing intermittently |\n| **Hearthstone Networks**| CUST-0445 | 0.87* | TICK-02701 | critical | Joined data returning null for fields that exist |\n| **Driftwood Group** | CUST-0260 | 0.94* | TICK-01575 | critical | Webhook events not reaching our endpoint |\n| **Sablefield Technologies**| CUST-0151 | 0.74 | TICK-00904 | critical | API rate limit documentation unclear |\n| **Wavelength Technologies**| CUST-0463 | 0.83* | TICK-02798 | critical | CSV export encoding incorrect for special characters |\n\n### **Key Findings & Observations:**\n*   **Solace Systems (CUST-0383)** and **Solace Analytics (CUST-0401)** are both high-risk accounts with critical open issues. **Solace Systems** specifically has two critical tickets open simultaneously.\n*   **Northstar Partners** and **Nimbus Partners** are particularly concerning due to their very high churn risk scores (0.93 and 0.94 respectively) combined with active critical failures in their Salesforce integrations.\n*   **Redwood Labs** has a 0.91 churn risk and is reporting a critical bug where data fails to refresh manually, which likely impacts their day-to-day operations significantly.\n\n*Note: High churn risk was defined as a `churn_risk_score` of 0.70 or higher based on current CRM data.*",
   "turns": [
-    {"n": 1, "tool": "list_indices", "summary": "Discovering available indices", "input": "", "cumulative_input_tokens": 3600, "tokens_estimated": false},
-    {"n": 2, "tool": "get_mapping", "summary": "Reading schema for precision-crm-accounts", "input": "precision-crm-accounts", "cumulative_input_tokens": 8100, "tokens_estimated": false},
-    {"n": 3, "tool": "get_mapping", "summary": "Reading schema for precision-support-tickets", "input": "precision-support-tickets", "cumulative_input_tokens": 12900, "tokens_estimated": false},
-    {"n": 4, "tool": "execute_esql", "summary": "Finding accounts with high churn risk (> 0.7)", "input": "FROM precision-crm-accounts | WHERE churn_risk > 0.7 | SORT churn_risk DESC | KEEP account_id, company_name, churn_risk", "cumulative_input_tokens": 17300, "tokens_estimated": false},
-    {"n": 5, "tool": "execute_esql", "summary": "Finding open P1 tickets", "input": "FROM precision-support-tickets | WHERE priority == \"P1\" AND status == \"open\" | STATS count = COUNT(*) BY account_id | SORT count DESC", "cumulative_input_tokens": 21800, "tokens_estimated": false},
-    {"n": 6, "tool": "execute_esql", "summary": "Attempting cross-index join — returned error (ES|QL cannot JOIN)", "input": "FROM precision-crm-accounts | WHERE churn_risk > 0.7 | JOIN precision-support-tickets ON account_id WHERE priority == \"P1\"", "cumulative_input_tokens": 26400, "tokens_estimated": false},
-    {"n": 7, "tool": "execute_esql", "summary": "Getting account_ids from high-churn CRM records", "input": "FROM precision-crm-accounts | WHERE churn_risk > 0.7 | KEEP account_id | LIMIT 20", "cumulative_input_tokens": 31200, "tokens_estimated": false},
-    {"n": 8, "tool": "execute_esql", "summary": "Filtering P1 open tickets by high-churn account_ids", "input": "FROM precision-support-tickets | WHERE priority == \"P1\" AND status == \"open\" AND account_id IN (\"ACC-0042\", \"ACC-0117\", \"ACC-0231\", \"ACC-0089\", \"ACC-0198\") | STATS count = COUNT(*) BY account_id", "cumulative_input_tokens": 37400, "tokens_estimated": false},
-    {"n": 9, "tool": "execute_esql", "summary": "Intersecting churn risk with P1 ticket counts", "input": "FROM precision-support-tickets | WHERE priority == \"P1\" AND status == \"open\" AND account_id IN (\"ACC-0042\", \"ACC-0117\", \"ACC-0231\", \"ACC-0089\") | STATS open_p1 = COUNT(*) BY account_id, company_name | SORT open_p1 DESC", "cumulative_input_tokens": 41600, "tokens_estimated": false}
+    {
+      "n": 1,
+      "tool": "write_todos",
+      "summary": "write_todos",
+      "input": "{\"todos\":[{\"content\":\"Search for Precision Labs indices related to accounts and tickets\",\"status\":\"in_progress\"},{\"content\":\"Query for accounts with high churn risk and open P1 tickets\",\"status\":\"pending\"},{\"content\":\"Synthesize the findings for the user\",\"status\":\"pending\"}]}",
+      "cumulative_input_tokens": 11945,
+      "tokens_estimated": true
+    },
+    {
+      "n": 2,
+      "tool": "platform.core.index_explorer",
+      "summary": "platform.core.index_explorer",
+      "input": "{\"query\":\"Precision Labs account and support ticket data\"}",
+      "cumulative_input_tokens": 23890,
+      "tokens_estimated": true
+    },
+    {
+      "n": 3,
+      "tool": "write_todos",
+      "summary": "write_todos",
+      "input": "{\"todos\":[{\"content\":\"Search for Precision Labs indices related to accounts and tickets\",\"status\":\"completed\"},{\"content\":\"Identify account and ticket indices and their mappings\",\"status\":\"in_progress\"},{\"content\":\"Query for accounts with high churn risk and open P1 tickets\",\"status\":\"pending\"},{\"content\":\"Synthesize the findings for the user\",\"status\":\"pending\"}]}",
+      "cumulative_input_tokens": 35835,
+      "tokens_estimated": true
+    },
+    {
+      "n": 4,
+      "tool": "platform.core.list_indices",
+      "summary": "platform.core.list_indices",
+      "input": "{\"pattern\":\"precision-*\"}",
+      "cumulative_input_tokens": 47780,
+      "tokens_estimated": true
+    },
+    {
+      "n": 5,
+      "tool": "write_todos",
+      "summary": "write_todos",
+      "input": "{\"todos\":[{\"content\":\"Search for Precision Labs indices related to accounts and tickets\",\"status\":\"completed\"},{\"content\":\"Identify account and ticket indices and their mappings\",\"status\":\"completed\"},{\"content\":\"Examine field mappings for precision-crm-accounts and precision-support-tickets\",\"status\":\"in_progress\"},{\"content\":\"Query for accounts with high churn risk and open P1 tickets\",\"status\":\"pending\"},{\"content\":\"Synthesize the findings for the user\",\"status\":\"pending\"}]}",
+      "cumulative_input_tokens": 59725,
+      "tokens_estimated": true
+    },
+    {
+      "n": 6,
+      "tool": "platform.core.get_index_mapping",
+      "summary": "platform.core.get_index_mapping",
+      "input": "{\"indices\":[\"precision-crm-accounts\",\"precision-support-tickets\"]}",
+      "cumulative_input_tokens": 71670,
+      "tokens_estimated": true
+    },
+    {
+      "n": 7,
+      "tool": "write_todos",
+      "summary": "write_todos",
+      "input": "{\"todos\":[{\"content\":\"Search for Precision Labs indices related to accounts and tickets\",\"status\":\"completed\"},{\"content\":\"Identify account and ticket indices and their mappings\",\"status\":\"completed\"},{\"content\":\"Examine field mappings for precision-crm-accounts and precision-support-tickets\",\"status\":\"completed\"},{\"content\":\"Query for accounts with high churn risk and open P1 tickets\",\"status\":\"in_progress\"},{\"content\":\"Synthesize the findings for the user\",\"status\":\"pending\"}]}",
+      "cumulative_input_tokens": 83615,
+      "tokens_estimated": true
+    },
+    {
+      "n": 8,
+      "tool": "platform.core.generate_esql",
+      "summary": "platform.core.generate_esql",
+      "input": "{\"query\":\"Find accounts with churn_risk_score >= 0.7 that have open support tickets with priority 'critical'. Join precision-crm-accounts and precision-support-tickets on customer_id = account_id. Return company_name, churn_risk_score, ticket_id, and priority.\"}",
+      "cumulative_input_tokens": 95560,
+      "tokens_estimated": true
+    },
+    {
+      "n": 9,
+      "tool": "platform.core.execute_esql",
+      "summary": "platform.core.execute_esql",
+      "input": "{\"query\":\"FROM precision-crm-accounts\\n| ENRICH precision-support-tickets ON customer_id = account_id\\n| WHERE churn_risk_score >= 0.7 AND priority == \\\"critical\\\" AND status == \\\"open\\\"\\n| KEEP company_name, churn_risk_score, ticket_id, priority, status\\n| LIMIT 100\"}",
+      "cumulative_input_tokens": 107505,
+      "tokens_estimated": true
+    },
+    {
+      "n": 10,
+      "tool": "platform.core.generate_esql",
+      "summary": "platform.core.generate_esql",
+      "input": "{\"query\":\"Get all records from precision-crm-accounts where churn_risk_score >= 0.7\"}",
+      "cumulative_input_tokens": 119450,
+      "tokens_estimated": true
+    },
+    {
+      "n": 11,
+      "tool": "platform.core.generate_esql",
+      "summary": "platform.core.generate_esql",
+      "input": "{\"query\":\"Get all open tickets with priority 'critical' from precision-support-tickets\"}",
+      "cumulative_input_tokens": 131395,
+      "tokens_estimated": true
+    },
+    {
+      "n": 12,
+      "tool": "platform.core.execute_esql",
+      "summary": "platform.core.execute_esql",
+      "input": "{\"query\":\"FROM \\\"precision-crm-accounts\\\"\\n| WHERE churn_risk_score >= 0.7\\n| LIMIT 100\"}",
+      "cumulative_input_tokens": 143340,
+      "tokens_estimated": true
+    },
+    {
+      "n": 13,
+      "tool": "platform.core.execute_esql",
+      "summary": "platform.core.execute_esql",
+      "input": "{\"query\":\"FROM precision-support-tickets\\n| WHERE status == \\\"open\\\" AND priority == \\\"critical\\\"\\n| LIMIT 100\"}",
+      "cumulative_input_tokens": 155285,
+      "tokens_estimated": true
+    }
   ],
-  "metrics": {"turns": 5, "tool_calls": 9, "input_tokens": 41600, "seconds": 57.8, "tokens_estimated": false}
+  "metrics": {
+    "turns": 18,
+    "llm_calls": 18,
+    "tool_calls": 13,
+    "input_tokens": 155295,
+    "cached_input_tokens": 50463,
+    "effective_tokens": 109878,
+    "output_tokens": 2061,
+    "seconds": 50.2,
+    "tokens_estimated": true,
+    "cache_read_mult": 0.1
+  }
 }

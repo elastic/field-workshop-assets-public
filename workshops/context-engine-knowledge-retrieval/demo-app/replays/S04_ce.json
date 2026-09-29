@@ -1,11 +1,95 @@
 {
   "scenario": "S04",
   "mode": "ce",
-  "source": "replay",
-  "answer_markdown": "## Knowledge Base Coverage of Top Support Categories\n\nThe Context Engine retrieved pre-built Knowledge Indicators that include summaries of KB articles by category — **no direct query to `precision-kb-articles` was needed**.\n\n**Top ticket categories and KB coverage (from corpus KIs):**\n\n| Category | Ticket Count | KB Coverage Summary |\n|---|---|---|\n| Integration | 847 | 12 articles covering REST API connectors, webhook setup, OAuth2 flows, and common 4xx error patterns. \"Connector Troubleshooting Guide\" and \"Webhook Delivery Failures\" are the most-referenced. |\n| Performance | 612 | 4 articles on query optimization and indexing strategy. Gap: no articles on infrastructure-level performance tuning. |\n| Billing | 521 | 8 articles on usage-based pricing, invoice FAQs, and overage cap notifications. Well-covered for standard inquiries. |\n| API | 389 | 19 articles — the best-documented category. Covers REST endpoints, rate limits, authentication, and SDK guides. |\n| Data quality | 298 | 3 articles only — a significant gap given the ticket volume. Existing articles cover ingestion validation but not schema migration or data reconciliation. |\n\n**Key insight:** The data quality gap (298 tickets, only 3 KB articles) represents the highest-ROI documentation opportunity. A single well-written article on schema migration troubleshooting could deflect an estimated 40–60 tickets per quarter.\n\n> **Why this works differently with CE:** The routing KI for `precision-kb-articles` includes pre-generated article summaries by category (corpus KIs). The agent retrieved these KIs directly — no schema discovery, no multi-attempt querying, no field-name trial-and-error.",
+  "source": "live",
+  "recorded_at": "20260928T212305Z",
+  "model": "google-gemini-3.0-flash",
+  "label": "Median of 3 recorded runs \u00b7 2026-09-28 \u00b7 google-gemini-3.0-flash",
+  "answer_markdown": "Based on our support ticket data and internal knowledge base, here are the top categories driving customer issues and the corresponding resources available to address them.\n\n### Top Support Ticket Categories\nThe top 5 categories by ticket volume are:\n1.  **Bug** (481 tickets)\n2.  **Integration** (461 tickets)\n3.  **API** (372 tickets)\n4.  **Performance** (368 tickets)\n5.  **Billing** (362 tickets)\n\n### Knowledge Base Insights\nWhile **Bug** and **Integration** are the most frequent ticket drivers, the Knowledge Base (KB) is heavily weighted toward **API** and **Billing** self-service, indicating these are areas where customers are actively seeking (or needing) detailed documentation.\n\n| Category | Key Knowledge Base Coverage |\n| :--- | :--- |\n| **API** | Extensive documentation covering **Authentication**, **Rate Limits**, **Error Handling**, and **Pagination**. The \"API Authentication FAQ\" and \"Migrating to API Rate Limits\" are among the most helpful resources. |\n| **Billing** | Focused on administrative tasks like **Updating Payment Methods** and **Billing Contacts**. The \"Updating Payment Method\" guide is the most upvoted article in this category. |\n| **Performance** | While a top ticket category, specific high-ranking KB articles were less prominent in this search, suggesting tickets may relate to specific environment issues rather than general configuration. |\n| **Integration** | Driven largely by system-specific setup; the KB points users to check workspace permissions and source system credentials. |\n\n### Summary of Findings\n*   **Self-Service Gap**: Despite **Bugs** being the #1 category, they often lack specific \"how-to\" KB articles because they are transactional/fix-oriented. \n*   **API Complexity**: The high volume of both tickets and highly-rated KB articles for **API** suggests that while we provide significant documentation, the technical complexity remains a primary friction point for users.\n*   **Billing Efficiency**: The Billing KB articles are very well-received (high helpfulness votes), which likely prevents the ticket volume from being even higher by enabling admin self-service.",
   "turns": [
-    {"n": 1, "tool": "query_ki", "summary": "Retrieving routing KIs and corpus KIs for KB articles and ticket categories", "input": "knowledge base articles top support ticket categories coverage", "cumulative_input_tokens": 6100, "tokens_estimated": false},
-    {"n": 2, "tool": "execute_esql", "summary": "Getting current ticket category volumes to pair with KB coverage", "input": "FROM precision-support-tickets | STATS count = COUNT(*) BY category | SORT count DESC | LIMIT 10", "cumulative_input_tokens": 8200, "tokens_estimated": false}
+    {
+      "n": 1,
+      "tool": "load_skill",
+      "summary": "load_skill",
+      "input": "{\"skill\":\"ki-retrieval\"}",
+      "cumulative_input_tokens": 9994,
+      "tokens_estimated": true
+    },
+    {
+      "n": 2,
+      "tool": "write_todos",
+      "summary": "write_todos",
+      "input": "{\"todos\":[{\"content\":\"Retrieve Knowledge Indicators for support tickets and knowledge base articles.\",\"status\":\"in_progress\"},{\"content\":\"Identify top support ticket categories by querying the support ticket index.\",\"status\":\"pending\"},{\"content\":\"Search the knowledge base for articles related to those top categories.\",\"status\":\"pending\"},{\"content\":\"Summarize findings for the user.\",\"status\":\"pending\"}]}",
+      "cumulative_input_tokens": 19988,
+      "tokens_estimated": true
+    },
+    {
+      "n": 3,
+      "tool": "platform.context_engine.query_ai_indices",
+      "summary": "platform.context_engine.query_ai_indices",
+      "input": "{\"query\":\"FROM ai-index-idx-precision-corpus METADATA _id, _index, _score\\n| WHERE content:\\\"support tickets\\\" OR content:\\\"knowledge base\\\" OR title:\\\"support tickets\\\" OR title:\\\"knowledge base\\\"\\n| FORK\\n    ( WHERE content:\\\"support tickets\\\" OR content:\\\"knowledge base\\\" OR title:\\\"support tickets\\\" OR title:\\\"knowledge base\\\" | SORT _score DESC | LIMIT 20 )\\n    ( WHERE content.semantic:\\\"support tickets\\\" OR content.semantic:\\\"knowledge base\\\" OR title.semantic:\\\"support tickets\\\" OR titl",
+      "cumulative_input_tokens": 29982,
+      "tokens_estimated": true
+    },
+    {
+      "n": 4,
+      "tool": "platform.context_engine.query_ai_indices",
+      "summary": "platform.context_engine.query_ai_indices",
+      "input": "{\"query\":\"FROM ai-index-idx-precision-corpus METADATA _id, _index, _score\\n| WHERE type == \\\"index_metadata\\\"\\n| WHERE content:\\\"support tickets\\\" OR content:\\\"knowledge base\\\" OR title:\\\"support tickets\\\" OR title:\\\"knowledge base\\\"\\n| SORT _score DESC\\n| EVAL esql = FIELD_EXTRACT(attributes, \\\"esql\\\")\\n| KEEP title, content, type, esql\\n| LIMIT 5\"}",
+      "cumulative_input_tokens": 39976,
+      "tokens_estimated": true
+    },
+    {
+      "n": 5,
+      "tool": "write_todos",
+      "summary": "write_todos",
+      "input": "{\"todos\":[{\"content\":\"Retrieve Knowledge Indicators for support tickets and knowledge base articles.\",\"status\":\"completed\"},{\"content\":\"Identify top support ticket categories by querying the support ticket index.\",\"status\":\"in_progress\"},{\"content\":\"Search the knowledge base for articles related to those top categories.\",\"status\":\"pending\"},{\"content\":\"Summarize findings for the user.\",\"status\":\"pending\"}]}",
+      "cumulative_input_tokens": 49970,
+      "tokens_estimated": true
+    },
+    {
+      "n": 6,
+      "tool": "platform.core.execute_esql",
+      "summary": "platform.core.execute_esql",
+      "input": "{\"query\":\"FROM \\\"precision-support-tickets\\\"\\n| STATS ticket_count = COUNT(*) BY category\\n| SORT ticket_count DESC\\n| LIMIT 5\"}",
+      "cumulative_input_tokens": 59964,
+      "tokens_estimated": true
+    },
+    {
+      "n": 7,
+      "tool": "write_todos",
+      "summary": "write_todos",
+      "input": "{\"todos\":[{\"content\":\"Retrieve Knowledge Indicators for support tickets and knowledge base articles.\",\"status\":\"completed\"},{\"content\":\"Identify top support ticket categories by querying the support ticket index.\",\"status\":\"completed\"},{\"content\":\"Search the knowledge base for articles related to those top categories.\",\"status\":\"in_progress\"},{\"content\":\"Summarize findings for the user.\",\"status\":\"pending\"}]}",
+      "cumulative_input_tokens": 69958,
+      "tokens_estimated": true
+    },
+    {
+      "n": 8,
+      "tool": "platform.core.execute_esql",
+      "summary": "platform.core.execute_esql",
+      "input": "{\"query\":\"FROM \\\"precision-kb-articles\\\"\\n| WHERE category IN (\\\"bug\\\", \\\"integration\\\", \\\"api\\\", \\\"performance\\\", \\\"billing\\\")\\n| KEEP title, category, helpful_votes, content\\n| SORT helpful_votes DESC\\n| LIMIT 10\"}",
+      "cumulative_input_tokens": 79952,
+      "tokens_estimated": true
+    },
+    {
+      "n": 9,
+      "tool": "write_todos",
+      "summary": "write_todos",
+      "input": "{\"todos\":[{\"content\":\"Retrieve Knowledge Indicators for support tickets and knowledge base articles.\",\"status\":\"completed\"},{\"content\":\"Identify top support ticket categories by querying the support ticket index.\",\"status\":\"completed\"},{\"content\":\"Search the knowledge base for articles related to those top categories.\",\"status\":\"completed\"},{\"content\":\"Summarize findings for the user.\",\"status\":\"completed\"}]}",
+      "cumulative_input_tokens": 89946,
+      "tokens_estimated": true
+    }
   ],
-  "metrics": {"turns": 2, "tool_calls": 2, "input_tokens": 8200, "seconds": 12.4, "tokens_estimated": false}
+  "metrics": {
+    "turns": 7,
+    "llm_calls": 7,
+    "tool_calls": 9,
+    "input_tokens": 89952,
+    "cached_input_tokens": 49442,
+    "effective_tokens": 45454,
+    "output_tokens": 1337,
+    "seconds": 30.1,
+    "tokens_estimated": true,
+    "cache_read_mult": 0.1
+  }
 }

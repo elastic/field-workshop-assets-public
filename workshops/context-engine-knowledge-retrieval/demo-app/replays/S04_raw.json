@@ -1,19 +1,79 @@
 {
   "scenario": "S04",
   "mode": "raw",
-  "source": "replay",
-  "answer_markdown": "## Knowledge Base Coverage of Top Support Categories\n\nAfter exploring the `precision-kb-articles` index, I found partial coverage of the top ticket categories. The KB index stores articles with `category` and `tags` fields, but cross-referencing with ticket volumes required multiple attempts.\n\n**Top ticket categories and KB article counts found:**\n\n| Category | Ticket Count | KB Articles |\n|---|---|---|\n| Integration | 847 | 12 articles |\n| Performance | 612 | 4 articles |\n| Billing | 521 | 8 articles |\n| API | 389 | 19 articles |\n| Data quality | 298 | 3 articles |\n\n**Observations:**\n\nThe API category is relatively well-documented (19 articles) despite lower ticket volume, suggesting good self-service coverage. Data quality is the most under-documented category — only 3 articles for 298 tickets. Integration articles exist but may not cover the specific connector failures driving the high ticket volume.\n\n*Note: The KB index does not have a full-text search field — querying required filtering by `category` and `tags` fields separately. Several query attempts failed before the correct field structure was identified.*",
+  "source": "live",
+  "recorded_at": "20260928T212305Z",
+  "model": "google-gemini-3.0-flash",
+  "label": "Median of 3 recorded runs \u00b7 2026-09-28 \u00b7 google-gemini-3.0-flash",
+  "answer_markdown": "Based on our support ticket data and internal knowledge base, here is what we know about our top support categories.\n\n### Top Support Ticket Categories\nThe top categories for support tickets at Precision Labs are:\n1.  **Bug** (481 tickets)\n2.  **Integration** (461 tickets)\n3.  **API** (372 tickets)\n4.  **Performance** (368 tickets)\n5.  **Billing** (362 tickets)\n\n### Knowledge Base Insights\nOur knowledge base (KB) provides extensive documentation for these high-volume areas, particularly for **API** and **Billing** issues.\n\n#### **1. API & Performance (High Volume)**\nA significant portion of our documentation addresses API-related issues, which likely contributes to the high ticket volume in the **API** and **Performance** (specifically rate-limiting) categories:\n*   **Authentication & Security:** Multiple guides cover setting up API keys (under `Settings \u2192 API Keys`) and transitioning to v2 authentication.\n*   **Rate Limits:** Several articles address \"API Returning 429 Rate Limit Errors,\" providing tier-specific limits and optimization tips.\n*   **Pagination:** A dedicated guide explains our transition to **cursor-based pagination**, which is a frequent source of \"large result set\" performance tickets.\n*   **Version Migration:** Documentation emphasizes the migration from API v1 to v2, noting that v1 will be deprecated on January 1, 2027.\n\n#### **2. Billing**\nBilling tickets often center on seat counts and payment updates:\n*   **Seat Count Logic:** KB-0016 explains that billing is per-seat/per-month based on **Active** user state. A common reason for tickets is seat count discrepancies, which the KB advises resolving by checking the team list in `Settings \u2192 Team`.\n*   **Payment Management:** Guides detail how to update credit cards via Stripe integration or add PO numbers for corporate billing.\n\n#### **3. Integration & Bugs**\nWhile **Bug** and **Integration** are the top two categories by volume, the current KB articles for these categories are often framed as \"Troubleshooting Runbooks\" or \"Setup Guides.\" \n*   **Troubleshooting:** Most \"Integration\" articles focus on workspace admin prerequisites and source system credentials.\n*   **Reporting:** The KB explicitly instructs users to include their **Account ID** and specific error descriptions when opening tickets for these categories to meet the 4-hour response SLA for Mid-Market/Enterprise accounts.",
   "turns": [
-    {"n": 1, "tool": "list_indices", "summary": "Discovering available indices", "input": "", "cumulative_input_tokens": 3900, "tokens_estimated": false},
-    {"n": 2, "tool": "get_mapping", "summary": "Reading schema for precision-support-tickets", "input": "precision-support-tickets", "cumulative_input_tokens": 8400, "tokens_estimated": false},
-    {"n": 3, "tool": "get_mapping", "summary": "Reading schema for precision-kb-articles", "input": "precision-kb-articles", "cumulative_input_tokens": 14200, "tokens_estimated": false},
-    {"n": 4, "tool": "execute_esql", "summary": "Getting top ticket categories by volume", "input": "FROM precision-support-tickets | STATS count = COUNT(*) BY category | SORT count DESC | LIMIT 5", "cumulative_input_tokens": 19600, "tokens_estimated": false},
-    {"n": 5, "tool": "execute_esql", "summary": "Searching KB by text match — failed (no text field)", "input": "FROM precision-kb-articles | WHERE content MATCH \"integration\" | STATS count = COUNT(*)", "cumulative_input_tokens": 23100, "tokens_estimated": false},
-    {"n": 6, "tool": "execute_esql", "summary": "Counting KB articles by category field", "input": "FROM precision-kb-articles | STATS count = COUNT(*) BY category | SORT count DESC", "cumulative_input_tokens": 27300, "tokens_estimated": false},
-    {"n": 7, "tool": "execute_esql", "summary": "Filtering KB articles for integration category", "input": "FROM precision-kb-articles | WHERE category == \"integration\" | KEEP title, tags | LIMIT 10", "cumulative_input_tokens": 31800, "tokens_estimated": false},
-    {"n": 8, "tool": "execute_esql", "summary": "Filtering KB articles for billing category", "input": "FROM precision-kb-articles | WHERE category == \"billing\" | KEEP title, tags | LIMIT 10", "cumulative_input_tokens": 36200, "tokens_estimated": false},
-    {"n": 9, "tool": "execute_esql", "summary": "Searching KB by tags for performance issues", "input": "FROM precision-kb-articles | WHERE tags LIKE \"*performance*\" | KEEP title, category, tags | LIMIT 10", "cumulative_input_tokens": 40100, "tokens_estimated": false},
-    {"n": 10, "tool": "execute_esql", "summary": "Getting full KB coverage summary across all categories", "input": "FROM precision-kb-articles | STATS count = COUNT(*) BY category | SORT count DESC | LIMIT 10", "cumulative_input_tokens": 43500, "tokens_estimated": false}
+    {
+      "n": 1,
+      "tool": "write_todos",
+      "summary": "write_todos",
+      "input": "{\"todos\":[{\"content\":\"Identify top support ticket categories\",\"status\":\"in_progress\"},{\"content\":\"Search knowledge base for those categories\",\"status\":\"pending\"},{\"content\":\"Synthesize findings and answer user question\",\"status\":\"pending\"}]}",
+      "cumulative_input_tokens": 14358,
+      "tokens_estimated": true
+    },
+    {
+      "n": 2,
+      "tool": "platform.core.index_explorer",
+      "summary": "platform.core.index_explorer",
+      "input": "{\"query\":\"indices containing Precision Labs support tickets and knowledge base articles\"}",
+      "cumulative_input_tokens": 28716,
+      "tokens_estimated": true
+    },
+    {
+      "n": 3,
+      "tool": "platform.core.generate_esql",
+      "summary": "platform.core.generate_esql",
+      "input": "{\"query\":\"Find the top support ticket categories by count\",\"index\":\"precision-support-tickets\"}",
+      "cumulative_input_tokens": 43074,
+      "tokens_estimated": true
+    },
+    {
+      "n": 4,
+      "tool": "platform.core.execute_esql",
+      "summary": "platform.core.execute_esql",
+      "input": "{\"query\":\"FROM \\\"precision-support-tickets\\\"\\n| STATS ticket_count = COUNT(*) BY category\\n| SORT ticket_count DESC\\n| LIMIT 5\"}",
+      "cumulative_input_tokens": 57432,
+      "tokens_estimated": true
+    },
+    {
+      "n": 5,
+      "tool": "write_todos",
+      "summary": "write_todos",
+      "input": "{\"todos\":[{\"content\":\"Identify top support ticket categories\",\"status\":\"completed\"},{\"content\":\"Search knowledge base for top categories: bug, integration, api, performance, billing\",\"status\":\"in_progress\"},{\"content\":\"Synthesize findings and answer user question\",\"status\":\"pending\"}]}",
+      "cumulative_input_tokens": 71790,
+      "tokens_estimated": true
+    },
+    {
+      "n": 6,
+      "tool": "platform.core.index_explorer",
+      "summary": "platform.core.index_explorer",
+      "input": "{\"query\":\"indices containing Precision Labs knowledge base articles\"}",
+      "cumulative_input_tokens": 86148,
+      "tokens_estimated": true
+    },
+    {
+      "n": 7,
+      "tool": "platform.core.search",
+      "summary": "platform.core.search",
+      "input": "{\"query\":\"information about support categories: bug, integration, api, performance, billing\",\"index\":\"precision-kb-articles\"}",
+      "cumulative_input_tokens": 100506,
+      "tokens_estimated": true
+    }
   ],
-  "metrics": {"turns": 6, "tool_calls": 10, "input_tokens": 43500, "seconds": 61.4, "tokens_estimated": false}
+  "metrics": {
+    "turns": 13,
+    "llm_calls": 13,
+    "tool_calls": 7,
+    "input_tokens": 100508,
+    "cached_input_tokens": 36119,
+    "effective_tokens": 68001,
+    "output_tokens": 1175,
+    "seconds": 40.0,
+    "tokens_estimated": true,
+    "cache_read_mult": 0.1
+  }
 }

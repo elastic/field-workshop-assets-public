@@ -1,17 +1,111 @@
 {
   "scenario": "S01",
   "mode": "raw",
-  "source": "replay",
-  "answer_markdown": "## Enterprise Churn Risk Analysis\n\nAfter searching the available indices, I found four Enterprise accounts with the highest churn risk scores:\n\n| Account | Churn Risk | ARR |\n|---|---|---|\n| Apex Dynamics | 0.87 | $420,000 |\n| Meridian Corp | 0.84 | $385,000 |\n| Sterling Global | 0.82 | $510,000 |\n| Vantage Systems | 0.79 | $295,000 |\n\n**What they're calling about:**\n\nAcross these four accounts, their support tickets fall into three dominant categories:\n\n- **Billing** (34%) — disputes and invoicing questions, especially around usage-based charges\n- **Integration** (28%) — API connectivity issues and third-party connector failures\n- **Data quality** (21%) — ingestion errors, schema mismatches, and missing records\n\nApex Dynamics alone has 7 open tickets, six of which are billing or integration related. Meridian Corp's tickets skew heavily toward data quality — they appear to be mid-migration to a new data pipeline.\n\n**Note:** The agent required multiple index discovery calls before locating the relevant fields (`churn_risk`, `account_tier`) in `precision-crm-accounts` and needed an additional join step to cross-reference ticket categories via `account_id` in `precision-support-tickets`.",
+  "source": "live",
+  "recorded_at": "20260928T212305Z",
+  "model": "google-gemini-3.0-flash",
+  "label": "Median of 3 recorded runs \u00b7 2026-09-28 \u00b7 google-gemini-3.0-flash",
+  "answer_markdown": "Based on current CRM data, the following Enterprise accounts have the highest churn risk scores. These accounts collectively show a pattern of frustration with platform stability and reporting performance.\n\n### **Top High-Risk Enterprise Accounts**\n\n| Company Name | ARR | Churn Risk Score | Primary Issue Themes |\n| :--- | :--- | :--- | :--- |\n| **Bluepeak Technologies** | $923,342 | **1.00** | Data refresh bugs, Onboarding hurdles |\n| **Hearthstone Co** | $1,467,295 | **0.99** | Dashboard/UI bugs, Search latency, Billing |\n| **Nimbus Labs** | $1,762,422 | **0.97** | Reporting delivery failures, Billing, Integration |\n| **Aurora Labs** | $1,050,429 | **0.96** | Severe performance lag, Automation delays |\n| **Cascade Co** | $454,183 | **0.95** | UI regressions (filters), Email report failures |\n\n---\n\n### **What are they calling us about?**\n\nAn analysis of the support tickets for these high-risk accounts reveals three major pain points:\n\n1.  **Platform Performance & Latency (Highest Volume):**\n    *   **Aurora Labs** and **Hearthstone Co** have reported significant spikes in search latency (15-20 second load times) and report timeouts for date ranges exceeding 90 days.\n    *   **Aurora Labs** specifically called out automation jobs queuing for hours, which is delaying their daily operations.\n\n2.  **Persistent Bugs in Reporting & UI:**\n    *   **Bluepeak** and **Hearthstone** are struggling with \"Refresh Data\" buttons that update the timestamp but fail to fetch new data without a full browser reload.\n    *   **Cascade Co** and **Hearthstone** reported a regression where analytics filters reset to defaults when navigating between views, making their workflows \"tedious.\"\n\n3.  **Reliability of Delivery & Exports:**\n    *   **Nimbus Labs** and **Cascade Co** both reported that scheduled report emails have stopped arriving, despite the platform marking them as \"Sent.\"\n    *   **Aurora Labs** mentioned that bulk exports for large datasets (50k+ rows) stall indefinitely, impacting partner handoffs.\n\n**Summary Recommendation:**\nThe risk is driven by **reliability issues** rather than a lack of features. Addressing the dashboard refresh bug and the report delivery failures would directly impact the top three highest-risk accounts.",
   "turns": [
-    {"n": 1, "tool": "list_indices", "summary": "Discovering available Elasticsearch indices", "input": "", "cumulative_input_tokens": 3800, "tokens_estimated": false},
-    {"n": 2, "tool": "get_mapping", "summary": "Reading schema for precision-crm-accounts", "input": "precision-crm-accounts", "cumulative_input_tokens": 9200, "tokens_estimated": false},
-    {"n": 3, "tool": "get_mapping", "summary": "Reading schema for precision-support-tickets", "input": "precision-support-tickets", "cumulative_input_tokens": 17400, "tokens_estimated": false},
-    {"n": 4, "tool": "execute_esql", "summary": "Ranking all accounts by churn_risk", "input": "FROM precision-crm-accounts | SORT churn_risk DESC | LIMIT 20", "cumulative_input_tokens": 21800, "tokens_estimated": false},
-    {"n": 5, "tool": "execute_esql", "summary": "Filtering to Enterprise tier only", "input": "FROM precision-crm-accounts | WHERE account_tier == \"Enterprise\" | SORT churn_risk DESC | LIMIT 10", "cumulative_input_tokens": 24100, "tokens_estimated": false},
-    {"n": 6, "tool": "execute_esql", "summary": "Joining tickets via account_id", "input": "FROM precision-support-tickets | WHERE account_id IN (\"ACC-0042\", \"ACC-0117\", \"ACC-0231\", \"ACC-0089\") | STATS count = COUNT(*) BY category", "cumulative_input_tokens": 28600, "tokens_estimated": false},
-    {"n": 7, "tool": "execute_esql", "summary": "Getting category breakdown per account", "input": "FROM precision-support-tickets | WHERE account_id IN (\"ACC-0042\", \"ACC-0117\", \"ACC-0231\", \"ACC-0089\") | STATS count = COUNT(*) BY account_id, category | SORT account_id, count DESC", "cumulative_input_tokens": 33100, "tokens_estimated": false},
-    {"n": 8, "tool": "execute_esql", "summary": "Ranking top categories for top-risk accounts", "input": "FROM precision-support-tickets | WHERE account_id IN (\"ACC-0042\", \"ACC-0117\", \"ACC-0231\", \"ACC-0089\") | STATS count = COUNT(*) BY category | SORT count DESC | LIMIT 5", "cumulative_input_tokens": 36200, "tokens_estimated": false}
+    {
+      "n": 1,
+      "tool": "write_todos",
+      "summary": "write_todos",
+      "input": "{\"todos\":[{\"content\":\"Search for Enterprise accounts with high churn risk\",\"status\":\"in_progress\"},{\"content\":\"Analyze support tickets for high-risk accounts to identify common themes\",\"status\":\"pending\"},{\"content\":\"Synthesize findings and report to the user\",\"status\":\"pending\"}]}",
+      "cumulative_input_tokens": 11268,
+      "tokens_estimated": true
+    },
+    {
+      "n": 2,
+      "tool": "platform.core.index_explorer",
+      "summary": "platform.core.index_explorer",
+      "input": "{\"query\":\"Precision Labs indices for accounts and support tickets\"}",
+      "cumulative_input_tokens": 22536,
+      "tokens_estimated": true
+    },
+    {
+      "n": 3,
+      "tool": "platform.core.list_indices",
+      "summary": "platform.core.list_indices",
+      "input": "{\"pattern\":\"precision-*\"}",
+      "cumulative_input_tokens": 33804,
+      "tokens_estimated": true
+    },
+    {
+      "n": 4,
+      "tool": "platform.core.get_index_mapping",
+      "summary": "platform.core.get_index_mapping",
+      "input": "{\"indices\":[\"precision-crm-accounts\",\"precision-support-tickets\"]}",
+      "cumulative_input_tokens": 45072,
+      "tokens_estimated": true
+    },
+    {
+      "n": 5,
+      "tool": "platform.core.generate_esql",
+      "summary": "platform.core.generate_esql",
+      "input": "{\"query\":\"Find Enterprise accounts with the highest churn_risk_score. Return company_name, customer_id, arr, and churn_risk_score, sorted by score descending.\",\"index\":\"precision-crm-accounts\"}",
+      "cumulative_input_tokens": 56340,
+      "tokens_estimated": true
+    },
+    {
+      "n": 6,
+      "tool": "platform.core.execute_esql",
+      "summary": "platform.core.execute_esql",
+      "input": "{\"query\":\"FROM precision-crm-accounts\\n| WHERE account_tier == \\\"Enterprise\\\"\\n| KEEP company_name, customer_id, arr, churn_risk_score\\n| SORT churn_risk_score DESC\\n| LIMIT 5\"}",
+      "cumulative_input_tokens": 67608,
+      "tokens_estimated": true
+    },
+    {
+      "n": 7,
+      "tool": "write_todos",
+      "summary": "write_todos",
+      "input": "{\"todos\":[{\"content\":\"Search for Enterprise accounts with high churn risk\",\"status\":\"completed\"},{\"content\":\"Analyze support tickets for high-risk accounts to identify common themes\",\"status\":\"in_progress\"},{\"content\":\"Synthesize findings and report to the user\",\"status\":\"pending\"}]}",
+      "cumulative_input_tokens": 78876,
+      "tokens_estimated": true
+    },
+    {
+      "n": 8,
+      "tool": "platform.core.execute_esql",
+      "summary": "platform.core.execute_esql",
+      "input": "{\"query\":\"FROM precision-support-tickets\\n| WHERE account_id IN (\\\"CUST-0012\\\", \\\"CUST-0285\\\", \\\"CUST-0481\\\", \\\"CUST-0396\\\", \\\"CUST-0109\\\")\\n| STATS count = COUNT(*) BY category, account_id\\n| SORT count DESC\"}",
+      "cumulative_input_tokens": 90144,
+      "tokens_estimated": true
+    },
+    {
+      "n": 9,
+      "tool": "platform.core.execute_esql",
+      "summary": "platform.core.execute_esql",
+      "input": "{\"query\":\"FROM precision-support-tickets\\n| WHERE account_id IN (\\\"CUST-0012\\\", \\\"CUST-0285\\\", \\\"CUST-0481\\\", \\\"CUST-0396\\\", \\\"CUST-0109\\\")\\n| STATS ticket_count = COUNT(*) BY category\\n| SORT ticket_count DESC\"}",
+      "cumulative_input_tokens": 101412,
+      "tokens_estimated": true
+    },
+    {
+      "n": 10,
+      "tool": "platform.core.execute_esql",
+      "summary": "platform.core.execute_esql",
+      "input": "{\"query\":\"FROM precision-support-tickets\\n| WHERE account_id IN (\\\"CUST-0012\\\", \\\"CUST-0285\\\", \\\"CUST-0481\\\", \\\"CUST-0396\\\", \\\"CUST-0109\\\")\\n| WHERE category == \\\"performance\\\" OR category == \\\"bug\\\"\\n| KEEP company_name, subject, body\\n| LIMIT 10\"}",
+      "cumulative_input_tokens": 112680,
+      "tokens_estimated": true
+    },
+    {
+      "n": 11,
+      "tool": "write_todos",
+      "summary": "write_todos",
+      "input": "{\"todos\":[{\"content\":\"Search for Enterprise accounts with high churn risk\",\"status\":\"completed\"},{\"content\":\"Analyze support tickets for high-risk accounts to identify common themes\",\"status\":\"completed\"},{\"content\":\"Synthesize findings and report to the user\",\"status\":\"in_progress\"}]}",
+      "cumulative_input_tokens": 123948,
+      "tokens_estimated": true
+    }
   ],
-  "metrics": {"turns": 5, "tool_calls": 8, "input_tokens": 36200, "seconds": 52.3, "tokens_estimated": false}
+  "metrics": {
+    "turns": 13,
+    "llm_calls": 13,
+    "tool_calls": 11,
+    "input_tokens": 123953,
+    "cached_input_tokens": 75871,
+    "effective_tokens": 55669,
+    "output_tokens": 1440,
+    "seconds": 40.1,
+    "tokens_estimated": true,
+    "cache_read_mult": 0.1
+  }
 }

@@ -570,7 +570,7 @@ header {
 
     <div class="scenario-card" id="card-s02" onclick="selectScenario('s02')">
       <div class="s-num">S02</div>
-      <div class="s-text">What are the most common support issues for Pro-tier accounts this quarter?</div>
+      <div class="s-text">Which Enterprise accounts renewing in the next 60 days have open P1 tickets, and which knowledge base articles cover their issues?</div>
     </div>
 
     <div class="scenario-card" id="card-s03" onclick="selectScenario('s03')">
@@ -608,9 +608,14 @@ header {
         </thead>
         <tbody>
           <tr>
-            <td>Turns</td>
+            <td><b>LLM calls</b></td>
             <td class="col-raw" id="m-raw-turns">—</td>
             <td class="col-ce" id="m-ce-turns">—</td>
+          </tr>
+          <tr>
+            <td><b>Seconds</b></td>
+            <td class="col-raw" id="m-raw-time">—</td>
+            <td class="col-ce" id="m-ce-time">—</td>
           </tr>
           <tr>
             <td>Tool calls</td>
@@ -618,62 +623,55 @@ header {
             <td class="col-ce" id="m-ce-tools">—</td>
           </tr>
           <tr>
-            <td>Input tokens</td>
+            <td><b>Effective tokens</b> <span style="font-size:10px;color:#888" title="Uncached input + cached × 0.10 (list-price proxy; EIS billing may differ)">ⓘ</span></td>
+            <td class="col-raw" id="m-raw-effective">—</td>
+            <td class="col-ce" id="m-ce-effective">—</td>
+          </tr>
+          <tr style="opacity:0.65;font-size:11px">
+            <td>Sent (raw input)</td>
             <td class="col-raw" id="m-raw-tokens">—</td>
             <td class="col-ce" id="m-ce-tokens">—</td>
           </tr>
-          <tr>
-            <td>Time to answer</td>
-            <td class="col-raw" id="m-raw-time">—</td>
-            <td class="col-ce" id="m-ce-time">—</td>
+          <tr style="opacity:0.65;font-size:11px">
+            <td>&nbsp;&nbsp;of which cached</td>
+            <td class="col-raw" id="m-raw-cached">—</td>
+            <td class="col-ce" id="m-ce-cached">—</td>
+          </tr>
+          <tr style="opacity:0.65;font-size:11px">
+            <td>Output tokens</td>
+            <td class="col-raw" id="m-raw-output">—</td>
+            <td class="col-ce" id="m-ce-output">—</td>
           </tr>
         </tbody>
       </table>
     </div>
 
-    <div class="flyout-section">
-      <div class="section-label">Context Accumulation by Turn</div>
-      <div id="chart-container" class="chart-wrap">
-        <div style="color:#999;font-size:11px;padding:20px 0;text-align:center;font-family:var(--mono)">Run both modes to see chart</div>
-      </div>
+    <div class="flyout-section" id="savings-section" style="display:none">
+      <div class="section-label">Relative Savings</div>
+      <table class="cmp-table">
+        <tbody>
+          <tr>
+            <td>LLM calls</td>
+            <td class="col-ce" id="savings-calls">—</td>
+          </tr>
+          <tr>
+            <td>Effective tokens</td>
+            <td class="col-ce" id="savings-tokens">—</td>
+          </tr>
+          <tr>
+            <td>Time</td>
+            <td class="col-ce" id="savings-time">—</td>
+          </tr>
+          <tr>
+            <td>Eff. tokens / 1K queries</td>
+            <td class="col-ce" id="savings-per-1k">—</td>
+          </tr>
+        </tbody>
+      </table>
+      <div style="font-size:10px;color:#888;margin-top:6px;font-family:var(--mono)">Effective = uncached + cached × 0.10 · list-price proxy · EIS billing may differ</div>
     </div>
 
     <div class="data-note" id="flyout-data-note">Select a scenario to see metrics</div>
-
-    <div class="flyout-section">
-      <div class="section-label">Cost Calculator</div>
-      <div class="calc-grid">
-        <label class="calc-label">Price / 1K tokens ($)
-          <input class="calc-input" id="calc-price" type="number" value="0.002" step="0.001" min="0.001" oninput="updateCalc()">
-        </label>
-        <label class="calc-label">Queries / day
-          <input class="calc-input" id="calc-queries" type="number" value="10000" step="1000" min="1" oninput="updateCalc()">
-        </label>
-      </div>
-      <table class="cmp-table" style="margin-top:8px">
-        <thead>
-          <tr><th></th><th class="col-h-raw">Without CE</th><th class="col-h-ce">With CE</th></tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>Tokens/query</td>
-            <td class="col-raw" id="calc-raw-tok">—</td>
-            <td class="col-ce" id="calc-ce-tok">—</td>
-          </tr>
-          <tr>
-            <td>Daily cost</td>
-            <td class="col-raw" id="calc-raw-day">—</td>
-            <td class="col-ce" id="calc-ce-day">—</td>
-          </tr>
-          <tr>
-            <td>Monthly cost</td>
-            <td class="col-raw" id="calc-raw-month">—</td>
-            <td class="col-ce" id="calc-ce-month">—</td>
-          </tr>
-        </tbody>
-      </table>
-      <div class="calc-savings" id="calc-savings">Run both modes to calculate savings</div>
-    </div>
   </aside>
 
 </div><!-- end layout -->
@@ -690,8 +688,8 @@ const SCENARIOS = {
   },
   s02: {
     label: 'S02',
-    name: 'Mid-Market Issues',
-    question: 'What are the most common support issues for Mid-Market accounts this quarter?'
+    name: 'Renewal Risk',
+    question: 'Which Enterprise accounts renewing in the next 60 days have open P1 tickets, and which knowledge base articles cover their issues?'
   },
   s03: {
     label: 'S03',
@@ -862,9 +860,9 @@ function buildRunningUI(question) {
       <div class="answer-meta">
         <span class="agent-id">CS Intelligence Agent</span>
         <div class="run-stats" id="run-stats">
-          <span>Turns <b id="stat-turns">—</b></span>
+          <span>LLM calls <b id="stat-turns">—</b></span>
           <span>Tool calls <b id="stat-tools">—</b></span>
-          <span>Tokens <b id="stat-tokens">—</b></span>
+          <span>Eff. tokens <b id="stat-tokens">—</b></span>
           <span>Time <b id="stat-time">—</b></span>
         </div>
       </div>
@@ -885,13 +883,15 @@ function finishRun(data) {
   const turnCount  = m.turns      || 0;
   const toolCount  = m.tool_calls || (data.turns ? data.turns.length : 0);
   const inputTok   = m.input_tokens || 0;
+  const cachedTok  = m.cached_input_tokens || 0;
+  const effTok     = m.effective_tokens || Math.round((inputTok - cachedTok) + cachedTok * 0.10);
   const seconds    = m.seconds    || 0;
 
   // Update final stats
   const setEl = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
   setEl('stat-turns',  turnCount);
   setEl('stat-tools',  toolCount);
-  setEl('stat-tokens', fmtN(inputTok));
+  setEl('stat-tokens', fmtN(effTok));
   setEl('stat-time',   seconds.toFixed(1) + 's');
 
   const panel = document.getElementById('trace-panel');
@@ -903,7 +903,7 @@ function finishRun(data) {
   panel.outerHTML = `
     ${answerHtml}
     <div class="trace-toggle" onclick="toggleTraceDetail(this)">
-      <span>${turnCount} turns &nbsp;·&nbsp; ${toolCount} tool calls &nbsp;·&nbsp; ${fmtN(inputTok)} tokens &nbsp;·&nbsp; ${seconds.toFixed(1)}s</span>
+      <span>${turnCount} LLM calls &nbsp;·&nbsp; ${toolCount} tool calls &nbsp;·&nbsp; ${fmtN(effTok)} eff. tokens &nbsp;·&nbsp; ${seconds.toFixed(1)}s</span>
       <span>▾ expand trace</span>
     </div>
     <div class="trace-detail" id="trace-detail">
@@ -974,16 +974,16 @@ function toggleMetrics() {
 
 function clearMetricsFlyout() {
   ['m-raw-turns','m-ce-turns','m-raw-tools','m-ce-tools',
-   'm-raw-tokens','m-ce-tokens','m-raw-time','m-ce-time'].forEach(id => {
+   'm-raw-tokens','m-ce-tokens','m-raw-time','m-ce-time',
+   'm-raw-cached','m-ce-cached','m-raw-effective','m-ce-effective',
+   'm-raw-output','m-ce-output'].forEach(id => {
     const el = document.getElementById(id);
     if (el) el.innerHTML = '—';
   });
-  const container = document.getElementById('chart-container');
-  if (container) container.innerHTML = '<div style="color:#999;font-size:11px;padding:16px 0;text-align:center;font-family:var(--mono)">Run both modes to see chart.</div>';
+  const sec = document.getElementById('savings-section');
+  if (sec) sec.style.display = 'none';
   const note = document.getElementById('flyout-data-note');
   if (note) note.textContent = '';
-  const savEl = document.getElementById('calc-savings');
-  if (savEl) savEl.textContent = 'Run both modes to calculate savings';
 }
 
 // ══════════════════════════════════════════════════
@@ -992,11 +992,17 @@ function clearMetricsFlyout() {
 function _runMetrics(run) {
   if (!run) return null;
   const m = run.metrics || {};
+  const inp = m.input_tokens || 0;
+  const cached = m.cached_input_tokens || 0;
+  const effective = m.effective_tokens || Math.round((inp - cached) + cached * 0.10);
   return {
-    turns:  m.turns      || 0,
-    tools:  m.tool_calls || (run.turns ? run.turns.length : 0),
-    tokens: m.input_tokens || 0,
-    time:   m.seconds    || 0,
+    turns:     m.turns      || 0,
+    tools:     m.tool_calls || (run.turns ? run.turns.length : 0),
+    tokens:    inp,
+    cached:    cached,
+    effective: effective,
+    output:    m.output_tokens || 0,
+    time:      m.seconds    || 0,
     perTurnTokens: run.turns
       ? run.turns.map((t, i) => i === 0 ? t.cumulative_input_tokens : t.cumulative_input_tokens - run.turns[i-1].cumulative_input_tokens)
       : [m.input_tokens || 0]
@@ -1017,36 +1023,51 @@ function updateMetricsForRun() {
   };
 
   if (rawM) {
-    set('m-raw-turns',  rawM.turns);
-    set('m-raw-tools',  rawM.tools);
-    set('m-raw-tokens', fmtN(rawM.tokens));
-    set('m-raw-time',   rawM.time.toFixed(1) + 's');
+    set('m-raw-turns',     rawM.turns);
+    set('m-raw-tools',     rawM.tools);
+    set('m-raw-tokens',    fmtN(rawM.tokens));
+    set('m-raw-cached',    fmtN(rawM.cached));
+    set('m-raw-effective', fmtN(rawM.effective));
+    set('m-raw-output',    fmtN(rawM.output));
+    set('m-raw-time',      rawM.time.toFixed(1) + 's');
   }
 
   if (ceM) {
-    set('m-ce-turns',  ceM.turns);
-    set('m-ce-tools',  ceM.tools);
-    set('m-ce-tokens', fmtN(ceM.tokens));
-    set('m-ce-time',   ceM.time.toFixed(1) + 's');
+    set('m-ce-turns',     ceM.turns);
+    set('m-ce-tools',     ceM.tools);
+    set('m-ce-tokens',    fmtN(ceM.tokens));
+    set('m-ce-cached',    fmtN(ceM.cached));
+    set('m-ce-effective', fmtN(ceM.effective));
+    set('m-ce-output',    fmtN(ceM.output));
+    set('m-ce-time',      ceM.time.toFixed(1) + 's');
   }
 
-  // Once both have run, add deltas and chart
+  // Once both have run, add deltas and savings panel
   if (rawM && ceM) {
-    set('m-ce-turns',  ceM.turns  + pct(rawM.turns,  ceM.turns));
-    set('m-ce-tools',  ceM.tools  + pct(rawM.tools || 1, ceM.tools));
-    set('m-ce-tokens', fmtN(ceM.tokens) + pct(rawM.tokens, ceM.tokens));
-    set('m-ce-time',   ceM.time.toFixed(1) + 's' + pct(rawM.time, ceM.time));
+    set('m-ce-turns',     ceM.turns  + pct(rawM.turns,     ceM.turns));
+    set('m-ce-tools',     ceM.tools  + pct(rawM.tools || 1, ceM.tools));
+    set('m-ce-tokens',    fmtN(ceM.tokens)    + pct(rawM.tokens,    ceM.tokens));
+    set('m-ce-effective', fmtN(ceM.effective) + pct(rawM.effective, ceM.effective));
+    set('m-ce-time',      ceM.time.toFixed(1) + 's' + pct(rawM.time, ceM.time));
 
-    const container = document.getElementById('chart-container');
-    if (container) {
-      container.innerHTML = buildChart(rawM.perTurnTokens, ceM.perTurnTokens);
-    }
+    // Savings panel
+    const sec = document.getElementById('savings-section');
+    if (sec) sec.style.display = '';
+    const pctFmt = (raw, ce) => {
+      if (!raw) return '—';
+      const d = Math.round((1 - ce / raw) * 100);
+      return (d >= 0 ? '−' : '+') + Math.abs(d) + '%';
+    };
+    set('savings-calls',   pctFmt(rawM.turns, ceM.turns) + ' LLM calls');
+    set('savings-tokens',  pctFmt(rawM.effective, ceM.effective) + ' effective tokens');
+    set('savings-time',    pctFmt(rawM.time, ceM.time) + ' wall time');
+    const per1kRaw = Math.round(rawM.effective * 1000);
+    const per1kCE  = Math.round(ceM.effective  * 1000);
+    set('savings-per-1k',  fmtN(per1kCE) + ' CE vs ' + fmtN(per1kRaw) + ' raw');
   }
 
   const note = document.getElementById('flyout-data-note');
   if (note) note.textContent = 'Scenario ' + scId.toUpperCase();
-
-  updateCalc();
 }
 
 // ══════════════════════════════════════════════════
@@ -1130,47 +1151,7 @@ ${ceLines}
 </div>`;
 }
 
-// ══════════════════════════════════════════════════
-// COST CALCULATOR — uses live STATE.runs data
-// ══════════════════════════════════════════════════
-function updateCalc() {
-  const scId   = STATE.scenario;
-  const rawRun = scId ? STATE.runs[scId + '_raw'] : null;
-  const ceRun  = scId ? STATE.runs[scId + '_ce']  : null;
-
-  if (!rawRun && !ceRun) return;
-
-  const price   = parseFloat(document.getElementById('calc-price').value)   || 0.002;
-  const queries = parseInt(document.getElementById('calc-queries').value)    || 10000;
-  const rawTok  = rawRun ? (rawRun.metrics ? rawRun.metrics.input_tokens : 0) : 0;
-  const ceTok   = ceRun  ? (ceRun.metrics  ? ceRun.metrics.input_tokens  : 0) : 0;
-
-  const set = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
-
-  if (rawTok) {
-    const rawDay = (rawTok / 1000) * price * queries;
-    set('calc-raw-tok',   fmtN(rawTok));
-    set('calc-raw-day',   '$' + rawDay.toFixed(2));
-    set('calc-raw-month', '$' + (rawDay * 30).toFixed(0));
-  }
-
-  if (ceTok) {
-    const ceDay = (ceTok / 1000) * price * queries;
-    set('calc-ce-tok',   fmtN(ceTok));
-    set('calc-ce-day',   '$' + ceDay.toFixed(2));
-    set('calc-ce-month', '$' + (ceDay * 30).toFixed(0));
-  }
-
-  if (rawTok && ceTok) {
-    const rawDay  = (rawTok / 1000) * price * queries;
-    const ceDay   = (ceTok  / 1000) * price * queries;
-    const savePct = Math.round((1 - ceTok / rawTok) * 100);
-    const saveAmt = (rawDay - ceDay) * 30;
-    const savEl   = document.getElementById('calc-savings');
-    if (savEl) savEl.textContent =
-      'At ' + fmtN(queries) + ' queries/day: save $' + saveAmt.toFixed(0) + '/month (' + savePct + '% token reduction)';
-  }
-}
+// Cost calculator removed (change A, 2026-09-25)
 
 // ══════════════════════════════════════════════════
 // UTIL

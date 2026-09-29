@@ -29,8 +29,8 @@ REPLAYS_DIR = BASE / 'replays'
 SCENARIOS = [
     {"id": "s01", "label": "S01", "name": "Churn Risk",
      "question": "Which Enterprise accounts have the highest churn risk, and what are they mostly calling us about?"},
-    {"id": "s02", "label": "S02", "name": "Mid-Market Issues",
-     "question": "What are the most common support issues for Mid-Market accounts this quarter?"},
+    {"id": "s02", "label": "S02", "name": "Renewal Risk",
+     "question": "Which Enterprise accounts renewing in the next 60 days have open P1 tickets, and which knowledge base articles cover their issues?"},
     {"id": "s03", "label": "S03", "name": "P1 + Churn",
      "question": "Which accounts have open P1 tickets and high churn risk right now?"},
     {"id": "s04", "label": "S04", "name": "KB Coverage",
@@ -41,6 +41,7 @@ _run_count = {"count": 0}
 _live_enabled = os.environ.get("DEMO_LIVE_ENABLED", "false").lower() == "true"
 KIBANA_URL = os.environ.get("KIBANA_URL", "")
 AI_INDEX = os.environ.get("CE_AI_INDEX", "ai-index-idx-precision-corpus")
+CACHE_READ_MULT = 0.10  # Anthropic list price; label: "list-price proxy; EIS billing may differ"
 
 
 def _es_reachable():
@@ -117,6 +118,10 @@ def _ab_to_replay_shape(ab_resp: dict, scenario: str, mode: str, elapsed: float)
     tool_steps = [s for s in ab_resp.get("steps", []) if s.get("type") == "tool_call"]
     usage = ab_resp.get("model_usage", {})
     input_tokens = usage.get("input_tokens", 0)
+    cached_tokens = usage.get("cached_input_tokens", 0)
+    output_tokens = usage.get("output_tokens", 0)
+    llm_calls = usage.get("llm_calls", len(tool_steps))
+    effective_tokens = round((input_tokens - cached_tokens) + cached_tokens * CACHE_READ_MULT)
     per = input_tokens // max(len(tool_steps), 1)
 
     turns = []
@@ -144,11 +149,15 @@ def _ab_to_replay_shape(ab_resp: dict, scenario: str, mode: str, elapsed: float)
         "answer_markdown": answer,
         "turns": turns,
         "metrics": {
-            "turns": usage.get("llm_calls", len(tool_steps)),
+            "turns": llm_calls,
             "tool_calls": len(tool_steps),
             "input_tokens": input_tokens,
+            "cached_input_tokens": cached_tokens,
+            "effective_tokens": effective_tokens,
+            "output_tokens": output_tokens,
             "seconds": round(elapsed, 1),
             "tokens_estimated": True,
+            "cache_read_mult": CACHE_READ_MULT,
         },
     }
 

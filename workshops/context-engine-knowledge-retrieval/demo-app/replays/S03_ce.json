@@ -1,13 +1,87 @@
 {
   "scenario": "S03",
   "mode": "ce",
-  "source": "replay",
-  "answer_markdown": "## Accounts with Open P1 Tickets and High Churn Risk\n\nFour accounts have both high churn risk and open P1 tickets right now:\n\n| Account | Churn Risk | Open P1 Tickets |\n|---|---|---|\n| Apex Dynamics | 0.87 | 3 |\n| Meridian Corp | 0.84 | 2 |\n| Pinnacle Industries | 0.78 | 4 |\n| Quantum Logistics | 0.76 | 1 |\n\n**Immediate action recommended:** Apex Dynamics and Pinnacle Industries are highest priority — Apex has the highest churn risk score while Pinnacle has the most unresolved P1 incidents. Escalate both to CSM attention today. Meridian Corp's data migration issues (source of their P1 tickets) are likely directly contributing to their elevated churn risk.",
+  "source": "live",
+  "recorded_at": "20260928T212305Z",
+  "model": "google-gemini-3.0-flash",
+  "label": "Median of 3 recorded runs \u00b7 2026-09-28 \u00b7 google-gemini-3.0-flash",
+  "answer_markdown": "I've cross-referenced the accounts with open P1/critical tickets and high churn risk. Here are the accounts that meet both criteria:\n\n### **Accounts with Open P1 Tickets and High Churn Risk**\n\n| Company Name | Customer ID | Churn Risk Score | P1 Ticket Subject | Account Owner |\n| :--- | :--- | :--- | :--- | :--- |\n| **Hearthstone Labs** | CUST-0303 | **0.95** | Salesforce sync failing intermittently / Dashboard load times degraded | Dana Reyes |\n| **Hearthstone Co** | CUST-0285 | **0.99** | Column sorting broken on custom dashboard | Lena Fischer |\n| **Nimbus Partners** | CUST-0245 | **0.94** | Salesforce sync failing intermittently | Lena Fischer |\n| **Vertex Group** | CUST-0131 | **0.95** | Snowflake connector missing rows on incremental sync | Priya Nair |\n| **Wavelength Technologies**| CUST-0463 | **0.96** | CSV export encoding incorrect | Lena Fischer |\n| **Redwood Labs** | CUST-0009 | **0.91** | Data not refreshing after manual trigger | Omar Haddad |\n| **Coppervale Group** | CUST-0042 | **0.92** | API rate limit documentation unclear | Omar Haddad |\n\n### **Analysis & Reasoning**\n- **High Churn Risk:** I filtered for accounts with a `churn_risk_score` greater than **0.8**.\n- **Open P1 Tickets:** I identified accounts with tickets currently in an \"open\" status and \"critical\" priority.\n- **Intersection:** The accounts listed above are at significant risk because they are facing major technical blockers (P1 issues) while already showing a high statistical likelihood of churning.\n\n**Strategic Note:** \nHearthstone Labs (CUST-0303) and Hearthstone Co (CUST-0285) are particularly critical, with risk scores near 1.0 and open issues affecting core dashboard and sync functionality. Immediate outreach from their respective CSMs (Dana Reyes and Lena Fischer) is recommended.",
   "turns": [
-    {"n": 1, "tool": "query_ki", "summary": "Retrieving routing KIs for CRM accounts and support tickets", "input": "accounts open P1 tickets high churn risk correlation", "cumulative_input_tokens": 5400, "tokens_estimated": false},
-    {"n": 2, "tool": "execute_esql", "summary": "Querying high-churn accounts (churn_risk > 0.7)", "input": "FROM precision-crm-accounts | WHERE churn_risk > 0.7 | SORT churn_risk DESC | KEEP account_id, company_name, churn_risk, account_tier", "cumulative_input_tokens": 9100, "tokens_estimated": false},
-    {"n": 3, "tool": "execute_esql", "summary": "Finding open P1 tickets grouped by account", "input": "FROM precision-support-tickets | WHERE priority == \"P1\" AND status == \"open\" | STATS open_p1 = COUNT(*) BY account_id | SORT open_p1 DESC", "cumulative_input_tokens": 11800, "tokens_estimated": false},
-    {"n": 4, "tool": "execute_esql", "summary": "Filtering P1 tickets to high-churn account list", "input": "FROM precision-support-tickets | WHERE priority == \"P1\" AND status == \"open\" AND account_id IN (\"ACC-0042\", \"ACC-0117\", \"ACC-0231\", \"ACC-0089\", \"ACC-0198\") | STATS open_p1 = COUNT(*) BY account_id, company_name | SORT open_p1 DESC", "cumulative_input_tokens": 13200, "tokens_estimated": false}
+    {
+      "n": 1,
+      "tool": "load_skill",
+      "summary": "load_skill",
+      "input": "{\"skill\":\"ki-retrieval\"}",
+      "cumulative_input_tokens": 14594,
+      "tokens_estimated": true
+    },
+    {
+      "n": 2,
+      "tool": "platform.context_engine.query_ai_indices",
+      "summary": "platform.context_engine.query_ai_indices",
+      "input": "{\"query\":\"FROM ai-index-idx-precision-corpus METADATA _id, _index, _score\\n| WHERE content:\\\"tickets\\\" OR content:\\\"accounts\\\" OR content:\\\"churn\\\"\\n| FORK\\n    ( WHERE content:\\\"P1\\\" OR content:\\\"risk\\\" | SORT _score DESC | LIMIT 20 )\\n    ( WHERE content.semantic:\\\"P1 open tickets\\\" OR content.semantic:\\\"high churn risk accounts\\\" | SORT _score DESC | LIMIT 20 )\\n| FUSE\\n| SORT _score DESC, _id ASC\\n| KEEP title, description, content, type, tags\\n| LIMIT 10\"}",
+      "cumulative_input_tokens": 29188,
+      "tokens_estimated": true
+    },
+    {
+      "n": 3,
+      "tool": "platform.context_engine.query_ai_indices",
+      "summary": "platform.context_engine.query_ai_indices",
+      "input": "{\"query\":\"FROM ai-index-idx-precision-corpus METADATA _id, _index, _score\\n| WHERE content:\\\"tickets\\\" OR content:\\\"accounts\\\" OR content:\\\"churn\\\" OR content:\\\"P1\\\" OR content:\\\"risk\\\"\\n| SORT _score DESC, _id ASC\\n| KEEP title, description, content, type, tags\\n| LIMIT 10\"}",
+      "cumulative_input_tokens": 43782,
+      "tokens_estimated": true
+    },
+    {
+      "n": 4,
+      "tool": "platform.core.execute_esql",
+      "summary": "platform.core.execute_esql",
+      "input": "{\"query\":\"FROM precision-support-tickets\\n| WHERE status == \\\"open\\\" AND (priority == \\\"critical\\\" OR priority == \\\"P1\\\")\\n| ENRICH precision_crm_accounts ON customer_id\\n| WHERE churn_risk_score > 0.8\\n| KEEP company_name, ticket_id, priority, churn_risk_score, account_owner\\n| SORT churn_risk_score DESC\"}",
+      "cumulative_input_tokens": 58376,
+      "tokens_estimated": true
+    },
+    {
+      "n": 5,
+      "tool": "platform.core.execute_esql",
+      "summary": "platform.core.execute_esql",
+      "input": "{\"query\":\"FROM \\\"precision-support-tickets\\\"\\n| WHERE status == \\\"open\\\" AND (priority == \\\"critical\\\" OR priority == \\\"P1\\\")\\n| KEEP account_id, company_name, ticket_id, priority, subject\\n| LIMIT 50\"}",
+      "cumulative_input_tokens": 72970,
+      "tokens_estimated": true
+    },
+    {
+      "n": 6,
+      "tool": "platform.core.execute_esql",
+      "summary": "platform.core.execute_esql",
+      "input": "{\"query\":\"FROM \\\"precision-crm-accounts\\\"\\n| WHERE churn_risk_score > 0.8\\n| KEEP account_id, company_name, churn_risk_score, account_owner, arr\\n| SORT churn_risk_score DESC\\n| LIMIT 100\"}",
+      "cumulative_input_tokens": 87564,
+      "tokens_estimated": true
+    },
+    {
+      "n": 7,
+      "tool": "platform.core.execute_esql",
+      "summary": "platform.core.execute_esql",
+      "input": "{\"query\":\"FROM \\\"precision-crm-accounts\\\"\\n| LIMIT 1\"}",
+      "cumulative_input_tokens": 102158,
+      "tokens_estimated": true
+    },
+    {
+      "n": 8,
+      "tool": "platform.core.execute_esql",
+      "summary": "platform.core.execute_esql",
+      "input": "{\"query\":\"FROM \\\"precision-crm-accounts\\\"\\n| WHERE churn_risk_score > 0.8\\n| KEEP customer_id, company_name, churn_risk_score, account_owner, arr\\n| SORT churn_risk_score DESC\\n| LIMIT 50\"}",
+      "cumulative_input_tokens": 116752,
+      "tokens_estimated": true
+    }
   ],
-  "metrics": {"turns": 2, "tool_calls": 4, "input_tokens": 13200, "seconds": 21.4, "tokens_estimated": false}
+  "metrics": {
+    "turns": 9,
+    "llm_calls": 9,
+    "tool_calls": 8,
+    "input_tokens": 116755,
+    "cached_input_tokens": 72433,
+    "effective_tokens": 51565,
+    "output_tokens": 1552,
+    "seconds": 29.8,
+    "tokens_estimated": true,
+    "cache_read_mult": 0.1
+  }
 }

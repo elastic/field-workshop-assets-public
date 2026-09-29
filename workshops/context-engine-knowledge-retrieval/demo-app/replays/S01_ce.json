@@ -1,12 +1,95 @@
 {
   "scenario": "S01",
   "mode": "ce",
-  "source": "replay",
-  "answer_markdown": "## Enterprise Churn Risk Analysis\n\nThe four Enterprise accounts with the highest churn risk are:\n\n| Account | Churn Risk | ARR | Top Support Category |\n|---|---|---|---|\n| Apex Dynamics | 0.87 | $420,000 | Billing (7 tickets) |\n| Meridian Corp | 0.84 | $385,000 | Data quality (5 tickets) |\n| Sterling Global | 0.82 | $510,000 | Integration (6 tickets) |\n| Vantage Systems | 0.79 | $295,000 | Integration (4 tickets) |\n\n**Top categories across all four accounts:**\n\n- **Billing** — 34% of tickets\n- **Integration** — 28% of tickets  \n- **Data quality** — 21% of tickets\n\nApex Dynamics is the highest-risk account with 7 open tickets, primarily billing disputes tied to usage-based overage charges. Meridian Corp's data quality issues suggest an ongoing migration. Both Sterling Global and Vantage Systems are experiencing API connectivity failures classified under integration.",
+  "source": "live",
+  "recorded_at": "20260928T212305Z",
+  "model": "google-gemini-3.0-flash",
+  "label": "Median of 3 recorded runs \u00b7 2026-09-28 \u00b7 google-gemini-3.0-flash",
+  "answer_markdown": "Based on the latest data from the Precision CRM and support systems, here are the Enterprise accounts with the highest churn risk and the primary issues they are facing.\n\n### **Highest Churn Risk Enterprise Accounts**\n\n| Company Name | Risk Score | ARR | Account Owner |\n| :--- | :--- | :--- | :--- |\n| **Bluepeak Technologies** | **1.00** | $923,342 | Omar Haddad |\n| **Hearthstone Co** | **0.99** | $1,467,294 | Lena Fischer |\n| **Nimbus Labs** | **0.97** | $1,762,422 | Omar Haddad |\n| **Aurora Labs** | **0.96** | $1,050,428 | Priya Nair |\n| **Hearthstone Labs** | **0.95** | $1,657,591 | Dana Reyes |\n\n---\n\n### **Top Support Themes & Pain Points**\n\nThe high-risk accounts are primarily reporting friction in three key areas:\n\n#### **1. Billing & Contract Friction (High Urgency)**\nNearly every high-risk account (Hearthstone Co, Nimbus Labs, Hearthstone Labs) has reported **invoice discrepancies**. Specifically, they are repeatedly complaining that renewal quotes do not reflect agreed-upon discounts (typically a cited 12% discount) or that they are being overcharged for seat counts despite offboarding users.\n\n#### **2. Platform Performance & Scaling (Technical Frustration)**\n*   **Timeouts:** Multiple accounts (Aurora Labs, Hearthstone Co, Nimbus Labs) are reporting that reports with date ranges exceeding 90 days or datasets larger than 50,000 rows are timing out or stalling indefinitely. \n*   **Latency:** A common theme is dashboard performance degradation, with load times increasing from 2 seconds to over 15 seconds, impacting their ability to run daily operations.\n\n#### **3. Integration & Data Reliability**\n*   **Sync Failures:** Hearthstone Labs and Bluepeak have reported significant issues with Salesforce sync and webhook delivery. \n*   **Data Integrity:** Both Aurora Labs and Nimbus Labs have experienced data dropping during ingest (approximately 8% of records) following platform updates, which is creating gaps in their board-level analytics.\n\n### **Summary of Reasoning**\nThe churn risk appears to be driven by a combination of **commercial mistrust** (billing errors) and **operational instability** (timeouts and data loss). Bluepeak Technologies, at a 1.00 risk score, is particularly concerning as they have open tickets regarding both API migration difficulties and data pipeline reliability.",
   "turns": [
-    {"n": 1, "tool": "query_ki", "summary": "Retrieving routing KIs for CRM accounts and support tickets", "input": "Enterprise accounts churn risk support ticket categories", "cumulative_input_tokens": 5200, "tokens_estimated": false},
-    {"n": 2, "tool": "execute_esql", "summary": "Querying Enterprise accounts ranked by churn risk", "input": "FROM precision-crm-accounts | WHERE account_tier == \"Enterprise\" | SORT churn_risk DESC | LIMIT 10 | KEEP account_id, company_name, churn_risk, arr", "cumulative_input_tokens": 8900, "tokens_estimated": false},
-    {"n": 3, "tool": "execute_esql", "summary": "Getting ticket categories for high-risk accounts", "input": "FROM precision-support-tickets | WHERE account_id IN (\"ACC-0042\", \"ACC-0117\", \"ACC-0231\", \"ACC-0089\") | STATS count = COUNT(*) BY category | SORT count DESC", "cumulative_input_tokens": 11400, "tokens_estimated": false}
+    {
+      "n": 1,
+      "tool": "load_skill",
+      "summary": "load_skill",
+      "input": "{\"skill\":\"ki-retrieval\"}",
+      "cumulative_input_tokens": 10361,
+      "tokens_estimated": true
+    },
+    {
+      "n": 2,
+      "tool": "write_todos",
+      "summary": "write_todos",
+      "input": "{\"todos\":[{\"content\":\"Retrieve Knowledge Indicators for accounts and tickets data structure\",\"status\":\"in_progress\"},{\"content\":\"Identify Enterprise accounts with high churn risk\",\"status\":\"pending\"},{\"content\":\"Analyze support ticket themes for high-risk accounts\",\"status\":\"pending\"},{\"content\":\"Synthesize findings and report churn risk drivers\",\"status\":\"pending\"}]}",
+      "cumulative_input_tokens": 20722,
+      "tokens_estimated": true
+    },
+    {
+      "n": 3,
+      "tool": "platform.context_engine.query_ai_indices",
+      "summary": "platform.context_engine.query_ai_indices",
+      "input": "{\"query\":\"FROM ai-index-idx-precision-corpus METADATA _id, _index, _score\\n| WHERE type == \\\"index_metadata\\\"\\n| FORK\\n    ( WHERE content:\\\"account churn risk\\\" OR title:\\\"account churn risk\\\" OR description:\\\"account churn risk\\\" | SORT _score DESC | LIMIT 20 )\\n    ( WHERE content.semantic:\\\"account churn risk\\\" OR title.semantic:\\\"account churn risk\\\" OR description.semantic:\\\"account churn risk\\\" | SORT _score DESC | LIMIT 20 )\\n| FUSE\\n| SORT _score DESC, _id ASC\\n| KEEP title, description",
+      "cumulative_input_tokens": 31083,
+      "tokens_estimated": true
+    },
+    {
+      "n": 4,
+      "tool": "platform.context_engine.query_ai_indices",
+      "summary": "platform.context_engine.query_ai_indices",
+      "input": "{\"query\":\"FROM ai-index-idx-precision-corpus METADATA _id, _index, _score\\n| WHERE type == \\\"index_metadata\\\"\\n| FORK\\n    ( WHERE content:\\\"account churn risk support tickets\\\" OR title:\\\"account churn risk support tickets\\\" OR description:\\\"account churn risk support tickets\\\" | SORT _score DESC | LIMIT 20 )\\n    ( WHERE content:\\\"Enterprise\\\" OR title:\\\"Enterprise\\\" | SORT _score DESC | LIMIT 20 )\\n| FUSE\\n| SORT _score DESC, _id ASC\\n| KEEP title, description, content, type, tags, attributes",
+      "cumulative_input_tokens": 41444,
+      "tokens_estimated": true
+    },
+    {
+      "n": 5,
+      "tool": "write_todos",
+      "summary": "write_todos",
+      "input": "{\"todos\":[{\"content\":\"Retrieve Knowledge Indicators for accounts and tickets data structure\",\"status\":\"completed\"},{\"content\":\"Identify Enterprise accounts with high churn risk\",\"status\":\"in_progress\"},{\"content\":\"Analyze support ticket themes for high-risk accounts\",\"status\":\"pending\"},{\"content\":\"Synthesize findings and report churn risk drivers\",\"status\":\"pending\"}]}",
+      "cumulative_input_tokens": 51805,
+      "tokens_estimated": true
+    },
+    {
+      "n": 6,
+      "tool": "platform.core.execute_esql",
+      "summary": "platform.core.execute_esql",
+      "input": "{\"query\":\"FROM \\\"precision-crm-accounts\\\"\\n| WHERE account_tier == \\\"Enterprise\\\"\\n| KEEP company_name, customer_id, churn_risk_score, account_owner, arr\\n| SORT churn_risk_score DESC\\n| LIMIT 10\"}",
+      "cumulative_input_tokens": 62166,
+      "tokens_estimated": true
+    },
+    {
+      "n": 7,
+      "tool": "write_todos",
+      "summary": "write_todos",
+      "input": "{\"todos\":[{\"content\":\"Retrieve Knowledge Indicators for accounts and tickets data structure\",\"status\":\"completed\"},{\"content\":\"Identify Enterprise accounts with high churn risk\",\"status\":\"completed\"},{\"content\":\"Analyze support ticket themes for high-risk accounts\",\"status\":\"in_progress\"},{\"content\":\"Synthesize findings and report churn risk drivers\",\"status\":\"pending\"}]}",
+      "cumulative_input_tokens": 72527,
+      "tokens_estimated": true
+    },
+    {
+      "n": 8,
+      "tool": "platform.core.execute_esql",
+      "summary": "platform.core.execute_esql",
+      "input": "{\"query\":\"FROM \\\"precision-support-tickets\\\"\\n| WHERE customer_id IN (\\\"CUST-0012\\\", \\\"CUST-0285\\\", \\\"CUST-0481\\\", \\\"CUST-0396\\\", \\\"CUST-0303\\\")\\n| KEEP customer_id, company_name, subject, body, status, created_date\\n| SORT created_date DESC\\n| LIMIT 50\"}",
+      "cumulative_input_tokens": 82888,
+      "tokens_estimated": true
+    },
+    {
+      "n": 9,
+      "tool": "platform.core.execute_esql",
+      "summary": "platform.core.execute_esql",
+      "input": "{\"query\":\"FROM \\\"precision-support-tickets\\\"\\n| WHERE account_id IN (\\\"CUST-0012\\\", \\\"CUST-0285\\\", \\\"CUST-0481\\\", \\\"CUST-0396\\\", \\\"CUST-0303\\\")\\n| KEEP account_id, company_name, subject, body, status, created_date\\n| SORT created_date DESC\\n| LIMIT 50\"}",
+      "cumulative_input_tokens": 93249,
+      "tokens_estimated": true
+    }
   ],
-  "metrics": {"turns": 2, "tool_calls": 3, "input_tokens": 11400, "seconds": 18.7, "tokens_estimated": false}
+  "metrics": {
+    "turns": 7,
+    "llm_calls": 7,
+    "tool_calls": 9,
+    "input_tokens": 93249,
+    "cached_input_tokens": 53284,
+    "effective_tokens": 45293,
+    "output_tokens": 1492,
+    "seconds": 30.0,
+    "tokens_estimated": true,
+    "cache_read_mult": 0.1
+  }
 }
