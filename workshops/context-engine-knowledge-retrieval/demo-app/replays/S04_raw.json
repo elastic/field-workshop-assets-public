@@ -4,7 +4,7 @@
   "source": "live",
   "recorded_at": "20260929T205257Z",
   "model": "google-gemini-3.0-flash",
-  "label": "Median of 3 recorded runs \u00b7 2026-09-29 \u00b7 google-gemini-3.0-flash",
+  "label": "Recorded run nearest the median of 3 \u00b7 2026-09-29 \u00b7 google-gemini-3.0-flash",
   "answer_markdown": "I have analyzed the Precision Labs knowledge base articles, and while there isn't a single article specifically listing the \"top\" support ticket categories, the knowledge base consistently directs users to file tickets under four primary categories depending on the nature of their issue:\n\n1.  **Integrations**: The most frequently mentioned category. Users are advised to use this for issues involving the Snowflake connector, Postgres connector, Salesforce migration, connector version management, and general integration health monitoring.\n2.  **Troubleshooting**: This category is designated for performance-related issues, specifically regarding dashboard performance and general system optimization.\n3.  **Features**: Used for general functionality inquiries and configuration help, such as alert configuration and CSV data import processes.\n4.  **Security**: Specifically mentioned for authentication and access control issues, such as two-factor authentication (2FA).\n\n**Reasoning:**\nI searched the `precision-kb-articles` index for documentation regarding ticket categories. The search results showed a standardized \"Getting help\" section across multiple articles (e.g., KB-0030, KB-0032, KB-0033, KB-0121) that maps specific technical topics to these four distinct support categories.",
   "turns": [
     {
