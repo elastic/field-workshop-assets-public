@@ -2,165 +2,109 @@
   "scenario": "S02",
   "mode": "ce",
   "source": "live",
-  "recorded_at": "20260928T212305Z",
+  "recorded_at": "20260929T162612Z",
   "model": "google-gemini-3.0-flash",
-  "label": "Median of 3 recorded runs \u00b7 2026-09-28 \u00b7 google-gemini-3.0-flash",
-  "answer_markdown": "I've analyzed the Enterprise accounts renewing in the next 60 days (through late November 2026) and cross-referenced them with open **critical (P1)** support tickets. \n\nOnly **one** Enterprise account meeting these criteria currently has an open P1 ticket: **Wavelength Group**.\n\n### Account & Ticket Details\n*   **Account:** Wavelength Group\n*   **Renewal Date:** 2026-11-01\n*   **Ticket ID:** TICK-02166\n*   **Issue:** OAuth token refresh loop on SCIM connector. The customer reports that tokens appear to expire instantly despite rotating their client secret, leading to a constant refresh loop that prevents normal operation.\n\n### Recommended Knowledge Base Articles\nTo assist in resolving this issue, the following internal documentation is most relevant:\n*   **KB-0014: Troubleshooting: OAuth Token Refresh Loop** \u2013 Directly addresses the current technical failure.\n*   **KB-0005: Salesforce Connector: Setup and Sync Configuration** \u2013 Useful if the SCIM/OAuth issues are related to the broader Salesforce integration setup.\n*   **KB-0045: API rate limits: Frequently Asked Questions** \u2013 May provide context if the rapid token refresh is triggering secondary rate-limiting issues.\n\nOther Enterprise accounts (such as Meridian Networks, Fathom Networks, and Granite Systems) have renewals scheduled within this window but currently have no open critical tickets assigned to them.",
+  "label": "Median of 3 recorded runs \u00b7 learner-built agents \u00b7 2026-09-29 \u00b7 google-gemini-3.0-flash",
+  "answer_markdown": "Based on my analysis of CRM accounts, support tickets, and knowledge base articles, here are the Enterprise accounts renewing within the next 60 days that have open P1 (Critical) tickets, along with the relevant resources:\n\n### **Enterprise Accounts with Open P1 Tickets**\n\n| Account Name | Renewal Date | ARR | Ticket Issue | Relevant KB Article |\n| :--- | :--- | :--- | :--- | :--- |\n| **Wavelength Group** | 2026-11-01 | $1,691,136 | OAuth token refresh loop on SCIM connector | **KB-0014**: Troubleshooting: OAuth Token Refresh Loop |\n| **Vertex Technologies** | 2026-11-01 | $1,154,121 | Onboarding checklist \u2014 which integrations to prioritize? | **KB-0095**: How to Optimize Your Onboarding Configuration |\n| **Vertex Networks** | 2026-10-22 | $610,642 | Zapier integration timing out on large payloads | **KB-0009**: Zapier Integration: Common Triggers and Actions |\n| **Granite Systems** | 2026-10-07 | $1,216,071 | Data pipeline drop after platform update | *No specific article found for pipeline drops* |\n\n### **Analysis Notes**\n*   **High Value at Risk**: Three of these accounts (Wavelength Group, Vertex Technologies, and Granite Systems) represent over **$1M in ARR each**, making the resolution of these P1 tickets critical for their upcoming renewals.\n*   **Knowledge Base Coverage**:\n    *   **Wavelength Group's** issue has a direct troubleshooting guide (**KB-0014**) specifically for OAuth token loops.\n    *   **Vertex Technologies** is in the onboarding phase; several articles (KB-0095, KB-0085, KB-0106) provide best practices for their integration strategy.\n    *   **Granite Systems** reported a pipeline drop following a platform update. While a specific article was not identified for this scenario, internal release notes or platform update logs should be consulted.",
   "turns": [
     {
       "n": 1,
       "tool": "write_todos",
       "summary": "write_todos",
-      "input": "{\"todos\":[{\"content\":\"Retrieve Knowledge Indicators for accounts, tickets, and KB articles.\",\"status\":\"in_progress\"},{\"content\":\"Find Enterprise accounts renewing in the next 60 days.\",\"status\":\"pending\"},{\"content\":\"Identify open P1 tickets for those accounts.\",\"status\":\"pending\"},{\"content\":\"Find knowledge base articles covering the issues in those tickets.\",\"status\":\"pending\"},{\"content\":\"Synthesize findings and answer the user.\",\"status\":\"pending\"}]}",
-      "cumulative_input_tokens": 10096,
+      "input": "{\"todos\":[{\"content\":\"Retrieve index metadata for accounts, tickets, and knowledge base articles from precision-corpus.\",\"status\":\"in_progress\"},{\"content\":\"Query Enterprise accounts renewing in the next 60 days.\",\"status\":\"pending\"},{\"content\":\"Identify open P1 tickets for those accounts.\",\"status\":\"pending\"},{\"content\":\"Find knowledge base articles covering the ticket issues.\",\"status\":\"pending\"}]}",
+      "cumulative_input_tokens": 8178,
       "tokens_estimated": true
     },
     {
       "n": 2,
       "tool": "platform.context_engine.query_ai_indices",
       "summary": "platform.context_engine.query_ai_indices",
-      "input": "{\"query\":\"FROM ai-index-idx-precision-corpus | WHERE type == \\\"index_metadata\\\" OR type == \\\"playbook\\\" | KEEP title, content, type\"}",
-      "cumulative_input_tokens": 20192,
+      "input": "{\"query\":\"FROM ai-index-idx-precision-corpus | WHERE type == \\\"index_metadata\\\" | KEEP title, content\"}",
+      "cumulative_input_tokens": 16356,
       "tokens_estimated": true
     },
     {
       "n": 3,
       "tool": "write_todos",
       "summary": "write_todos",
-      "input": "{\"todos\":[{\"content\":\"Retrieve Knowledge Indicators for accounts, tickets, and KB articles.\",\"status\":\"completed\"},{\"content\":\"Find Enterprise accounts renewing in the next 60 days.\",\"status\":\"in_progress\"},{\"content\":\"Identify open P1 tickets for those accounts.\",\"status\":\"pending\"},{\"content\":\"Find knowledge base articles covering the issues in those tickets.\",\"status\":\"pending\"},{\"content\":\"Synthesize findings and answer the user.\",\"status\":\"pending\"}]}",
-      "cumulative_input_tokens": 30288,
+      "input": "{\"todos\":[{\"content\":\"Retrieve index metadata for accounts, tickets, and knowledge base articles from precision-corpus.\",\"status\":\"completed\"},{\"content\":\"Query Enterprise accounts renewing in the next 60 days.\",\"status\":\"in_progress\"},{\"content\":\"Identify open P1 tickets for those accounts.\",\"status\":\"pending\"},{\"content\":\"Find knowledge base articles covering the ticket issues.\",\"status\":\"pending\"}]}",
+      "cumulative_input_tokens": 24534,
       "tokens_estimated": true
     },
     {
       "n": 4,
       "tool": "platform.core.execute_esql",
       "summary": "platform.core.execute_esql",
-      "input": "{\"query\":\"FROM \\\"precision-crm-accounts\\\" \\n| WHERE renewal_date <= NOW() + 60d AND renewal_date >= NOW() AND account_tier == \\\"Enterprise\\\" \\n| KEEP account_id, company_name, renewal_date \\n| SORT renewal_date ASC\"}",
-      "cumulative_input_tokens": 40384,
+      "input": "{\"query\":\"FROM \\\"precision-crm-accounts\\\" \\n| WHERE account_tier == \\\"Enterprise\\\" AND renewal_date >= \\\"2026-09-29\\\" AND renewal_date <= \\\"2026-11-28\\\" \\n| KEEP customer_id, company_name, renewal_date, arr\"}",
+      "cumulative_input_tokens": 32712,
       "tokens_estimated": true
     },
     {
       "n": 5,
-      "tool": "describe_api",
-      "summary": "describe_api",
-      "input": "{\"api\":\"indices.get_mapping\",\"target\":\"elasticsearch\"}",
-      "cumulative_input_tokens": 50480,
+      "tool": "write_todos",
+      "summary": "write_todos",
+      "input": "{\"todos\":[{\"content\":\"Retrieve index metadata for accounts, tickets, and knowledge base articles from precision-corpus.\",\"status\":\"completed\"},{\"content\":\"Query Enterprise accounts renewing in the next 60 days.\",\"status\":\"completed\"},{\"content\":\"Identify open P1 tickets for those accounts.\",\"status\":\"in_progress\"},{\"content\":\"Find knowledge base articles covering the ticket issues.\",\"status\":\"pending\"}]}",
+      "cumulative_input_tokens": 40890,
       "tokens_estimated": true
     },
     {
       "n": 6,
-      "tool": "execute_api",
-      "summary": "execute_api",
-      "input": "{\"api\":\"indices.get_mapping\",\"params\":{\"index\":\"precision-crm-accounts\"},\"target\":\"elasticsearch\"}",
-      "cumulative_input_tokens": 60576,
+      "tool": "platform.core.execute_esql",
+      "summary": "platform.core.execute_esql",
+      "input": "{\"query\":\"FROM \\\"precision-support-tickets\\\" \\n| WHERE status == \\\"open\\\" AND priority == \\\"critical\\\" \\n| KEEP ticket_id, account_id, subject, category \\n| LIMIT 100\"}",
+      "cumulative_input_tokens": 49068,
       "tokens_estimated": true
     },
     {
       "n": 7,
       "tool": "write_todos",
       "summary": "write_todos",
-      "input": "{\"todos\":[{\"content\":\"Retrieve Knowledge Indicators for accounts, tickets, and KB articles.\",\"status\":\"completed\"},{\"content\":\"Find Enterprise accounts renewing in the next 60 days.\",\"status\":\"in_progress\"},{\"content\":\"Identify open P1 tickets for those accounts.\",\"status\":\"pending\"},{\"content\":\"Find knowledge base articles covering the issues in those tickets.\",\"status\":\"pending\"},{\"content\":\"Synthesize findings and answer the user.\",\"status\":\"pending\"}]}",
-      "cumulative_input_tokens": 70672,
+      "input": "{\"todos\":[{\"content\":\"Retrieve index metadata for accounts, tickets, and knowledge base articles from precision-corpus.\",\"status\":\"completed\"},{\"content\":\"Query Enterprise accounts renewing in the next 60 days.\",\"status\":\"completed\"},{\"content\":\"Identify open P1 tickets for those accounts.\",\"status\":\"completed\"},{\"content\":\"Find knowledge base articles covering the ticket issues.\",\"status\":\"in_progress\"}]}",
+      "cumulative_input_tokens": 57246,
       "tokens_estimated": true
     },
     {
       "n": 8,
       "tool": "platform.core.execute_esql",
       "summary": "platform.core.execute_esql",
-      "input": "{\"query\":\"FROM \\\"precision-crm-accounts\\\" \\n| WHERE renewal_date <= NOW() + 60d AND renewal_date >= NOW() AND account_tier == \\\"Enterprise\\\" \\n| KEEP customer_id, company_name, renewal_date \\n| SORT renewal_date ASC\"}",
-      "cumulative_input_tokens": 80768,
+      "input": "{\"query\":\"FROM \\\"precision-kb-articles\\\" \\n| WHERE MV_CONTAINS(tags, \\\"scim\\\") OR MV_CONTAINS(tags, \\\"zapier\\\") OR MV_CONTAINS(tags, \\\"onboarding\\\") OR MV_CONTAINS(tags, \\\"pipeline\\\") OR MV_CONTAINS(tags, \\\"oauth\\\")\\n| KEEP article_id, title, category, tags \\n| LIMIT 20\"}",
+      "cumulative_input_tokens": 65424,
       "tokens_estimated": true
     },
     {
       "n": 9,
       "tool": "write_todos",
       "summary": "write_todos",
-      "input": "{\"todos\":[{\"content\":\"Retrieve Knowledge Indicators for accounts, tickets, and KB articles.\",\"status\":\"completed\"},{\"content\":\"Find Enterprise accounts renewing in the next 60 days.\",\"status\":\"completed\"},{\"content\":\"Identify open P1 tickets for those accounts.\",\"status\":\"in_progress\"},{\"content\":\"Find knowledge base articles covering the issues in those tickets.\",\"status\":\"pending\"},{\"content\":\"Synthesize findings and answer the user.\",\"status\":\"pending\"}]}",
-      "cumulative_input_tokens": 90864,
+      "input": "{\"todos\":[{\"content\":\"Retrieve index metadata for accounts, tickets, and knowledge base articles from precision-corpus.\",\"status\":\"completed\"},{\"content\":\"Query Enterprise accounts renewing in the next 60 days.\",\"status\":\"completed\"},{\"content\":\"Identify open P1 tickets for those accounts.\",\"status\":\"completed\"},{\"content\":\"Find knowledge base articles covering the ticket issues.\",\"status\":\"in_progress\"}]}",
+      "cumulative_input_tokens": 73602,
       "tokens_estimated": true
     },
     {
       "n": 10,
-      "tool": "execute_api",
-      "summary": "execute_api",
-      "input": "{\"api\":\"indices.get_mapping\",\"params\":{\"index\":\"precision-support-tickets\"},\"target\":\"elasticsearch\"}",
-      "cumulative_input_tokens": 100960,
+      "tool": "platform.core.execute_esql",
+      "summary": "platform.core.execute_esql",
+      "input": "{\"query\":\"FROM \\\"precision-kb-articles\\\" \\n| WHERE title LIKE \\\"%pipeline%\\\" OR title LIKE \\\"%update%\\\" OR content LIKE \\\"%pipeline%\\\" OR content LIKE \\\"%update%\\\"\\n| KEEP article_id, title \\n| LIMIT 5\"}",
+      "cumulative_input_tokens": 81780,
       "tokens_estimated": true
     },
     {
       "n": 11,
       "tool": "write_todos",
       "summary": "write_todos",
-      "input": "{\"todos\":[{\"content\":\"Retrieve Knowledge Indicators for accounts, tickets, and KB articles.\",\"status\":\"completed\"},{\"content\":\"Find Enterprise accounts renewing in the next 60 days.\",\"status\":\"completed\"},{\"content\":\"Identify open P1 tickets for those accounts.\",\"status\":\"in_progress\"},{\"content\":\"Find knowledge base articles covering the issues in those tickets.\",\"status\":\"pending\"},{\"content\":\"Synthesize findings and answer the user.\",\"status\":\"pending\"}]}",
-      "cumulative_input_tokens": 111056,
-      "tokens_estimated": true
-    },
-    {
-      "n": 12,
-      "tool": "platform.core.execute_esql",
-      "summary": "platform.core.execute_esql",
-      "input": "{\"query\":\"FROM \\\"precision-support-tickets\\\" \\n| WHERE priority == \\\"critical\\\" AND status == \\\"open\\\" AND account_tier == \\\"Enterprise\\\"\\n| WHERE created_date >= NOW() - 365d\\n| KEEP ticket_id, account_id, company_name, subject, body \\n| SORT account_id ASC\"}",
-      "cumulative_input_tokens": 121152,
-      "tokens_estimated": true
-    },
-    {
-      "n": 13,
-      "tool": "write_todos",
-      "summary": "write_todos",
-      "input": "{\"todos\":[{\"content\":\"Retrieve Knowledge Indicators for accounts, tickets, and KB articles.\",\"status\":\"completed\"},{\"content\":\"Find Enterprise accounts renewing in the next 60 days.\",\"status\":\"completed\"},{\"content\":\"Identify open P1 tickets for those accounts.\",\"status\":\"completed\"},{\"content\":\"Find knowledge base articles covering the issues in those tickets.\",\"status\":\"in_progress\"},{\"content\":\"Synthesize findings and answer the user.\",\"status\":\"pending\"}]}",
-      "cumulative_input_tokens": 131248,
-      "tokens_estimated": true
-    },
-    {
-      "n": 14,
-      "tool": "load_skill",
-      "summary": "load_skill",
-      "input": "{\"skill\":\"ki-retrieval\"}",
-      "cumulative_input_tokens": 141344,
-      "tokens_estimated": true
-    },
-    {
-      "n": 15,
-      "tool": "write_todos",
-      "summary": "write_todos",
-      "input": "{\"todos\":[{\"content\":\"Retrieve Knowledge Indicators for accounts, tickets, and KB articles.\",\"status\":\"completed\"},{\"content\":\"Find Enterprise accounts renewing in the next 60 days.\",\"status\":\"completed\"},{\"content\":\"Identify open P1 tickets for those accounts.\",\"status\":\"completed\"},{\"content\":\"Find knowledge base articles covering the issues in those tickets.\",\"status\":\"in_progress\"},{\"content\":\"Synthesize findings and answer the user.\",\"status\":\"pending\"}]}",
-      "cumulative_input_tokens": 151440,
-      "tokens_estimated": true
-    },
-    {
-      "n": 16,
-      "tool": "platform.context_engine.query_ai_indices",
-      "summary": "platform.context_engine.query_ai_indices",
-      "input": "{\"query\":\"FROM ai-index-idx-precision-corpus METADATA _id, _index, _score\\n| FORK\\n    ( WHERE content:\\\"API rate limit 429 SCIM OAuth token refresh dashboard reload refresh duplicate accounts Salesforce sync\\\" \\n      OR title:\\\"API rate limit 429 SCIM OAuth token refresh dashboard reload refresh duplicate accounts Salesforce sync\\\" \\n      | SORT _score DESC | LIMIT 20 )\\n    ( WHERE content.semantic:\\\"API rate limit 429 SCIM OAuth token refresh dashboard reload refresh duplicate accounts Sale",
-      "cumulative_input_tokens": 161536,
-      "tokens_estimated": true
-    },
-    {
-      "n": 17,
-      "tool": "platform.context_engine.query_ai_indices",
-      "summary": "platform.context_engine.query_ai_indices",
-      "input": "{\"query\":\"FROM ai-index-idx-precision-corpus METADATA _id, _index, _score\\n| WHERE type == \\\"index_metadata\\\" AND title == \\\"Precision Labs Knowledge Base\\\"\\n| KEEP content\\n| LIMIT 1\"}",
-      "cumulative_input_tokens": 171632,
-      "tokens_estimated": true
-    },
-    {
-      "n": 18,
-      "tool": "platform.core.execute_esql",
-      "summary": "platform.core.execute_esql",
-      "input": "{\"query\":\"FROM \\\"precision-kb-articles\\\" \\n| WHERE content LIKE \\\"*rate limit*\\\" OR content LIKE \\\"*OAuth*\\\" OR content LIKE \\\"*SCIM*\\\" OR content LIKE \\\"*refresh*\\\" OR content LIKE \\\"*Salesforce*\\\" OR content LIKE \\\"*duplicate*\\\"\\n| KEEP article_id, title, category \\n| LIMIT 20\"}",
-      "cumulative_input_tokens": 181728,
+      "input": "{\"todos\":[{\"content\":\"Retrieve index metadata for accounts, tickets, and knowledge base articles from precision-corpus.\",\"status\":\"completed\"},{\"content\":\"Query Enterprise accounts renewing in the next 60 days.\",\"status\":\"completed\"},{\"content\":\"Identify open P1 tickets for those accounts.\",\"status\":\"completed\"},{\"content\":\"Find knowledge base articles covering the ticket issues.\",\"status\":\"completed\"}]}",
+      "cumulative_input_tokens": 89958,
       "tokens_estimated": true
     }
   ],
   "metrics": {
-    "turns": 13,
-    "llm_calls": 13,
-    "tool_calls": 18,
-    "input_tokens": 181743,
-    "cached_input_tokens": 112685,
-    "effective_tokens": 80326,
-    "output_tokens": 1970,
-    "seconds": 35.0,
+    "turns": 7,
+    "llm_calls": 7,
+    "tool_calls": 11,
+    "input_tokens": 89962,
+    "cached_input_tokens": 64245,
+    "effective_tokens": 32142,
+    "output_tokens": 2415,
+    "seconds": 34.8,
     "tokens_estimated": true,
     "cache_read_mult": 0.1
   }

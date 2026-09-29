@@ -2,77 +2,53 @@
   "scenario": "S04",
   "mode": "raw",
   "source": "live",
-  "recorded_at": "20260928T212305Z",
+  "recorded_at": "20260929T162612Z",
   "model": "google-gemini-3.0-flash",
-  "label": "Median of 3 recorded runs \u00b7 2026-09-28 \u00b7 google-gemini-3.0-flash",
-  "answer_markdown": "Based on our support ticket data and internal knowledge base, here is what we know about our top support categories.\n\n### Top Support Ticket Categories\nThe top categories for support tickets at Precision Labs are:\n1.  **Bug** (481 tickets)\n2.  **Integration** (461 tickets)\n3.  **API** (372 tickets)\n4.  **Performance** (368 tickets)\n5.  **Billing** (362 tickets)\n\n### Knowledge Base Insights\nOur knowledge base (KB) provides extensive documentation for these high-volume areas, particularly for **API** and **Billing** issues.\n\n#### **1. API & Performance (High Volume)**\nA significant portion of our documentation addresses API-related issues, which likely contributes to the high ticket volume in the **API** and **Performance** (specifically rate-limiting) categories:\n*   **Authentication & Security:** Multiple guides cover setting up API keys (under `Settings \u2192 API Keys`) and transitioning to v2 authentication.\n*   **Rate Limits:** Several articles address \"API Returning 429 Rate Limit Errors,\" providing tier-specific limits and optimization tips.\n*   **Pagination:** A dedicated guide explains our transition to **cursor-based pagination**, which is a frequent source of \"large result set\" performance tickets.\n*   **Version Migration:** Documentation emphasizes the migration from API v1 to v2, noting that v1 will be deprecated on January 1, 2027.\n\n#### **2. Billing**\nBilling tickets often center on seat counts and payment updates:\n*   **Seat Count Logic:** KB-0016 explains that billing is per-seat/per-month based on **Active** user state. A common reason for tickets is seat count discrepancies, which the KB advises resolving by checking the team list in `Settings \u2192 Team`.\n*   **Payment Management:** Guides detail how to update credit cards via Stripe integration or add PO numbers for corporate billing.\n\n#### **3. Integration & Bugs**\nWhile **Bug** and **Integration** are the top two categories by volume, the current KB articles for these categories are often framed as \"Troubleshooting Runbooks\" or \"Setup Guides.\" \n*   **Troubleshooting:** Most \"Integration\" articles focus on workspace admin prerequisites and source system credentials.\n*   **Reporting:** The KB explicitly instructs users to include their **Account ID** and specific error descriptions when opening tickets for these categories to meet the 4-hour response SLA for Mid-Market/Enterprise accounts.",
+  "label": "Median of 3 recorded runs \u00b7 learner-built agents \u00b7 2026-09-29 \u00b7 google-gemini-3.0-flash",
+  "answer_markdown": "Based on my analysis of the `precision-support-tickets` index, the top support ticket categories are:\n\n1.  **Bug** (481 tickets)\n2.  **Integration** (461 tickets)\n3.  **API** (372 tickets)\n4.  **Performance** (368 tickets)\n5.  **Billing** (362 tickets)\n\nI then searched the knowledge base (`precision-kb-articles`) for information related to these categories. Here is what the knowledge base says about these top areas:\n\n### 1. API (Ranking: #3)\nThe KB is quite extensive on API-related issues, which aligns with it being a top category:\n*   **Rate Limiting (HTTP 429):** There is a dedicated guide (KB-0013) explaining rate limits by account tier (e.g., Enterprise at 1,200 requests/min). It notes that \"unbounded loops\" and sharing keys across services are common causes for these errors.\n*   **Key Management:** Article KB-0008 provides a process for rotating API keys without downtime using a grace period.\n*   **Error Handling:** Several articles (KB-0138, KB-0075) focus on best practices for API error handling and migration.\n\n### 2. Billing (Ranking: #5)\nThe KB provides clear self-service instructions for the most common billing tasks:\n*   **Payment & Contacts:** KB-0017 explains how to update credit cards via Stripe and how to add PO numbers to invoices.\n*   **Invoice Clarity:** KB-0016 clarifies that billing is based on \"peak active seat count\" and explains how deactivating users can result in prorated credits.\n*   **Disputes:** There is a formal process for disputing invoices, requiring a support ticket with the category 'billing' (KB-0016).\n\n### 3. Performance (Ranking: #4)\nKnowledge base coverage for performance is primarily focused on **Dashboards**:\n*   Articles KB-0051, KB-0033, and KB-0098 provide setup guides, best practices, and release updates specifically for \"dashboard performance.\"\n*   Interestingly, these articles suggest opening support tickets under the 'troubleshooting' category for performance issues not covered in the KB, rather than a specific 'performance' category.\n\n### 4. Integration (Ranking: #2)\nWhile 'Integration' is the second most frequent ticket category, the KB articles found (like KB-0051 and KB-0112) mention integrations primarily in the context of **Prerequisites**, stating that users need appropriate credentials for source systems. There were fewer direct \"how-to\" guides for specific integrations in the initial search results compared to API or Billing.\n\n### 5. Bug (Ranking: #1)\nThe knowledge base does not have a \"Bug\" category for articles. Instead, most KB articles (e.g., KB-0051, KB-0138) instruct users to open a support ticket under specific categories (like 'api' or 'troubleshooting') when they encounter an issue not covered by the documentation.\n\n**Summary of Reasoning:**\n*   **Data Source:** I used ES|QL to aggregate and count tickets by `category` in `precision-support-tickets`.\n*   **KB Search:** I used natural language search in `precision-kb-articles` to find articles matching the top categories identified.\n*   **Finding:** The KB is well-equipped for **API** and **Billing** (likely high-volume but solvable via documentation), but may have a documentation gap for **Integrations**, which is a high-volume ticket area but has less specific KB coverage in these results.",
   "turns": [
     {
       "n": 1,
-      "tool": "write_todos",
-      "summary": "write_todos",
-      "input": "{\"todos\":[{\"content\":\"Identify top support ticket categories\",\"status\":\"in_progress\"},{\"content\":\"Search knowledge base for those categories\",\"status\":\"pending\"},{\"content\":\"Synthesize findings and answer user question\",\"status\":\"pending\"}]}",
-      "cumulative_input_tokens": 14358,
+      "tool": "platform.core.list_indices",
+      "summary": "platform.core.list_indices",
+      "input": "{\"pattern\":\"precision-*\"}",
+      "cumulative_input_tokens": 20424,
       "tokens_estimated": true
     },
     {
       "n": 2,
-      "tool": "platform.core.index_explorer",
-      "summary": "platform.core.index_explorer",
-      "input": "{\"query\":\"indices containing Precision Labs support tickets and knowledge base articles\"}",
-      "cumulative_input_tokens": 28716,
+      "tool": "platform.core.generate_esql",
+      "summary": "platform.core.generate_esql",
+      "input": "{\"query\":\"What are the top 5 support ticket categories by count?\",\"index\":\"precision-support-tickets\"}",
+      "cumulative_input_tokens": 40848,
       "tokens_estimated": true
     },
     {
       "n": 3,
-      "tool": "platform.core.generate_esql",
-      "summary": "platform.core.generate_esql",
-      "input": "{\"query\":\"Find the top support ticket categories by count\",\"index\":\"precision-support-tickets\"}",
-      "cumulative_input_tokens": 43074,
+      "tool": "platform.core.execute_esql",
+      "summary": "platform.core.execute_esql",
+      "input": "{\"query\":\"FROM \\\"precision-support-tickets\\\"\\n| STATS category_count = COUNT(*) BY category\\n| SORT category_count DESC\\n| LIMIT 5\"}",
+      "cumulative_input_tokens": 61272,
       "tokens_estimated": true
     },
     {
       "n": 4,
-      "tool": "platform.core.execute_esql",
-      "summary": "platform.core.execute_esql",
-      "input": "{\"query\":\"FROM \\\"precision-support-tickets\\\"\\n| STATS ticket_count = COUNT(*) BY category\\n| SORT ticket_count DESC\\n| LIMIT 5\"}",
-      "cumulative_input_tokens": 57432,
-      "tokens_estimated": true
-    },
-    {
-      "n": 5,
-      "tool": "write_todos",
-      "summary": "write_todos",
-      "input": "{\"todos\":[{\"content\":\"Identify top support ticket categories\",\"status\":\"completed\"},{\"content\":\"Search knowledge base for top categories: bug, integration, api, performance, billing\",\"status\":\"in_progress\"},{\"content\":\"Synthesize findings and answer user question\",\"status\":\"pending\"}]}",
-      "cumulative_input_tokens": 71790,
-      "tokens_estimated": true
-    },
-    {
-      "n": 6,
-      "tool": "platform.core.index_explorer",
-      "summary": "platform.core.index_explorer",
-      "input": "{\"query\":\"indices containing Precision Labs knowledge base articles\"}",
-      "cumulative_input_tokens": 86148,
-      "tokens_estimated": true
-    },
-    {
-      "n": 7,
       "tool": "platform.core.search",
       "summary": "platform.core.search",
-      "input": "{\"query\":\"information about support categories: bug, integration, api, performance, billing\",\"index\":\"precision-kb-articles\"}",
-      "cumulative_input_tokens": 100506,
+      "input": "{\"query\":\"articles about support ticket categories: bug, integration, API, performance, billing\",\"index\":\"precision-kb-articles\"}",
+      "cumulative_input_tokens": 81696,
       "tokens_estimated": true
     }
   ],
   "metrics": {
-    "turns": 13,
-    "llm_calls": 13,
-    "tool_calls": 7,
-    "input_tokens": 100508,
-    "cached_input_tokens": 36119,
-    "effective_tokens": 68001,
-    "output_tokens": 1175,
-    "seconds": 40.0,
+    "turns": 8,
+    "llm_calls": 8,
+    "tool_calls": 4,
+    "input_tokens": 81696,
+    "cached_input_tokens": 53906,
+    "effective_tokens": 33181,
+    "output_tokens": 1360,
+    "seconds": 30.4,
     "tokens_estimated": true,
     "cache_read_mult": 0.1
   }

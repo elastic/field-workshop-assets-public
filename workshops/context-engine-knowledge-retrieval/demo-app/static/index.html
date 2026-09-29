@@ -726,6 +726,9 @@ function setMode(m) {
   const lb = document.getElementById('live-btn');
   if (rb) { rb.style.background = STATE.live_mode ? 'var(--bg)' : 'var(--ink)'; rb.style.color = STATE.live_mode ? 'var(--ink)' : 'var(--bg)'; }
   if (lb) { lb.style.background = STATE.live_mode ? 'var(--ink)' : 'var(--bg)'; lb.style.color = STATE.live_mode ? 'var(--bg)' : 'var(--ink)'; }
+  // Switching Replay<->Live must not leave stale numbers from the other mode
+  // in the comparison panel (WP7 follow-up, 2026-09-29).
+  clearMetricsFlyout();
 }
 
 // ══════════════════════════════════════════════════
