@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>What is context engineering</title>
+<link rel="stylesheet" href="style/eweb.css">
+<link rel="stylesheet" href="style/deck.css">
+<style>
+  .l{max-width:600px}
+  .def{margin-top:18px;font-size:17px;line-height:1.55;color:var(--char);max-width:560px}
+  .def b{color:var(--ink)}
+  .cw{position:absolute;left:760px;top:66px;width:448px;border:1px solid var(--ink);background:#fff;z-index:2}
+  .cw .hd{font:600 10.5px var(--mono);letter-spacing:.06em;text-transform:uppercase;padding:9px 12px;border-bottom:1px solid var(--ink);display:flex;justify-content:space-between}
+  .cw .hd i{font-style:normal;color:var(--grey);font-weight:400}
+  .band{display:flex;justify-content:space-between;align-items:center;padding:10px 12px;border-bottom:1px dashed var(--line);font:500 12px var(--mono);letter-spacing:.04em;text-transform:uppercase;color:var(--char)}
+  .band:last-child{border-bottom:0}
+  .band span:last-child{font:400 12px var(--sans);text-transform:none;letter-spacing:0;color:var(--grey)}
+  .band.hot{background:var(--blue-l);color:var(--blue);font-weight:600}
+  .band.hot span:last-child{color:var(--blue)}
+  .cards{top:392px;grid-template-columns:repeat(3,1fr)}
+  .cards .card{min-height:170px}
+</style>
+</head>
+<body data-foot="Why context engineering · Definition">
+<div class="l">
+  <div class="eyebrow in1">Why context engineering · <b>Definition</b></div>
+  <h1 class="in2">Context engineering is what the model knows. <span class="b">It fails three ways.</span></h1>
+  <p class="def in3">Prompt engineering is <b>how you ask</b>. Context engineering is <b>everything else in the window</b> when the model answers: the instructions, the tools, the knowledge you retrieve, and the memory you carry. Get it right and the model has what it needs, and nothing it does not.</p>
+</div>
+<div class="cw in3">
+  <div class="hd"><span>Context window</span><i>one LLM call</i></div>
+  <div class="band"><span>Instructions</span><span>who the agent is, the rules</span></div>
+  <div class="band"><span>Tools</span><span>what it can do</span></div>
+  <div class="band hot"><span>Retrieved knowledge</span><span>what it knows about your data</span></div>
+  <div class="band"><span>Memory</span><span>what happened before</span></div>
+  <div class="band"><span>The question</span><span>what the user asked</span></div>
+</div>
+<div class="cards">
+  <div class="card warn in4"><div class="tag">01 · Discovery cost</div><h3>Tokens burned relearning your schema.</h3><p>No map of the data, so the agent lists indices, reads mappings, and guesses queries on every question.</p></div>
+  <div class="card warn in5"><div class="tag">02 · Interpretation</div><h3>Does "arr" mean revenue or array length?</h3><p>Without business meaning the model guesses. A wrong guess is a confident, wrong answer.</p></div>
+  <div class="card warn in6"><div class="tag">03 · Silos</div><h3>What one agent learns, no other agent gets.</h3><p>Knowledge lives in one session and disappears. Quality does not compound and cost does not fall.</p></div>
+</div>
+<script src="style/eweb.js"></script>
+<aside class="notes">
+<p>Context engineering is the discipline of deciding what goes into the model's context window on each call. The prompt is only one piece.</p>
+<p>The highlighted band, <b>retrieved knowledge</b>, is where this workshop lives: what the agent knows about your data before it starts working.</p>
+<p>Three failure modes when that band is empty:</p>
+<ul><li><b>Discovery cost</b>: every question pays to relearn the schema.</li>
+<li><b>Interpretation</b>: in our dataset the revenue field is literally called <code>arr</code>. Models read that as "array".</li>
+<li><b>Silos</b>: nothing learned is shared across agents or sessions.</li></ul>
+</aside>
+</body>
+</html>

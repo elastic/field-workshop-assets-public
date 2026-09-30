@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>What we measured</title>
+<link rel="stylesheet" href="style/eweb.css">
+<link rel="stylesheet" href="style/deck.css">
+<style>
+  h1{font-size:44px}
+  .cols{position:absolute;left:72px;right:72px;top:226px;display:grid;grid-template-columns:420px 1fr;gap:0;z-index:2}
+  .col{padding:0 34px;border-left:1px solid var(--ink)}
+  .col:first-child{padding-left:0;border-left:0}
+  .big{display:flex;align-items:flex-end;gap:12px}
+  .big .pre{font:500 12px var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--grey);padding-bottom:14px}
+  .big .stat{font-size:96px}
+  .big .post{font-size:15px;line-height:1.35;color:var(--char);padding-bottom:12px}
+  .vs{margin-top:14px;font:400 13px var(--mono);color:var(--char)}
+  .vs b{color:var(--blue);font-weight:600;margin-right:6px}
+  .caveat{margin-top:24px;padding:14px 16px;border:1px solid var(--line);border-left:3px solid var(--orange);font-size:14px;line-height:1.5;color:var(--char);background:#fff}
+  .caveat b{color:var(--ink)}
+  .col .tag{margin-bottom:14px;display:block}
+  .row{display:grid;grid-template-columns:44px 64px 1fr 58px;align-items:center;gap:10px;margin-bottom:9px;font:400 12px var(--mono);color:var(--char)}
+  .row .id{font-weight:600;color:var(--ink)}
+  .tr{height:12px;background:var(--bg);position:relative}
+  .tr i{position:absolute;left:0;top:0;bottom:0;transform-origin:left;animation:grow 1s cubic-bezier(.2,.7,.2,1) both}
+  .tr.raw i{background:var(--slate)}.tr.ce i{background:var(--blue)}
+  @keyframes grow{from{transform:scaleX(0)}to{transform:none}}
+  .row .v{text-align:right}
+  .row.ce .v{color:var(--blue);font-weight:600}
+  .grp{margin-bottom:10px;padding-bottom:6px;border-bottom:1px dashed var(--line)}
+  .leg{display:flex;gap:16px;font:500 10.5px var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--grey);margin-top:6px}
+  .leg i{display:inline-block;width:10px;height:10px;margin-right:6px;vertical-align:-1px}
+  .tie{font:500 10px var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--orange);margin-left:6px}
+</style>
+</head>
+<body data-foot="The workshop · What we measured">
+<div class="z">
+  <div class="eyebrow in1">The workshop · <b>What we measured</b></div>
+  <h1 class="in2">Fewer LLM calls, fewer tokens, predictable behavior. <span class="b">Now measure it yourself.</span></h1>
+</div>
+<div class="cols">
+  <div class="col in3">
+    <span class="tag">Across all four questions</span>
+    <div class="big"><span class="pre">about</span><span class="stat" id="pct">60%</span><span class="post">fewer<br>tokens</span></div>
+    <div class="vs"><b>~55%</b>fewer LLM calls, 51 down to 23</div>
+    <div class="caveat"><b>Your mileage will vary.</b> This is what this workshop's data and agents show. Your results depend on your data, your agent, and how it is used.</div>
+  </div>
+  <div class="col in4">
+    <span class="tag">LLM calls per question · baseline vs Context Engine</span>
+    <div id="bars"></div>
+    <div class="leg"><span><i style="background:var(--slate)"></i>Baseline agent</span><span><i style="background:var(--blue)"></i>With Context Engine</span></div>
+  </div>
+</div>
+<div class="src">Medians of 3 runs per question · learner-built agents · google-gemini-3.0-flash · 2026-09-29 · tokens = uncached input + 0.1 × cached input</div>
+<script src="style/eweb.js"></script>
+<script>
+(function(){
+  const D = [['S01',13,5],['S02',21,7],['S03',12,5],['S04',5,6]], M = 22, box = document.getElementById('bars');
+  D.forEach(([id, a, b], k) => {
+    const g = document.createElement('div'); g.className = 'grp';
+    g.innerHTML = `<div class="row"><span class="id">${id}</span><span>baseline</span><div class="tr raw"><i style="width:${a / M * 100}%;animation-delay:${.6 + k * .12}s"></i></div><span class="v">${a}</span></div>
+      <div class="row ce"><span></span><span>context</span><div class="tr ce"><i style="width:${b / M * 100}%;animation-delay:${.7 + k * .12}s"></i></div><span class="v">${b}${id === 'S04' ? '<span class="tie">tie</span>' : ''}</span></div>`;
+    box.appendChild(g);
+  });
+  EW.count(document.getElementById('pct'), 60, {post: '%', delay: .35, dur: 1.2});
+})();
+</script>
+<aside class="notes">
+<p>Here is the hook: the numbers you will reproduce.</p>
+<p>Across the four questions, the Context Engine agent used <b>about 60% fewer tokens</b> and about 55% fewer LLM calls. The biggest win is on <b>S02</b>, the cross-index question: 21 calls down to 7.</p>
+<p><b>S04 is a tie</b>, and we say so. It is a simple knowledge-base question; the baseline agent already does fine with one search.</p>
+<p>Be clear about the caveat: these are this workshop's data and agents. Real results depend on your data, your agent, and your usage. Elastic's own ElasticON material cites a similar figure, around 58%.</p>
+</aside>
+</body>
+</html>

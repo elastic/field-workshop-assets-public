@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Every question starts from zero</title>
+<link rel="stylesheet" href="style/eweb.css">
+<link rel="stylesheet" href="style/deck.css">
+<style>
+  .l{max-width:540px}
+  .q{margin-top:26px;border-left:3px solid var(--pink);padding:6px 0 6px 16px;font:400 17px/1.5 var(--sans);color:var(--ink)}
+  .q .tag{display:block;margin-bottom:6px;color:var(--grey)}
+  .big{position:absolute;left:72px;top:470px;z-index:2;display:flex;align-items:flex-end;gap:14px}
+  .big .stat{font-size:92px}
+  .big .post{font-size:14px;line-height:1.4;color:var(--char);padding-bottom:10px;max-width:220px}
+  .win{left:680px;top:80px;width:528px}
+  .win .steps{padding:14px}
+  .tot{display:flex;gap:18px;padding:12px 14px;border-top:1px solid var(--ink);font:600 11px var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--ink)}
+  .tot b{color:#E0352B;font-weight:600}
+</style>
+</head>
+<body data-foot="Why context engineering · The problem">
+<div class="l">
+  <div class="eyebrow in1">Why context engineering · <b>The problem</b></div>
+  <h1 class="in2">Every question starts from zero. <span class="b">The agent rediscovers your data.</span></h1>
+  <div class="q in3"><span class="tag">A real question from this workshop</span>"Which Enterprise accounts renewing in the next 60 days have open P1 tickets, and which knowledge base articles cover their issues?"</div>
+</div>
+<div class="big in5"><span class="stat">7&#8209;22</span><span class="post">LLM calls for the <b>same question</b>, across repeated runs of the same baseline agent.</span></div>
+
+<div class="win in3">
+  <div class="bar"><i></i><i></i><i></i><span>Baseline agent · tool calls</span></div>
+  <div class="steps" id="steps"></div>
+  <div class="tot"><span><b>21</b> LLM calls</span><span><b>10</b> tool calls</span><span>45.2 s</span></div>
+</div>
+<div class="src">Recorded run nearest the median of 3 · 2026-09-29 · google-gemini-3.0-flash · no Context Engine</div>
+<script src="style/eweb.js"></script>
+<script>
+(function(){
+  const T = ['write_todos','platform.core.generate_esql','platform.core.execute_esql','write_todos','platform.core.generate_esql','platform.core.execute_esql','platform.core.generate_esql','platform.core.execute_esql','platform.core.generate_esql','platform.core.execute_esql'];
+  const note = {0:'plan', 1:'write a query', 2:'run it', 4:'try again', 6:'and again', 8:'and again'};
+  const box = document.getElementById('steps');
+  T.forEach((t, i) => { const d = document.createElement('div'); d.className = 'step';
+    d.style.animationDelay = (.45 + i * .1) + 's';
+    d.innerHTML = `<span class="n">${String(i + 1).padStart(2, '0')}</span><span>${t}</span><span class="tag"><i>${note[i] || ''}</i></span>`;
+    box.appendChild(d); });
+})();
+</script>
+<aside class="notes">
+<p>This is a real run from this workshop: a baseline Agent Builder agent with the default tools and no Context Engine.</p>
+<p>It has tools but no map of the data. So it plans, guesses an ES|QL query, runs it, and tries again. <b>21 LLM calls</b> for one question.</p>
+<p>The bigger problem is variance: the same agent, same question, took anywhere from <b>7 to 22 LLM calls</b> across runs. Unpredictable cost and latency is what keeps agents out of production.</p>
+</aside>
+</body>
+</html>

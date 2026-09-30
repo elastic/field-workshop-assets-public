@@ -1,0 +1,49 @@
+/* Context Engine intro deck: shared components on top of eweb.css */
+aside.notes{display:none}
+h1{font-size:46px;letter-spacing:-1.5px;max-width:1080px}
+.sub{font-size:17px;max-width:620px}
+.l{position:relative;z-index:2;max-width:560px}
+.src{position:absolute;left:72px;right:72px;bottom:60px;font:400 10.5px/1.5 var(--mono);color:var(--grey-l);z-index:3}
+.src b{color:var(--grey);font-weight:500}
+
+/* product / data window */
+.win{background:#fff;border:1px solid var(--ink);box-shadow:8px 8px 0 var(--blue);position:absolute;z-index:2}
+.win.pink{box-shadow:8px 8px 0 var(--pink)}
+.win.orange{box-shadow:8px 8px 0 var(--orange)}
+.win .bar{height:30px;border-bottom:1px solid var(--ink);display:flex;align-items:center;gap:6px;padding:0 12px;font:600 10.5px var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--ink)}
+.win .bar i{width:9px;height:9px;border:1px solid var(--ink);border-radius:50%}
+.win .bar span{margin-left:8px}
+.code{font:400 12.5px/1.6 var(--mono);color:var(--char);padding:16px 18px;white-space:pre-wrap;word-break:break-word}
+.code .k{color:var(--blue);font-weight:500}
+.code .s{color:var(--char)}
+.code mark{background:#FFF1BF;color:var(--ink);padding:1px 2px;box-shadow:inset 0 -2px 0 var(--yellow)}
+
+/* numbered card grid */
+.cards{position:absolute;left:72px;right:72px;display:grid;gap:18px;z-index:2}
+.cards .card{display:flex;flex-direction:column;gap:8px}
+.cards .card .tag{color:var(--grey)}
+.cards .card h3{font:600 19px/1.25 var(--sans);letter-spacing:-.3px;color:var(--ink)}
+.cards .card p{font-size:14px;line-height:1.5;color:var(--char)}
+.card.hot{border-color:var(--ink);box-shadow:6px 6px 0 var(--blue)}
+.card.warn{border-top:3px solid var(--orange)}
+
+/* tiny data cubes (raw = multi-color, processed = blue, problem = red, AI = pink) */
+.cube{display:inline-block;width:12px;height:12px;border:1px solid var(--ink)}
+.cube.b{background:var(--blue)}.cube.p{background:var(--pink)}.cube.t{background:var(--teal)}
+.cube.o{background:var(--orange)}.cube.y{background:var(--yellow)}.cube.s{background:var(--slate-l)}
+.cube.r{background:#E0352B}
+
+/* step rows */
+.steps{display:flex;flex-direction:column;gap:6px}
+.step{display:grid;grid-template-columns:26px 1fr auto;align-items:center;gap:10px;font:400 12.5px var(--mono);color:var(--char);padding:6px 10px;border:1px solid var(--line);background:#fff}
+.step .n{color:var(--grey-l)}
+.step.b{border-color:var(--blue);color:var(--ink)}
+.step.b .n{color:var(--blue)}
+@keyframes ew-row{from{opacity:0;transform:translateX(-10px)}to{opacity:1;transform:none}}
+.step{animation:ew-row .35s cubic-bezier(.2,.7,.2,1) both}
+
+.arrow{font:500 18px var(--mono);color:var(--grey-l)}
+.pill{display:inline-block;font:600 10.5px var(--mono);letter-spacing:.06em;text-transform:uppercase;padding:3px 8px;border:1px solid var(--ink);background:#fff;color:var(--ink)}
+.pill.b{background:var(--blue);border-color:var(--blue);color:#fff}
+.pill.p{background:var(--pink);border-color:var(--pink);color:#fff}
+.pill.t{background:var(--teal);border-color:var(--teal-d);color:var(--ink)}

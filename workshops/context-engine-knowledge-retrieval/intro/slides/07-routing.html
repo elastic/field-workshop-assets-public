@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Two ways a KI helps</title>
+<link rel="stylesheet" href="style/eweb.css">
+<link rel="stylesheet" href="style/deck.css">
+<style>
+  h1{font-size:42px}
+  .lanes{position:absolute;left:72px;right:72px;top:250px;display:flex;flex-direction:column;gap:22px;z-index:2}
+  .lane{display:grid;grid-template-columns:230px 1fr;gap:24px;align-items:center;border:1px solid var(--line);background:#fff;padding:18px 22px}
+  .lane.hot{border-color:var(--ink);box-shadow:8px 8px 0 var(--blue)}
+  .lane .tag{color:var(--grey);display:block;margin-bottom:6px}
+  .lane h3{font:600 19px/1.25 var(--sans);letter-spacing:-.3px}
+  .lane .flow{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+  .lane .flow .pill{font-size:11px;padding:6px 10px}
+  .lane .flow .arrow{font-size:15px}
+  .lane p{grid-column:2;font-size:13.5px;color:var(--char);margin-top:-8px}
+  .src{bottom:62px}
+</style>
+</head>
+<body data-foot="The Context Engine · How KIs help">
+<div class="z">
+  <div class="eyebrow in1">The Context Engine · <b>How KIs help</b></div>
+  <h1 class="in2">A KI answers, or it points the way. <span class="b">Ours point the way.</span></h1>
+  <p class="sub in3" style="max-width:900px">Some context is the answer. Some context is the map to the answer. This workshop uses routing KIs: the map.</p>
+</div>
+<div class="lanes">
+  <div class="lane in4">
+    <div><span class="tag">Answers directly</span><h3>The KI is the answer.</h3></div>
+    <div class="flow"><span class="pill">Question</span><span class="arrow">→</span><span class="pill b">KI</span><span class="arrow">→</span><span class="pill">Answer</span></div>
+    <p>Good for durable findings, for example "what does our knowledge base say about login issues?"</p>
+  </div>
+  <div class="lane hot in5">
+    <div><span class="tag" style="color:var(--blue)">Points the way · this workshop</span><h3>The KI routes to live data.</h3></div>
+    <div class="flow"><span class="pill">Question</span><span class="arrow">→</span><span class="pill b">Routing KI</span><span class="arrow">→</span><span class="pill">Right index, right fields</span><span class="arrow">→</span><span class="pill">ES|QL on live data</span><span class="arrow">→</span><span class="pill">Answer</span></div>
+    <p>The KI holds the map, not the rows, so answers stay current as the data changes.</p>
+  </div>
+</div>
+<div class="src in6"><b>Also:</b> an AI Index can be fed from several ES|QL sources, and from external Connectors (Salesforce, ServiceNow, Zendesk, Jira, Confluence, SharePoint) in technical preview. Not covered in this workshop.</div>
+<script src="style/eweb.js"></script>
+<aside class="notes">
+<p>Two ways a KI earns its keep.</p>
+<p><b>Answers directly</b>: the KI contains a finding that is stable enough to reuse as is.</p>
+<p><b>Points the way</b>: the KI tells the agent which index to use, which fields matter, and how to join. The agent then runs one precise ES|QL query against live data. This is what you build today, and it is why answers stay fresh.</p>
+<p>Footnote: AI Indices can also be fed by external connectors, in technical preview. We do not demo that here.</p>
+</aside>
+</body>
+</html>

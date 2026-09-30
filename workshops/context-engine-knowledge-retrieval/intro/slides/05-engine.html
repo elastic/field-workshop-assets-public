@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Meet the Context Engine</title>
+<link rel="stylesheet" href="style/eweb.css">
+<link rel="stylesheet" href="style/deck.css">
+<style>
+  .quote{font:400 19px/1.5 var(--mono);color:var(--ink);letter-spacing:-.2px;max-width:1000px;margin-top:20px;border-left:3px solid var(--blue);padding-left:18px}
+  .quote .tag{display:block;margin-top:8px;color:var(--grey);font-weight:500}
+  .chips{margin-top:14px;display:flex;gap:8px}
+  .flow{position:absolute;left:72px;right:72px;top:416px;display:grid;grid-template-columns:1fr 26px 1fr 26px 1fr 60px 1fr;align-items:stretch;z-index:2}
+  .node{min-height:190px;border:1px solid var(--line);background:#fff;padding:16px 16px 14px;display:flex;flex-direction:column;gap:8px}
+  .node .tag{color:var(--grey)}
+  .node h3{font:600 18px/1.2 var(--sans);letter-spacing:-.3px}
+  .node p{font-size:13px;line-height:1.45;color:var(--char)}
+  .node .row{display:flex;gap:3px;flex-wrap:wrap}
+  .node.ai{border-color:var(--ink);box-shadow:6px 6px 0 var(--blue)}
+  .node.ag{border-color:var(--ink);box-shadow:6px 6px 0 var(--pink)}
+  .ar{display:flex;align-items:center;justify-content:center;font:500 18px var(--mono);color:var(--ink)}
+  .split{display:flex;flex-direction:column;align-items:center;justify-content:center;border-left:1px dashed var(--ink);margin-left:29px;font:500 18px var(--mono)}
+  .when{position:absolute;top:384px;z-index:2;font:600 10.5px var(--mono);letter-spacing:.08em;text-transform:uppercase}
+</style>
+</head>
+<body data-foot="The Context Engine · Overview">
+<div class="z">
+  <div class="eyebrow in1">The Context Engine · <b>Overview</b></div>
+  <h1 class="in2">Meet the Context Engine. <span class="b">Built ahead of time, used at query time.</span></h1>
+  <div class="quote in3">"Context Engine enables you to distill raw source data into context optimized for retrieval by agents and applications. This upfront investment reduces repeated source data scanning and interpretation."<span class="tag">Elastic docs · Context Engine</span></div>
+  <div class="chips in3"><span class="chip on">Elastic Cloud Serverless</span><span class="chip">Experimental</span></div>
+</div>
+<div class="when in4" style="left:72px;color:var(--grey)">Built ahead of time</div>
+<div class="when in4" style="left:1000px;color:var(--pink)">At query time</div>
+<div class="flow">
+  <div class="node in4"><div class="tag">01 · Sources</div><h3>Your raw data</h3><div class="row"><i class="cube o"></i><i class="cube t"></i><i class="cube y"></i><i class="cube p"></i><i class="cube s"></i><i class="cube b"></i></div><p>Elasticsearch indices today. External connectors in technical preview.</p></div>
+  <div class="ar in4">→</div>
+  <div class="node in5"><div class="tag">02 · Automation</div><h3>A workflow distills it</h3><div class="row"><i class="cube t"></i><i class="cube t"></i></div><p>Reads the sources, writes Knowledge Indicators. Manual, scheduled, or on change.</p></div>
+  <div class="ar in5">→</div>
+  <div class="node ai in5"><div class="tag">03 · AI Index</div><h3>Knowledge Indicators</h3><div class="row"><i class="cube b"></i><i class="cube b"></i><i class="cube b"></i><i class="cube b"></i></div><p>An Elasticsearch index of ready-to-use context, searchable by keyword and meaning.</p></div>
+  <div class="split in6"></div>
+  <div class="node ag in6"><div class="tag">04 · Agent</div><h3>Retrieves, then acts</h3><div class="row"><i class="cube p"></i></div><p>Agent Builder, or any agent over API or MCP, pulls the right KIs for each question.</p></div>
+</div>
+<script src="style/eweb.js"></script>
+<aside class="notes">
+<p>The official definition, straight from the docs. The key phrase is <b>upfront investment</b>: do the interpretation work once, not on every question.</p>
+<p>Four building blocks:</p>
+<ul><li><b>Sources</b>: the raw data, Elasticsearch indices today.</li>
+<li><b>Automation</b>: an Elastic Workflow that reads sources and writes Knowledge Indicators.</li>
+<li><b>AI Index</b>: an Elasticsearch index holding those KIs.</li>
+<li><b>Agent</b>: retrieves KIs at query time.</li></ul>
+<p>Everything left of the dashed line happens before anyone asks a question. Context Engine is Experimental on Elastic Cloud Serverless.</p>
+</aside>
+</body>
+</html>

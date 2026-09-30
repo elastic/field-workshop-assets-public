@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Design principle</title>
+<link rel="stylesheet" href="style/eweb.css">
+<link rel="stylesheet" href="style/deck.css">
+<style>
+  h1{font-size:42px}
+  .panes{position:absolute;left:72px;right:72px;top:200px;display:grid;grid-template-columns:1fr 1fr;gap:28px;z-index:2}
+  .pane{border:1px solid var(--line);background:#fff;padding:20px 22px;display:flex;flex-direction:column;gap:14px}
+  .pane.good{border-color:var(--ink);box-shadow:8px 8px 0 var(--blue)}
+  .pane h3{font:600 20px/1.2 var(--sans);letter-spacing:-.3px}
+  .pane .tag{color:var(--grey)}
+  .heap{display:flex;flex-wrap:wrap;gap:5px;height:84px;align-content:flex-start}
+  .heap .cube{width:11px;height:11px;animation:pop .3s ease both}
+  @keyframes pop{from{opacity:0;transform:scale(.3)}to{opacity:1;transform:none}}
+  .flow{display:flex;flex-wrap:wrap;gap:6px;align-items:center;font:400 12px var(--mono);color:var(--char)}
+  .flow span.x{border:1px solid var(--line);padding:4px 8px;background:#fff}
+  .flow span.x.b{border-color:var(--blue);color:var(--blue);font-weight:500}
+  .flow .arrow{font-size:13px}
+  .keep{position:absolute;left:72px;right:72px;top:510px;display:grid;grid-template-columns:1fr 1fr;gap:28px;z-index:2}
+  .keep div{font-size:14px;line-height:1.5;color:var(--char);border-top:1px solid var(--ink);padding-top:10px}
+  .keep .tag{display:block;margin-bottom:4px}
+  .keep .tag.b{color:var(--blue)}
+</style>
+</head>
+<body data-foot="Why context engineering · Principle">
+<div class="z">
+  <div class="eyebrow in1">Why context engineering · <b>Design principle</b></div>
+  <h1 class="in2">Precompute what is durable. <span class="b">Keep what is volatile live.</span></h1>
+  <p class="sub in3" style="max-width:900px">Don't make your agent wander the whole library on every question. Hand it the card catalog.</p>
+</div>
+<div class="panes">
+  <div class="pane in3">
+    <div class="tag">Without context · the library</div>
+    <h3>Scan raw data. Many steps, every time.</h3>
+    <div class="heap" id="heap"></div>
+    <div class="flow"><span class="x">list indices</span><span class="arrow">→</span><span class="x">read mappings</span><span class="arrow">→</span><span class="x">guess a query</span><span class="arrow">→</span><span class="x">fix it</span><span class="arrow">→</span><span class="x">run again</span><span class="arrow">→</span><span class="x">answer?</span></div>
+  </div>
+  <div class="pane good in4">
+    <div class="tag">With context · the card catalog</div>
+    <h3>One lookup. Then a query that works.</h3>
+    <div class="heap" id="cat"></div>
+    <div class="flow"><span class="x b">look up context</span><span class="arrow">→</span><span class="x b">run the right query</span><span class="arrow">→</span><span class="x b">answer</span></div>
+  </div>
+</div>
+<div class="keep">
+  <div class="in5"><span class="tag b">Durable · precompute it once</span>What each index holds, what fields mean, how indices join, which queries work.</div>
+  <div class="in6"><span class="tag">Volatile · query it live</span>The rows themselves: today's tickets, this quarter's renewals, the current churn scores.</div>
+</div>
+<script src="style/eweb.js"></script>
+<script>
+(function(){
+  const C = ['b','p','t','o','y','s','s','t','o','p'], R = EW.rand(5);
+  const heap = document.getElementById('heap');
+  for (let i = 0; i < 150; i++){ const c = document.createElement('i'); c.className = 'cube ' + C[Math.floor(R() * C.length)]; c.style.animationDelay = (.5 + i * .006) + 's'; heap.appendChild(c); }
+  const cat = document.getElementById('cat');
+  for (let i = 0; i < 12; i++){ const c = document.createElement('i'); c.className = 'cube b'; c.style.animationDelay = (.8 + i * .03) + 's'; cat.appendChild(c); }
+})();
+</script>
+<aside class="notes">
+<p>The design principle behind the Context Engine: split what you know about your data into two kinds.</p>
+<p><b>Durable</b>: the structure and meaning of the data. Which index holds accounts, that <code>arr</code> is revenue, that <code>customer_id</code> joins to <code>account_id</code>. That rarely changes, so work it out once, ahead of time.</p>
+<p><b>Volatile</b>: the rows. Tickets open today, renewals this month. Always query that live so answers stay current.</p>
+<p>Multi-color cubes are raw data; blue cubes are processed, ready-to-use context.</p>
+</aside>
+</body>
+</html>

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Cover</title>
+<link rel="stylesheet" href="style/eweb.css">
+<link rel="stylesheet" href="style/deck.css">
+<style>
+  h1{font-size:56px;line-height:1.02;letter-spacing:-2px;margin-top:110px;max-width:500px}
+  .sub{font-size:18px;max-width:470px;margin-top:22px}
+  .prov{margin-top:28px;display:flex;align-items:center;gap:12px;font:500 12px var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--char)}
+  .prov i{width:10px;height:10px;background:var(--teal);border:1px solid var(--teal-d);animation:pulse 1.8s ease-in-out 2s infinite}
+  @keyframes pulse{50%{opacity:.35}}
+  #hero{left:600px;top:0;width:680px;height:720px}
+</style>
+</head>
+<body data-foot="Context Engine workshop · Brief">
+<div class="l">
+  <div class="eyebrow in1">Workshop · <b>Context engineering</b></div>
+  <h1 class="in2">Context engineering with Elastic. <span class="b">Hand your agent the card catalog.</span></h1>
+  <p class="sub in3">Why agents waste calls rediscovering your data, how the Context Engine fixes it, and what you will build and measure today.</p>
+  <div class="prov in4"><i></i>Your lab is provisioning, about 15 min. Read at your own pace.</div>
+</div>
+<svg id="hero" class="iso" viewBox="0 0 680 720"></svg>
+<script src="style/eweb.js"></script>
+<script>
+(function(){
+  EW.dots({x: 620, y: 40, w: 660, h: 640, seed: 4, blobs: 6, thr: .5});
+  const sc = EW.iso(document.getElementById('hero'), {ox: 250, oy: 290, s: .8});
+  sc.rect({x: -30, y: -30, w: 330, d: 330, z: 0, delay: .1});
+  sc.box({x: 0, y: 0, w: 270, d: 270, h: 46, c: 'blue', delay: .15, drop: 120, order: -1000});
+  // Knowledge Indicators: uniform blue cubes (processed data) on the AI Index
+  let k = 0;
+  for (let r = 0; r < 3; r++) for (let q = 0; q < 3; q++){
+    sc.box({x: 150 + q * 38, y: 150 + r * 38, w: 26, d: 26, h: 26, z: 46, c: 'blue', delay: .5 + (k++) * .05, drop: 70, order: 1});
+  }
+  // the agent (pink) hovering over the index
+  sc.box({x: 40, y: 30, w: 80, d: 80, h: 80, z: 170, c: 'pink', delay: 1.0, drop: 80, float: 7, floatSpeed: 1.1, order: 3000});
+  sc.label({at: [120, 30, 210], side: 'r', len: 60, title: 'Agent', sub: 'Asks the question', delay: 1.3});
+  sc.label({at: [270, 0, 23], side: 'r', len: 36, title: 'AI Index', sub: ['Knowledge Indicators,', 'stored in Elasticsearch'], delay: 1.5});
+  sc.run();
+})();
+</script>
+<aside class="notes">
+<p><b>Welcome.</b> This workshop is about one idea: agents are only as good as the context they have when they answer.</p>
+<p>In the next ten minutes: why agents burn LLM calls rediscovering data, what context engineering means, how Elastic's Context Engine precomputes the context an agent needs, and where Elasticsearch fits.</p>
+<p>The environment is provisioning in the background, about 15 minutes, so there is no rush.</p>
+</aside>
+</body>
+</html>

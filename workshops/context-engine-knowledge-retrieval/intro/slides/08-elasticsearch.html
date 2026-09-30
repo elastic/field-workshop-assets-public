@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Where Elasticsearch fits</title>
+<link rel="stylesheet" href="style/eweb.css">
+<link rel="stylesheet" href="style/deck.css">
+<style>
+  .l{max-width:560px}
+  .stack{margin-top:26px;display:flex;flex-direction:column;border:1px solid var(--ink);background:#fff;width:540px}
+  .lay{display:grid;grid-template-columns:34px 1fr;gap:10px;align-items:baseline;padding:11px 14px;border-bottom:1px solid var(--line);font-size:14.5px;color:var(--char)}
+  .lay:last-child{border-bottom:0}
+  .lay .n{font:600 11px var(--mono);color:var(--blue)}
+  .lay b{color:var(--ink);font-weight:600}
+  .lay.top{background:var(--ink);color:#fff}
+  .lay.top b{color:#fff}.lay.top .n{color:var(--pink)}
+  .win{left:690px;top:170px;width:518px}
+  .skill{padding:20px 22px;display:flex;flex-direction:column;gap:12px}
+  .skill .nm{font:600 20px var(--mono);color:var(--ink)}
+  .skill .ds{font:400 15px/1.55 var(--sans);color:var(--char)}
+  .skill .chips{display:flex;gap:8px;flex-wrap:wrap}
+  .skill .meta{font:400 11.5px var(--mono);color:var(--grey);border-top:1px dashed var(--line);padding-top:10px}
+  .after{position:absolute;left:690px;top:470px;width:518px;font-size:14px;line-height:1.5;color:var(--char);z-index:2}
+  .after b{color:var(--ink)}
+</style>
+</head>
+<body data-foot="Where Elasticsearch fits">
+<div class="l">
+  <div class="eyebrow in1">Where Elasticsearch fits · <b>One platform</b></div>
+  <h1 class="in2">It all runs on Elasticsearch. <span class="b">Retrieval ships as a skill.</span></h1>
+  <div class="stack in3">
+    <div class="lay top"><span class="n">AGENT</span><span><b>Agent Builder</b>, built into Kibana. Models are platform-provided.</span></div>
+    <div class="lay"><span class="n">05</span><span><b>Agent traces</b> land in Elasticsearch. You measure them in Lab 4.</span></div>
+    <div class="lay"><span class="n">04</span><span><b>ES|QL</b> runs the precise query against live data.</span></div>
+    <div class="lay"><span class="n">03</span><span><b>Retrieval</b> finds the right KIs: keyword, semantic, or hybrid.</span></div>
+    <div class="lay"><span class="n">02</span><span><b>The AI Index</b> is an Elasticsearch index of KIs.</span></div>
+    <div class="lay"><span class="n">01</span><span><b>Your source data</b> is already in Elasticsearch.</span></div>
+  </div>
+</div>
+<div class="win in4">
+  <div class="bar"><i></i><i></i><i></i><span>Kibana · Agent Builder · Skills</span></div>
+  <div class="skill">
+    <div class="nm">ki-retrieval</div>
+    <div class="ds">"Retrieve context from a Context Engine AI Index at query time using keyword, semantic, or hybrid (FORK+FUSE) ES|QL search"</div>
+    <div class="chips"><span class="chip">Keyword</span><span class="chip">Semantic</span><span class="chip on">Hybrid · FORK+FUSE</span></div>
+    <div class="meta">Out of the box · attach it to an agent</div>
+  </div>
+</div>
+<p class="after in5">Attach the skill and assign an AI Index, and the agent <b>looks up context first</b>, then writes one query that works.</p>
+<script src="style/eweb.js"></script>
+<aside class="notes">
+<p>Why Elasticsearch? Every layer of this story is the same platform.</p>
+<ul><li>Your source data is already there.</li>
+<li>The AI Index is just an Elasticsearch index.</li>
+<li>Retrieving KIs is search: keyword, semantic, or both fused together with ES|QL FORK and FUSE.</li>
+<li>ES|QL then queries the live data.</li>
+<li>The agent's own traces land in Elasticsearch, which is how you measure the difference in Lab 4.</li></ul>
+<p>Retrieval ships as an out-of-the-box skill called <code>ki-retrieval</code>. In Lab 2 you attach it to a new agent.</p>
+</aside>
+</body>
+</html>

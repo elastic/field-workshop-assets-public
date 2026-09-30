@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>What is a Knowledge Indicator</title>
+<link rel="stylesheet" href="style/eweb.css">
+<link rel="stylesheet" href="style/deck.css">
+<style>
+  .l{max-width:500px}
+  .quote{font:400 15px/1.6 var(--mono);color:var(--ink);letter-spacing:-.1px;margin-top:20px;border-left:3px solid var(--blue);padding-left:16px}
+  .quote .tag{display:block;margin-top:8px;color:var(--grey);font-weight:500}
+  .kinds{margin-top:20px}
+  .kinds .tag{color:var(--grey);margin-bottom:8px;display:block}
+  .kinds .chips{display:flex;flex-wrap:wrap;gap:8px}
+  .win{left:640px;top:74px;width:568px}
+  .cap{position:absolute;left:640px;top:560px;width:568px;z-index:2;font-size:14px;color:var(--char)}
+  .cap b{color:var(--ink)}
+</style>
+</head>
+<body data-foot="The Context Engine · Knowledge Indicators">
+<div class="l">
+  <div class="eyebrow in1">The Context Engine · <b>Knowledge Indicators</b></div>
+  <h1 class="in2">A Knowledge Indicator is reusable context. <span class="b">Here is a real one.</span></h1>
+  <div class="quote in3">"A Knowledge Indicator (KI) is a document that records reusable context derived from raw source data. [...] Agents retrieve them to answer recurring questions without repeatedly finding and interpreting the same information."<span class="tag">Elastic docs · Concepts</span></div>
+  <div class="kinds in4"><span class="tag">A KI can hold</span><div class="chips"><span class="chip">Business meaning</span><span class="chip">Derived findings</span><span class="chip">Source limitations</span><span class="chip on">Verified query patterns</span></div></div>
+</div>
+<div class="win in3">
+  <div class="bar"><i></i><i></i><i></i><span>AI Index · routing KI · precision-crm-accounts</span></div>
+<div class="code">{
+  <span class="k">"type"</span>: "index_metadata",
+  <span class="k">"title"</span>: "precision-crm-accounts — Customer Account Records",
+  <span class="k">"content"</span>: "Index: precision-crm-accounts. One document per Precision Labs customer account (500 total). Key fields: customer_id (keyword, primary key), company_name, industry, region, account_tier (Enterprise/Mid-Market/SMB), <mark>arr (annual recurring revenue in USD — an integer dollar amount, NOT an array or array length)</mark>, employee_count, churn_risk_score (0.0–1.0, float), account_owner, renewal_date. <mark>Join key: customer_id links to account_id in precision-support-tickets.</mark> Typical questions: which accounts have the highest churn risk? [...]"
+}</div>
+</div>
+<p class="cap in5">Remember <b>"arr"</b>? This KI settles it, and names the join key, <b>before the agent writes a single query</b>.</p>
+<script src="style/eweb.js"></script>
+<aside class="notes">
+<p>The official definition: a KI is a document of reusable context, derived from raw data, that agents retrieve instead of rediscovering.</p>
+<p>The docs list four kinds of content a KI can hold: business meaning, derived findings, source limitations, and verified query patterns.</p>
+<p>On the right is a real KI from this workshop, lightly trimmed. It tells the agent what the index is for, what the fields mean, that <code>arr</code> is revenue and not an array, and how this index joins to support tickets.</p>
+<p>In Lab 2 you generate KIs like this one with a workflow.</p>
+</aside>
+</body>
+</html>

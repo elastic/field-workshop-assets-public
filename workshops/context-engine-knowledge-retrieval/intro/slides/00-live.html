@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Live workshop: your path</title>
+<link rel="stylesheet" href="style/eweb.css">
+<link rel="stylesheet" href="style/deck.css">
+<style>
+  h1{font-size:42px}
+  .cards{top:196px;grid-template-columns:repeat(4,1fr)}
+  .cards .card{min-height:190px}
+  .cards .card .out{margin-top:auto;font:500 11px var(--mono);letter-spacing:.04em;text-transform:uppercase;color:var(--blue);border-top:1px dashed var(--line);padding-top:8px}
+  .opt{position:absolute;left:72px;right:72px;top:418px;z-index:2;display:flex;align-items:center;gap:12px;font-size:14px;color:var(--char);border:1px dashed var(--slate);padding:10px 14px;background:#fff}
+  .rules{position:absolute;left:72px;right:72px;top:478px;display:grid;grid-template-columns:repeat(3,1fr);gap:18px;z-index:2}
+  .rules div{font-size:13.5px;line-height:1.45;color:var(--char);border-top:1px solid var(--ink);padding-top:8px}
+  .rules .tag{display:block;margin-bottom:3px}
+  .go{position:absolute;left:72px;right:72px;top:572px;z-index:2;display:flex;align-items:center;justify-content:space-between;border:1px solid var(--ink);box-shadow:6px 6px 0 var(--pink);background:#fff;padding:12px 16px}
+  .go b{font:600 16px var(--sans)}
+  .go a{font:500 12px var(--mono);color:var(--blue);cursor:pointer;text-decoration:underline}
+</style>
+</head>
+<body data-foot="Live workshop · Your path">
+<div class="z">
+  <div class="eyebrow in1">Live workshop · <b>Your path</b></div>
+  <h1 class="in2">Your presenter sets the scene. <span class="b">Here is the map for today.</span></h1>
+</div>
+<div class="cards">
+  <div class="card in3"><div class="tag">Lab 1</div><h3>Watch an agent search blind</h3><p>Build a baseline agent and count the calls it spends on discovery.</p><div class="out">Baseline agent</div></div>
+  <div class="card hot in3"><div class="tag">Lab 2</div><h3>Build the Context Engine</h3><p>AI Index, a workflow that writes routing KIs, and a scoped agent with ki-retrieval.</p><div class="out">Context Engine agent</div></div>
+  <div class="card in4"><div class="tag">Lab 3</div><h3>The Context Engine in action</h3><p>Flip the Context Engine off and on in the CS Intelligence app.</p><div class="out">Side-by-side metrics</div></div>
+  <div class="card in4"><div class="tag">Lab 4</div><h3>Measure it in Kibana</h3><p>Query both agents' traces with ES|QL and build the dashboard.</p><div class="out">Your own numbers</div></div>
+</div>
+<div class="opt in5"><span class="chip">Optional</span>Lab 5, under the hood: how the workflow builds each KI, if you have time left.</div>
+<div class="rules in5">
+  <div><span class="tag">Tabs and Check</span>Each lab opens the tabs you need. Click Check when you finish.</div>
+  <div><span class="tag">Keep the default model</span>Stay on Gemini 3.0 Flash until Lab 4, so your numbers match.</div>
+  <div><span class="tag">Subagents off</span>Leave Subagents unchecked on both agents.</div>
+</div>
+<div class="go in6"><b>Click Check when your presenter says go.</b><a id="self">On your own after all? Switch to the full self-paced brief.</a></div>
+<script src="style/eweb.js"></script>
+<script>document.getElementById('self').onclick = () => parent.postMessage('ce-mode-self', '*');</script>
+<aside class="notes">
+<p>This is the learner view in live mode. The presenter runs the full deck from presenter view on the big screen.</p>
+</aside>
+</body>
+</html>

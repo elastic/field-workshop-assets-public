@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Ready for Lab 1</title>
+<link rel="stylesheet" href="style/eweb.css">
+<link rel="stylesheet" href="style/deck.css">
+<style>
+  h1{font-size:72px;line-height:1;letter-spacing:-2.8px;margin-top:170px;max-width:640px}
+  .sub{font-size:18px;max-width:520px;margin-top:22px}
+  .cta{margin-top:34px;display:flex;gap:14px;align-items:center}
+  #hero{left:640px;top:0;width:640px;height:720px}
+</style>
+</head>
+<body data-foot="Context Engine workshop · Ready">
+<div class="l">
+  <div class="eyebrow in1">Context Engine workshop · <b>Next</b></div>
+  <h1 class="in2">Ready for Lab 1. <span class="b">Click Check to continue.</span></h1>
+  <p class="sub in3">Your environment should be ready by now. If Check does not pass yet, give it another minute and try again.</p>
+  <div class="cta in4"><span class="btn fill">Check</span><span class="tag"><i>in the Instruqt assignment panel</i></span></div>
+</div>
+<svg id="hero" class="iso" viewBox="0 0 640 720"></svg>
+<script src="style/eweb.js"></script>
+<script>
+(function(){
+  EW.dots({x: 660, y: 60, w: 620, h: 600, seed: 9, blobs: 5, thr: .5});
+  const sc = EW.iso(document.getElementById('hero'), {ox: 300, oy: 300, s: .8});
+  sc.rect({x: -20, y: -20, w: 260, d: 260, z: 0, delay: .1});
+  sc.box({x: 0, y: 0, w: 220, d: 220, h: 36, c: 'slate', stroke: false, delay: .15, drop: 100, order: -1000});
+  const C = ['orange', 'teal', 'yellow', 'pink', 'blue', 'teal'];
+  C.forEach((c, k) => sc.box({x: 20 + (k % 3) * 34, y: 130 + Math.floor(k / 3) * 34, w: 22, d: 22, h: 22, z: 36, c, delay: .4 + k * .05, drop: 60, order: 1}));
+  for (let k = 0; k < 4; k++) sc.box({x: 140 + (k % 2) * 34, y: 30 + Math.floor(k / 2) * 34, w: 22, d: 22, h: 22, z: 36, c: 'blue', delay: .8 + k * .06, drop: 60, order: 1});
+  sc.label({at: [20, 196, 47], side: 'l', len: 50, title: 'Raw data', sub: 'Lab 1', delay: 1.2});
+  sc.label({at: [196, 30, 47], side: 'r', len: 50, title: 'Context', sub: 'Lab 2', delay: 1.4});
+  sc.run();
+})();
+</script>
+<aside class="notes">
+<p>That is the brief. When the environment finishes provisioning, click <b>Check</b> to move on to Lab 1.</p>
+<p>If Check fails, the environment is still coming up. Wait a minute and try again.</p>
+</aside>
+</body>
+</html>

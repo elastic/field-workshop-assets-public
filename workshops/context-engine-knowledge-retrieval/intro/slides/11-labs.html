@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Your path</title>
+<link rel="stylesheet" href="style/eweb.css">
+<link rel="stylesheet" href="style/deck.css">
+<style>
+  .cards{top:180px;grid-template-columns:repeat(4,1fr)}
+  .cards .card{min-height:210px}
+  .cards .card .out{margin-top:auto;font:500 11px var(--mono);letter-spacing:.04em;text-transform:uppercase;color:var(--blue);border-top:1px dashed var(--line);padding-top:8px}
+  .opt{position:absolute;left:72px;right:72px;top:420px;z-index:2;display:flex;align-items:center;gap:12px;font-size:14px;color:var(--char);border:1px dashed var(--slate);padding:10px 14px;background:#fff}
+  .rules{position:absolute;left:72px;right:72px;top:486px;display:grid;grid-template-columns:repeat(3,1fr);gap:18px;z-index:2}
+  .rules div{font-size:13.5px;line-height:1.45;color:var(--char);border-top:1px solid var(--ink);padding-top:8px}
+  .rules .tag{display:block;margin-bottom:3px}
+</style>
+</head>
+<body data-foot="The workshop · Your path">
+<div class="z">
+  <div class="eyebrow in1">The workshop · <b>Your path</b></div>
+  <h1 class="in2">Four labs. <span class="b">See it fail, fix it, compare, measure.</span></h1>
+</div>
+<div class="cards">
+  <div class="card in3"><div class="tag">Lab 1</div><h3>Watch an agent search blind</h3><p>Build a baseline agent in Agent Builder, ask a business question, and count the calls it spends on discovery.</p><div class="out">Baseline agent</div></div>
+  <div class="card hot in4"><div class="tag">Lab 2</div><h3>Build the Context Engine</h3><p>Create an AI Index, run a workflow that writes routing KIs, and build a scoped agent with the ki-retrieval skill.</p><div class="out">Context Engine agent</div></div>
+  <div class="card in5"><div class="tag">Lab 3</div><h3>The Context Engine in action</h3><p>Flip the Context Engine off and on in the CS Intelligence app across all four questions.</p><div class="out">Side-by-side metrics</div></div>
+  <div class="card in6"><div class="tag">Lab 4</div><h3>Measure it in Kibana</h3><p>Query both agents' traces with ES|QL and build the comparison dashboard.</p><div class="out">Your own numbers</div></div>
+</div>
+<div class="opt in6"><span class="chip">Optional</span>Lab 5, under the hood: how the workflow builds each KI, if you have time left.</div>
+<div class="rules in6">
+  <div><span class="tag">Tabs and Check</span>Each lab opens the Kibana tabs you need. Click Check when you finish a lab.</div>
+  <div><span class="tag">Keep the default model</span>Leave the model at Gemini 3.0 Flash until Lab 4, so your numbers match ours.</div>
+  <div><span class="tag">Subagents off</span>Leave Subagents unchecked on both agents. It adds calls and variance.</div>
+</div>
+<script src="style/eweb.js"></script>
+<aside class="notes">
+<p>The path for the rest of the workshop.</p>
+<ul><li><b>Lab 1</b>: build the baseline agent and watch it search blind.</li>
+<li><b>Lab 2</b>: the core build. AI Index, the workflow that writes routing KIs, and a scoped agent with the ki-retrieval skill.</li>
+<li><b>Lab 3</b>: the CS Intelligence app runs both agents side by side.</li>
+<li><b>Lab 4</b>: measure both agents from their traces in Kibana.</li>
+<li><b>Lab 5</b> is optional.</li></ul>
+<p>Two rules that keep numbers comparable: stay on the default model, Gemini 3.0 Flash, until Lab 4, and leave Subagents unchecked.</p>
+</aside>
+</body>
+</html>
