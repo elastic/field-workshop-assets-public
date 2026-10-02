@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1280">
+<title>Vector Search: Vector, Keyword, and Hybrid Retrieval</title>
+<style>
+:root {
+  --elastic-blue:#0B64DD; --light-teal:#48EFCF; --light-poppy:#FF957D; --pink:#F04E98; --yellow:#FEC514;
+  --midnight:#153385; --developer-blue:#101C3F; --dark-ink:#1C1E23; --ink:#343741; --white:#FFFFFF;
+  --light-grey:#F5F7FA; --medium-grey:#DCE2EA; --dark-grey:#ABB4C4;
+  --logo-teal:#02BCB7; --logo-lime:#9ADC30;
+  --font-headline:'Space Grotesk','Inter',Arial,sans-serif;
+  --font-body:'Inter',Arial,sans-serif;
+  --font-code:'Space Mono',ui-monospace,Menlo,Consolas,monospace;
+  --shadow-md:0 4px 12px rgba(16,28,63,0.08);
+}
+@font-face{font-family:'Space Grotesk';font-weight:700;font-display:swap;src:url('./fonts/SpaceGrotesk/weight-700.woff2') format('woff2');}
+@font-face{font-family:'Inter';font-weight:400;font-display:swap;src:url('./fonts/Inter/weight-400.woff2') format('woff2');}
+@font-face{font-family:'Inter';font-weight:600;font-display:swap;src:url('./fonts/Inter/weight-600.woff2') format('woff2');}
+@font-face{font-family:'Space Mono';font-weight:400;font-display:swap;src:url('./fonts/SpaceMono/weight-400.woff2') format('woff2');}
+@font-face{font-family:'Space Mono';font-weight:700;font-display:swap;src:url('./fonts/SpaceMono/weight-700.woff2') format('woff2');}
+
+/* 1rem scales with the viewport: design canvas is ~186rem x 100rem (16:9 + 48px nav bar) */
+html{font-size:min(0.5913vw, calc((100vh - 48px) / 91));}
+*,*::before,*::after{box-sizing:border-box;}
+html,body{height:100%;overflow:hidden;margin:0;}
+body{background:var(--developer-blue);display:flex;flex-direction:column;font-family:var(--font-body);
+  font-size:2.4rem;line-height:1.5;color:var(--ink);-webkit-font-smoothing:antialiased;}
+.deck{flex:1;min-height:0;position:relative;overflow:hidden;}
+.slide{position:absolute;inset:0;display:none;flex-direction:column;overflow:hidden;
+  padding:4rem 7rem;font-size:2.4rem;line-height:1.5;}
+.slide.active{display:flex;animation:slideIn 200ms ease both;}
+@keyframes slideIn{from{opacity:.6;transform:translateX(12px);}to{opacity:1;transform:none;}}
+@media (prefers-reduced-motion:reduce){.slide.active{animation:none;}}
+
+/* layouts (same mapping as the sibling deck) */
+.slide[data-layout="title"]{background:var(--elastic-blue);color:var(--white);justify-content:center;}
+.slide[data-layout="problem"],.slide[data-layout="concept"]{background:var(--white);color:var(--dark-ink);}
+.slide[data-layout="done"]{background:var(--developer-blue);color:var(--white);}
+.slide.stack{justify-content:center;gap:2.6rem;}
+.slide.stack.tight{gap:1.8rem;}
+.slide.cols{flex-direction:row;align-items:center;gap:6rem;}
+.slide.center{align-items:center;text-align:center;}
+.col-diagram{flex:0 0 46%;display:flex;align-items:center;justify-content:center;min-width:0;}
+.col-diagram.wide{flex:0 0 54%;}
+.col-diagram.narrow{flex:0 0 38%;}
+.col-text{flex:1;display:flex;flex-direction:column;gap:2.2rem;min-width:0;}
+
+/* typography */
+.slide-title{font-family:var(--font-headline);font-weight:700;font-size:8.2rem;line-height:1.1;margin:0 0 3rem;}
+.slide-subtitle{font-size:3.4rem;margin:0 0 2.4rem;opacity:.95;}
+.presenter{font-size:3rem;margin:0;opacity:.95;}
+.slide-heading{font-family:var(--font-headline);font-weight:700;font-size:5.2rem;line-height:1.1;margin:0;color:var(--dark-ink);}
+.slide[data-layout="done"] .slide-heading{color:var(--light-teal);}
+.eyebrow{font-family:var(--font-code);font-size:2rem;letter-spacing:.12em;text-transform:uppercase;margin:0 0 -1rem;color:var(--elastic-blue);font-weight:700;}
+.slide[data-layout="done"] .eyebrow{color:var(--light-teal);}
+.stack > .slide-heading,.stack > .eyebrow{margin-bottom:0;}
+.stack > .eyebrow{margin-bottom:-1.6rem;}
+.lead{font-size:2.8rem;margin:0;}
+.nomargin{margin:0;}
+code{font-family:var(--font-code);font-size:.86em;color:var(--elastic-blue);background:rgba(11,100,221,.08);padding:.05em .3em;border-radius:.4rem;white-space:nowrap;}
+.slide[data-layout="done"] code,.slide[data-layout="title"] code{color:var(--light-teal);background:rgba(255,255,255,.1);}
+.slide[data-layout="title"] code{color:var(--white);background:rgba(255,255,255,.18);}
+strong{font-weight:600;}
+.tealtxt{color:var(--light-teal);}
+
+/* bullets */
+.bul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:1.6rem;font-size:2.5rem;line-height:1.4;}
+.bul li{position:relative;padding-left:3.2rem;}
+.bul li::before{content:"";position:absolute;left:0;top:.62em;width:1.2rem;height:1.2rem;background:var(--elastic-blue);border-radius:.2rem;}
+.slide[data-layout="done"] .bul li::before{background:var(--light-teal);}
+.bul.xl{font-size:3.5rem;gap:2.8rem;}
+.bul.xl li{padding-left:4.2rem;}
+.bul.xl li::before{width:1.6rem;height:1.6rem;top:.6em;}
+.bul.sm{font-size:2.3rem;gap:1.2rem;}
+
+/* callouts */
+.callout{font-size:3.3rem;line-height:1.35;padding:2.4rem 3.2rem;border-radius:1rem;border-left:1rem solid var(--yellow);background:var(--light-grey);}
+.callout.poppy{border-left-color:var(--light-poppy);background:#FFF0EC;color:var(--dark-ink);}
+.callout.teal{border-left-color:var(--light-teal);background:rgba(72,239,207,.12);color:var(--white);font-size:2.8rem;}
+.callout.teal.big{font-size:3.6rem;font-weight:600;}
+.look{display:flex;gap:1.6rem;align-items:baseline;padding:1.4rem 2rem;border-radius:.8rem;background:var(--light-grey);border-left:.8rem solid var(--elastic-blue);font-size:2.4rem;line-height:1.35;}
+.look-label{font-family:var(--font-code);font-size:1.8rem;letter-spacing:.1em;text-transform:uppercase;font-weight:700;white-space:nowrap;color:var(--elastic-blue);}
+.callout .look-label{color:var(--light-teal);margin-right:1rem;}
+.chip{font-family:var(--font-code);font-size:.8em;background:var(--developer-blue);color:var(--light-teal);padding:.1em .5em;border-radius:99px;white-space:nowrap;}
+
+/* slide 2/3 */
+.hands{margin:0;padding:0;list-style:none;counter-reset:h;display:flex;flex-direction:column;gap:2.2rem;}
+.hands li{counter-increment:h;font-size:4.2rem;line-height:1.25;font-family:var(--font-headline);font-weight:700;padding-left:7rem;position:relative;}
+.hands li::before{content:counter(h);position:absolute;left:0;top:.05em;width:4.8rem;height:4.8rem;border-radius:50%;background:var(--developer-blue);color:var(--light-teal);font-size:2.8rem;display:flex;align-items:center;justify-content:center;font-family:var(--font-code);}
+.thesis{font-family:var(--font-headline);font-weight:700;font-size:8rem;line-height:1.12;margin:0;max-width:150rem;}
+.thesis .hl{color:var(--elastic-blue);}
+.quote{font-size:3.6rem;margin:1rem 0 0;font-style:italic;color:var(--ink);}
+.prove{font-size:3rem;margin:0;font-weight:600;padding:1.2rem 3rem;background:var(--developer-blue);color:var(--light-teal);border-radius:99px;}
+
+/* slide 4 agenda */
+.agenda{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:1.4rem;}
+.agenda li{display:flex;align-items:center;gap:2.4rem;font-size:3.1rem;padding:1.4rem 2.4rem;border:.2rem solid rgba(255,255,255,.18);border-radius:1rem;background:rgba(255,255,255,.05);}
+.agenda .num{font-family:var(--font-code);font-weight:700;color:var(--developer-blue);background:var(--light-teal);width:5rem;height:5rem;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:2.6rem;flex:0 0 auto;}
+.agenda .what{flex:1;}
+.agenda .what strong{color:var(--white);}
+.agenda .time{font-family:var(--font-code);color:var(--light-teal);font-size:2.4rem;white-space:nowrap;}
+.agenda li.bonus .num{background:var(--yellow);}
+
+/* slide 5 window diagram */
+.win{width:100%;border:.25rem solid var(--developer-blue);border-radius:1.4rem;overflow:hidden;box-shadow:var(--shadow-md);background:#fff;}
+.win-bar{background:var(--developer-blue);display:flex;align-items:center;gap:.8rem;padding:1.2rem 1.8rem;color:#fff;font-family:var(--font-code);font-size:1.8rem;letter-spacing:.08em;}
+.win-bar i{width:1.4rem;height:1.4rem;border-radius:50%;background:var(--dark-grey);display:block;}
+.win-bar i:nth-child(1){background:var(--light-poppy);}.win-bar i:nth-child(2){background:var(--yellow);}.win-bar i:nth-child(3){background:var(--light-teal);}
+.win-bar span{margin-left:1.2rem;}
+.win-body{display:flex;height:50rem;}
+.pane{padding:1.6rem;display:flex;flex-direction:column;gap:1.2rem;min-width:0;}
+.pane.assign{flex:0 0 36%;background:var(--light-grey);border-right:.25rem solid var(--developer-blue);}
+.pane.tabs{flex:1;padding:0;gap:0;}
+.pane-title{font-family:var(--font-code);font-size:1.8rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--dark-ink);margin-bottom:.6rem;}
+.ln{height:1.1rem;border-radius:.6rem;background:var(--medium-grey);}
+.ln.dk{background:var(--dark-grey);opacity:.6;}
+.w40{width:40%}.w50{width:50%}.w60{width:60%}.w70{width:70%}.w80{width:80%}.w85{width:85%}.w90{width:90%}
+.next-btn{margin-top:auto;align-self:flex-start;background:var(--elastic-blue);color:#fff;font-weight:600;font-size:2rem;padding:.8rem 2rem;border-radius:.6rem;}
+.tabrow{display:flex;background:var(--medium-grey);border-bottom:.25rem solid var(--developer-blue);}
+.tab{flex:1;text-align:center;font-size:2rem;line-height:1.2;font-weight:600;color:var(--ink);padding:1.4rem .6rem;border-right:.15rem solid #fff;}
+.tab.on{background:var(--white);color:var(--dark-ink);box-shadow:inset 0 .5rem 0 var(--elastic-blue);}
+.tabcontent{padding:2rem;display:flex;flex-direction:column;gap:1.4rem;}
+.placeholder{display:flex;align-items:center;gap:2.4rem;border:.3rem dashed var(--ink);border-radius:1.2rem;padding:2rem 2.6rem;background:#FFFBE6;margin-top:.6rem;}
+.ph-label{font-family:var(--font-code);font-size:1.8rem;letter-spacing:.1em;text-transform:uppercase;font-weight:700;color:var(--ink);}
+.ph-text{font-size:2.8rem;font-weight:600;color:var(--dark-ink);}
+
+/* code */
+.code{margin:0;background:var(--developer-blue);color:#EEF2FA;font-family:var(--font-code);font-size:2.05rem;line-height:1.6;
+  padding:2.4rem 2.8rem;border-radius:1.2rem;border:.2rem solid rgba(72,239,207,.35);white-space:pre;overflow:hidden;width:100%;}
+.code code{white-space:pre;font-family:inherit;font-size:1em;color:inherit;background:none;padding:0;}
+.code.big{font-size:2.2rem;line-height:1.7;}
+.code.tight{font-size:2rem;line-height:1.5;padding:2rem 2.4rem;}
+.t-k{color:var(--light-teal);font-weight:700;}
+.t-f{color:var(--yellow);}
+.t-s{color:var(--light-poppy);}
+.t-p{color:var(--yellow);font-weight:700;}
+.t-pi{color:var(--dark-grey);}
+
+/* flow diagrams (slides 7, 14) */
+.flow{display:flex;flex-direction:column;align-items:stretch;width:100%;max-width:70rem;}
+.fnode{border:.25rem solid var(--developer-blue);border-radius:1.2rem;padding:1.3rem 2.2rem;display:flex;flex-direction:column;gap:.2rem;background:#fff;}
+.fnode.blue{border-color:var(--elastic-blue);background:rgba(11,100,221,.08);}
+.fnode.teal{border-color:var(--logo-teal);background:rgba(2,188,183,.14);}
+.fk{font-family:var(--font-headline);font-weight:700;font-size:3rem;line-height:1.15;color:var(--dark-ink);}
+.fs{font-family:var(--font-code);font-size:1.9rem;color:var(--ink);}
+.farrow{height:3.4rem;position:relative;}
+.farrow::before{content:"";position:absolute;left:50%;top:0;bottom:1.1rem;width:.35rem;margin-left:-.175rem;background:var(--ink);}
+.farrow::after{content:"";position:absolute;left:50%;bottom:0;margin-left:-1rem;border-left:1rem solid transparent;border-right:1rem solid transparent;border-top:1.4rem solid var(--ink);}
+
+/* slide 9 table */
+.trap{width:100%;border-collapse:separate;border-spacing:.7rem;font-size:2.3rem;line-height:1.3;table-layout:fixed;margin:-.7rem;width:calc(100% + 1.4rem);}
+.trap th{font-family:var(--font-headline);font-size:2.4rem;text-align:left;padding:1.2rem 2rem;background:var(--developer-blue);color:#fff;border-radius:.8rem;}
+.trap td{padding:1.4rem 2rem;border-radius:.8rem;vertical-align:middle;color:var(--dark-ink);}
+.trap td:first-child{background:var(--light-grey);}
+.trap th:nth-child(1){width:28%;}
+.trap td code{font-size:.9em;white-space:normal;}
+.trap td.good,.sw.good{background:#48EFCF;}
+.trap td.bad,.sw.bad{background:#FF957D;}
+.trap td.mid,.sw.mid{background:#FEC514;}
+.legend{display:flex;gap:4rem;font-size:2.1rem;align-items:center;margin-top:.2rem;}
+.legend span{display:flex;align-items:center;gap:1rem;}
+.sw{display:inline-block;width:2.8rem;height:2.8rem;border-radius:.6rem;border:.15rem solid rgba(16,28,63,.35);}
+
+/* slide 11 */
+.d11{width:100%;height:auto;display:block;}
+.split{display:flex;gap:3rem;align-items:center;}
+.split-code{flex:0 0 65%;min-width:0;}
+.split-text{flex:1;display:flex;flex-direction:column;gap:1.8rem;min-width:0;}
+.split-text .look{font-size:2.2rem;}
+
+/* slide 13 */
+.rag{display:flex;gap:3rem;align-items:center;}
+.rag-code{flex:1;min-width:0;}
+.stages{flex:0 0 31rem;display:flex;flex-direction:column;gap:1.4rem;}
+.stage{display:flex;align-items:center;gap:1.4rem;font-family:var(--font-headline);font-weight:700;font-size:3rem;padding:1.2rem 2rem;border-radius:1rem;background:rgba(11,100,221,.1);border:.25rem solid var(--elastic-blue);color:var(--dark-ink);}
+.stage span{font-family:var(--font-code);font-size:2.2rem;width:4rem;height:4rem;border-radius:50%;background:var(--developer-blue);color:var(--light-teal);display:flex;align-items:center;justify-content:center;}
+.stage.gen{background:rgba(2,188,183,.16);border-color:var(--logo-teal);}
+
+/* slide 15 */
+.cmp{display:flex;align-items:stretch;gap:2.4rem;}
+.cmp-card{flex:1;border-radius:1.4rem;padding:2.6rem 3rem;display:flex;flex-direction:column;gap:1rem;color:var(--dark-ink);}
+.cmp-card.good{background:#48EFCF;}
+.cmp-card.bad{background:#FF957D;}
+.cmp-k{font-family:var(--font-code);font-size:2.2rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;}
+.cmp-v{font-family:var(--font-headline);font-weight:700;font-size:4.2rem;line-height:1.15;}
+.cmp-mid{flex:0 0 auto;align-self:center;background:var(--developer-blue);color:var(--light-teal);font-family:var(--font-code);font-weight:700;font-size:2.2rem;text-align:center;padding:1.6rem 2rem;border-radius:1.4rem;line-height:1.3;letter-spacing:.06em;text-transform:uppercase;}
+.big-line{font-family:var(--font-headline);font-weight:700;font-size:6rem;line-height:1.1;margin:1.6rem 0 0;}
+
+/* slide 16 */
+.d16{width:100%;height:auto;max-height:84rem;display:block;}
+
+/* slide 17 */
+.choose{width:100%;border-collapse:collapse;font-size:2.7rem;line-height:1.35;}
+.choose th{font-family:var(--font-headline);font-size:2.6rem;text-align:left;padding:1.4rem 2.4rem;background:var(--elastic-blue);color:#fff;}
+.choose td{padding:1.9rem 2.4rem;border-bottom:.15rem solid rgba(255,255,255,.2);color:#fff;}
+.choose td:nth-child(1){width:46%;}
+.choose td:nth-child(2){color:var(--light-teal);}
+.choose td:nth-child(2) strong{color:var(--white);}
+.choose td:nth-child(2) code{background:rgba(255,255,255,.1);}
+
+/* slide 19 */
+.trouble{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:1.5rem;}
+.trouble li{display:flex;align-items:center;gap:2.4rem;font-size:2.7rem;line-height:1.3;padding:1.6rem 2.6rem;border-radius:1rem;background:var(--light-grey);border-left:.9rem solid var(--light-poppy);}
+.trouble .sym{flex:0 0 52%;font-weight:600;}
+.trouble .arr{color:var(--elastic-blue);font-weight:700;}
+.trouble .fix{flex:1;}
+
+/* title extras */
+.title-wrap{max-width:150rem;}
+.stripe{position:absolute;left:0;right:0;bottom:0;height:1.6rem;display:flex;}
+.stripe i{flex:1;display:block;}
+.elastic-logo{position:absolute;bottom:4rem;right:6rem;width:13rem;opacity:.9;}
+.slide[data-layout="title"] .elastic-logo{bottom:5rem;}
+
+/* nav */
+#nav-bar{height:48px;flex:0 0 48px;background:var(--developer-blue);color:#fff;display:flex;align-items:center;justify-content:space-between;padding:0 32px;border-top:1px solid rgba(255,255,255,.1);}
+#nav-bar button{background:transparent;color:#fff;border:1px solid rgba(255,255,255,.3);border-radius:6px;padding:4px 14px;font-family:var(--font-body);font-size:14px;cursor:pointer;}
+#nav-bar button:hover{background:rgba(255,255,255,.1);}
+#nav-bar button:disabled{opacity:.3;cursor:default;}
+#slide-counter{font-family:var(--font-code);font-size:14px;opacity:.8;}
+.speaker-notes{display:none !important;}
+#overview{display:none;position:fixed;inset:0;background:rgba(16,28,63,.96);z-index:100;overflow-y:auto;padding:32px;}
+#overview.open{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:16px;}
+.overview-thumb{background:#fff;border-radius:6px;padding:12px;cursor:pointer;font-size:12px;border:2px solid transparent;aspect-ratio:16/9;display:flex;flex-direction:column;overflow:hidden;color:var(--ink);}
+.overview-thumb:hover,.overview-thumb.current{border-color:var(--light-teal);}
+.overview-num{font-family:var(--font-code);font-size:11px;color:#6B7585;margin-bottom:4px;}
+</style>
+</head>
+<body>
+<!-- Speaker notes live in HTML comments and hidden <aside class="speaker-notes"> elements. Keys: arrows / space / PageUp / PageDown / Home / End, o = overview. -->
+<div class="deck" id="deck">
+
+<section class="slide " data-layout="title">
+<div class="title-wrap">
+  <h1 class="slide-title">Vector Search:<br>Vector, Keyword, and<br>Hybrid Retrieval</h1>
+  <p class="slide-subtitle">Hands-on with Elasticsearch <code>ES|QL</code> &middot; ElasticON New York</p>
+  <p class="presenter"><strong>Jeff Vestal</strong> &middot; Elastic</p>
+</div>
+<div class="stripe"><i style="background:var(--pink)"></i><i style="background:var(--yellow)"></i><i style="background:var(--light-teal)"></i><i style="background:var(--logo-lime)"></i><i style="background:var(--white)"></i></div>
+<img class="elastic-logo" alt="Elastic" src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjgwIiBoZWlnaHQ9IjI4MCIgdmlld0JveD0iMCAwIDI4MCAyODAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxwYXRoIGQ9Ik0yMjAgMTQzLjQ5NEMyMjAuMDE0IDEzNy4wMDIgMjE4LjAyIDEzMC42NjQgMjE0LjI5MSAxMjUuMzQ4QzIxMC41NjMgMTIwLjAzMyAyMDUuMjgyIDExNiAxOTkuMTczIDExMy44MDJDMTk5LjczMSAxMTAuOTcgMjAwLjAxMiAxMDguMDkgMjAwLjAxNCAxMDUuMjA0QzIwMC4wMTYgOTUuNjQ2NiAxOTYuOTg5IDg2LjMzNDUgMTkxLjM2NyA3OC42MDZDMTg1Ljc0NCA3MC44Nzc0IDE3Ny44MTYgNjUuMTMwNCAxNjguNzIzIDYyLjE5MDhDMTU5LjYyOSA1OS4yNTExIDE0OS44MzcgNTkuMjcwMyAxNDAuNzU0IDYyLjI0NTZDMTMxLjY3MiA2NS4yMjA4IDEyMy43NjcgNzAuOTk4OSAxMTguMTc1IDc4Ljc0OTVDMTE0LjA1MSA3NS41NTUzIDEwOC45OTkgNzMuNzkxOSAxMDMuNzgzIDczLjcyNjRDOTguNTY2OSA3My42NjA5IDkzLjQ3MTkgNzUuMjk2OCA4OS4yNjkxIDc4LjM4NjRDODUuMDY2NCA4MS40NzYxIDgxLjk4NSA4NS44NTExIDgwLjQ5MTUgOTAuODQ5Qzc4Ljk5OCA5NS44NDY4IDc5LjE3MzggMTAxLjE5NSA4MC45OTI0IDEwNi4wODRDNzQuODY2NyAxMDguMzEzIDY5LjU3MSAxMTIuMzY1IDY1LjgxNzkgMTE3LjY5NUM2Mi4wNjQ3IDEyMy4wMjUgNjAuMDM0NCAxMjkuMzc2IDYwLjAwMDIgMTM1Ljg5NEM1OS45Nzk2IDE0Mi40MTMgNjEuOTgwNSAxNDguNzc4IDY1LjcyNzMgMTU0LjExM0M2OS40NzQxIDE1OS40NDcgNzQuNzgyNSAxNjMuNDg5IDgwLjkyMTYgMTY1LjY4MUM4MC4zODk2IDE2OC41MTQgODAuMTI2NCAxNzEuMzkgODAuMTM1NyAxNzQuMjcxQzgwLjExODYgMTgzLjgyNiA4My4xMzg5IDE5My4xMzkgODguNzYwMyAyMDAuODY2Qzk0LjM4MTggMjA4LjU5MiAxMDIuMzEzIDIxNC4zMzEgMTExLjQxIDIxNy4yNTVDMTIwLjUwNiAyMjAuMTc5IDEzMC4yOTcgMjIwLjEzNyAxMzkuMzY3IDIxNy4xMzNDMTQ4LjQzOCAyMTQuMTI5IDE1Ni4zMTkgMjA4LjMyIDE2MS44NzMgMjAwLjU0NUMxNjUuOTg0IDIwMy43NTMgMTcxLjAzIDIwNS41MzMgMTc2LjI0NSAyMDUuNjEzQzE4MS40NiAyMDUuNjkzIDE4Ni41NTggMjA0LjA3IDE5MC43NjcgMjAwLjk4OUMxOTQuOTc1IDE5Ny45MDkgMTk4LjA2NCAxOTMuNTQgMTk5LjU2NCAxODguNTQ1QzIwMS4wNjQgMTgzLjU1IDIwMC44OTQgMTc4LjIwMiAxOTkuMDc4IDE3My4zMTNDMjA1LjE5MiAxNzEuMDcyIDIxMC40NzQgMTY3LjAxMyAyMTQuMjEzIDE2MS42ODNDMjE3Ljk1MyAxNTYuMzUzIDIxOS45NzMgMTUwLjAwNiAyMjAgMTQzLjQ5NFpNMTIxLjk0NyA4My41NzUxQzEyNy4wOTkgNzYuMDgxNSAxMzQuNjc5IDcwLjU5NTEgMTQzLjQwNyA2OC4wNDJDMTUyLjEzNSA2NS40ODg5IDE2MS40NzcgNjYuMDI1NCAxNjkuODU1IDY5LjU2MTFDMTc4LjIzMyA3My4wOTY4IDE4NS4xMzUgNzkuNDE1IDE4OS4zOTUgODcuNDQ5MkMxOTMuNjU2IDk1LjQ4MzQgMTk1LjAxMyAxMDQuNzQxIDE5My4yMzkgMTEzLjY2MUwxNTcuOTE5IDE0NC41OTVMMTIyLjkwNiAxMjguNjRMMTE2LjA2OCAxMTQuMDQ2TDEyMS45NDcgODMuNTc1MVpNMTA0LjI0IDc5LjY0NTRDMTA4LjM5MiA3OS42NDQ2IDExMi40MyA4MS4wMDg4IDExNS43MzEgODMuNTI3OUwxMTAuNDMzIDExMC43OTJMODYuNDQ2NyAxMDUuMTI1Qzg1LjQwNjUgMTAyLjI2MSA4NS4wNzA3IDk5LjE4ODMgODUuNDY3NyA5Ni4xNjY4Qzg1Ljg2NDcgOTMuMTQ1MyA4Ni45ODI3IDkwLjI2MzcgODguNzI3NSA4Ny43NjUyQzkwLjQ3MjMgODUuMjY2NyA5Mi43OTI2IDgzLjIyNDcgOTUuNDkyNSA4MS44MTE0Qzk4LjE5MjUgODAuMzk4MiAxMDEuMTkzIDc5LjY1NTMgMTA0LjI0IDc5LjY0NTRaTTY2LjE4NTQgMTM1Ljk2NUM2Ni4yMjA3IDEzMC40MDMgNjcuOTkxMiAxMjQuOTkgNzEuMjQ5OSAxMjAuNDgxQzc0LjUwODYgMTE1Ljk3MyA3OS4wOTMxIDExMi41OTQgODQuMzY0IDExMC44MTVMMTEwLjY5MyAxMTcuMDMyTDExNi44NyAxMzAuMjQ0TDgzLjIwODcgMTYwLjY5MUM3OC4yMDAyIDE1OC43NzkgNzMuODkwNCAxNTUuMzkyIDcwLjg1MDQgMTUwLjk3NkM2Ny44MTA0IDE0Ni41NjEgNjYuMTgzNiAxNDEuMzI2IDY2LjE4NTQgMTM1Ljk2NVpNMTU4LjIxIDE5NS44NDVDMTUzLjQ1NCAyMDIuODQ4IDE0Ni41NzcgMjA4LjE0IDEzOC41OTEgMjEwLjk0NkMxMzAuNjA0IDIxMy43NTEgMTIxLjkyOCAyMTMuOTIxIDExMy44MzggMjExLjQzMkMxMDUuNzQ3IDIwOC45NDIgOTguNjY4MSAyMDMuOTI0IDkzLjY0MDQgMTk3LjExNEM4OC42MTI3IDE5MC4zMDMgODUuOTAxMyAxODIuMDYxIDg1LjkwNDQgMTczLjU5NkM4NS45MDgxIDE3MC45NTYgODYuMTcxNCAxNjguMzI0IDg2LjY5MDQgMTY1LjczNkwxMjEuMTE0IDEzNC41ODJMMTU2LjI2MSAxNTAuNTk5TDE2NC4wNDIgMTY1LjQ2OUwxNTguMjEgMTk1Ljg0NVpNMTc1Ljc5OSAxOTkuNzc1QzE3MS42NTkgMTk5Ljc2MSAxNjcuNjM5IDE5OC4zNzkgMTY0LjM2NCAxOTUuODQ1TDE2OS41ODIgMTY4LjY2OEwxOTMuNTUzIDE3NC4yNzFDMTk0LjU5NiAxNzcuMTMzIDE5NC45MzUgMTgwLjIwNCAxOTQuNTQxIDE4My4yMjRDMTk0LjE0OCAxODYuMjQ0IDE5My4wMzQgMTg5LjEyNSAxOTEuMjkzIDE5MS42MjRDMTg5LjU1MiAxOTQuMTI0IDE4Ny4yMzYgMTk2LjE2NyAxODQuNTM5IDE5Ny41ODNDMTgxLjg0MyAxOTguOTk5IDE3OC44NDUgMTk5Ljc0NSAxNzUuNzk5IDE5OS43NTlWMTk5Ljc3NVpNMTk1LjYzNiAxNjguNTY2TDE2OS4yNDUgMTYyLjM5NkwxNjIuMjM0IDE0OS4wMzVMMTk2Ljc1MiAxMTguNzkzQzIwMS43NjUgMTIwLjY4OCAyMDYuMDgyIDEyNC4wNjQgMjA5LjEzIDEyOC40NzJDMjEyLjE3OCAxMzIuODggMjEzLjgxMiAxMzguMTEyIDIxMy44MTUgMTQzLjQ3MUMyMTMuNzY1IDE0OS4wMjEgMjExLjk4NyAxNTQuNDE5IDIwOC43MyAxNTguOTEzQzIwNS40NzIgMTYzLjQwNyAyMDAuODk2IDE2Ni43NzYgMTk1LjYzNiAxNjguNTVWMTY4LjU2NloiIGZpbGw9IndoaXRlIj48L3BhdGg+Cjwvc3ZnPg=="/></section>
+
+<section class="slide stack" data-layout="problem"><h2 class="slide-heading">Show of hands</h2>
+<ol class="hands">
+  <li>Who&rsquo;s shipped something with RAG or an agent in the last year?</li>
+  <li>Who&rsquo;s had it give a confident, wrong answer?</li>
+</ol>
+<div class="callout poppy">&ldquo;Use a better model&rdquo; is the reflex. Usually the model is fine &mdash; <strong>the retrieval is wrong.</strong></div>
+
+<!-- Speaker: RAG went into the background; agents now retrieve many times per task. Every retrieval call is a chance to feed the model garbage. -->
+<aside class="speaker-notes" hidden>RAG went into the background; agents now retrieve many times per task. Every retrieval call is a chance to feed the model garbage.</aside></section>
+
+<section class="slide stack center" data-layout="problem">
+<p class="eyebrow">The thesis</p>
+<h2 class="thesis"><span class="hl">Retrieval quality,</span> not model quality, bounds answer quality.</h2>
+<p class="quote">&ldquo;The model didn&rsquo;t get dumber. The retrieval got worse.&rdquo;</p>
+<p class="prove">We prove it live &mdash; your own cluster, not slides.</p>
+</section>
+
+<section class="slide stack" data-layout="done"><h2 class="slide-heading">What you&rsquo;ll do today</h2><ol class="agenda"><li class=""><span class="num">1</span><span class="what"><strong>Vector search</strong> &mdash; match on meaning</span><span class="time">~20 min</span></li><li class=""><span class="num">2</span><span class="what"><strong>Where vector breaks</strong> &mdash; and where keyword breaks</span><span class="time">~25 min</span></li><li class=""><span class="num">3</span><span class="what"><strong>Hybrid search</strong> &mdash; FORK + FUSE, measured</span><span class="time">~25 min</span></li><li class=""><span class="num">4</span><span class="what"><strong>Why it matters</strong> &mdash; one-query RAG + a multi-hop agent</span><span class="time">~30 min</span></li><li class="bonus"><span class="num">B</span><span class="what"><strong>Bonus: reranking</strong></span><span class="time">~15 min</span></li></ol><div class="callout teal"><span class="look-label">You leave with</span> a public repo &mdash; corpus, ingest script, every query, every notebook.</div></section>
+
+<section class="slide cols" data-layout="concept"><div class="col-diagram">
+<div class="win">
+  <div class="win-bar"><i></i><i></i><i></i><span>Instruqt</span></div>
+  <div class="win-body">
+    <div class="pane assign">
+      <div class="pane-title">Assignment</div>
+      <div class="ln w90"></div><div class="ln w70"></div><div class="ln w85"></div><div class="ln w60"></div>
+      <div class="ln w80"></div><div class="ln w50"></div>
+      <div class="next-btn">Next &rarr;</div>
+    </div>
+    <div class="pane tabs">
+      <div class="tabrow"><span class="tab on">Kibana Discover</span><span class="tab">Python Notebook</span><span class="tab">Agent Builder</span></div>
+      <div class="tabcontent">
+        <div class="ln w80 dk"></div><div class="ln w60 dk"></div><div class="ln w90 dk"></div>
+        <div class="ln w40 dk"></div>
+      </div>
+    </div>
+  </div>
+</div></div><div class="col-text"><h2 class="slide-heading">How the lab works</h2><ul class="bul "><li><strong>Kibana Discover</strong> &mdash; paste ES|QL, click <strong>Search</strong>. Labs 1&ndash;3, 5.</li><li><strong>Python Notebook</strong> &mdash; same ideas in code, run cells top to bottom.</li><li><strong>Agent Builder</strong> &mdash; Lab 4 only: chat with an agent.</li><li>Each lab: read the assignment &rarr; run the queries &rarr; <strong>Next</strong>.</li><li>Your own Elastic Cloud Serverless project. Already loaded: 62 Elastic docs pages.</li><li>Stuck? Raise a hand. Ahead? Do the notebook, then the bonus.</li></ul><div class="placeholder"><span class="ph-label">Getting in</span><span class="ph-text">Invite link / QR &mdash; fill in</span></div></div></section>
+
+<section class="slide cols" data-layout="concept"><div class="col-diagram wide"><pre class="code big"><code><span class="t-k">FROM</span> aiewf-workshop-docs <span class="t-k">METADATA</span> _score
+<span class="t-pi">|</span> <span class="t-k">WHERE</span> <span class="t-f">MATCH</span>(body_semantic, <span class="t-s">&quot;securing cluster traffic&quot;</span>)
+<span class="t-pi">|</span> <span class="t-k">SORT</span> _score <span class="t-k">DESC</span>
+<span class="t-pi">|</span> <span class="t-k">LIMIT</span> 5
+<span class="t-pi">|</span> <span class="t-k">KEEP</span> id, title, _score</code></pre></div><div class="col-text"><h2 class="slide-heading">ES|QL in 60 seconds</h2><ul class="bul "><li>A pipe: source, then <code>|</code> stages.</li><li><code>METADATA _score</code> &mdash; ask for relevance. Without it, MATCH is just a filter.</li><li><code>MATCH</code> on a <code>semantic_text</code> field = vector search. On a <code>text</code> field = BM25 keyword search. <strong>The field decides.</strong></li></ul></div></section>
+
+<section class="slide cols" data-layout="concept"><div class="col-diagram">
+<div class="flow">
+  <div class="fnode plain"><span class="fk">Query text</span><span class="fs">&ldquo;securing cluster traffic&rdquo;</span></div>
+  <div class="farrow"></div>
+  <div class="fnode blue"><span class="fk">EIS</span><span class="fs">Jina v5 embeddings</span></div>
+  <div class="farrow"></div>
+  <div class="fnode plain"><span class="fk">Dense vector</span></div>
+  <div class="farrow"></div>
+  <div class="fnode plain"><span class="fk">Nearest neighbours</span></div>
+  <div class="farrow"></div>
+  <div class="fnode teal"><span class="fk">Docs</span><span class="fs">TLS doc &mdash; no shared keywords</span></div>
+</div></div><div class="col-text"><p class="eyebrow">Lab 1 &middot; Brief</p><h2 class="slide-heading">Vector search</h2><ul class="bul "><li>Embeddings are generated <strong>server-side</strong> &mdash; you write zero ML code.</li><li>Try: <code>securing cluster traffic</code> &rarr; TLS doc, no shared keywords.</li><li>Try your own everyday questions.</li></ul><div class="look"><span class="look-label">Look for</span><span>how good it feels. Next lab we break it.</span></div></div></section>
+
+<section class="slide stack" data-layout="done"><p class="eyebrow">Lab 1 &middot; Recap</p><h2 class="slide-heading">Lab 1 recap</h2><ul class="bul xl"><li>Semantic search matched on <strong>meaning</strong>.</li><li><code>semantic_text</code> + Jina v5 did the embedding &mdash; query and documents.</li><li>Feels like magic. <span class="tealtxt">Hold that thought.</span></li></ul></section>
+
+<section class="slide stack" data-layout="problem"><p class="eyebrow">Lab 2 &middot; Brief</p><h2 class="slide-heading">Where vector breaks</h2><p class="lead">Two failure modes, opposite query shapes:</p>
+<table class="trap">
+  <thead><tr><th>Query</th><th>Semantic</th><th>BM25</th></tr></thead>
+  <tbody>
+    <tr><td><code>exit code 137</code></td><td class="mid">right doc, but by a hair</td><td class="mid">real distance &mdash; but a boosted title wins #1</td></tr>
+    <tr><td><code>new_primaries</code></td><td class="bad">plausible <strong>wrong</strong> doc</td><td class="good">pins the settings doc</td></tr>
+    <tr><td><code>8.18 breaking changes</code></td><td class="good">right</td><td class="bad"><strong>wrong</strong> doc #1 (boosted common words)</td></tr>
+    <tr><td><code>notify me when something goes wrong</code></td><td class="good">right</td><td class="bad">buries it (no shared words)</td></tr>
+  </tbody>
+</table>
+<div class="legend"><span><i class="sw good"></i>Right doc on top</span><span><i class="sw mid"></i>Right, but fragile</span><span><i class="sw bad"></i>Wrong or buried</span></div>
+<div class="look"><span class="look-label">Look for</span><span><em>why</em> &mdash; split title-only vs body-only to read the score.</span></div></section>
+
+<section class="slide stack" data-layout="done"><p class="eyebrow">Lab 2 &middot; Recap</p><h2 class="slide-heading">Lab 2 recap</h2><ul class="bul xl"><li>Semantic <strong>blurs</strong> exact tokens: error codes, versions, config values.</li><li>BM25 <strong>mis-ranks</strong> on boosted common words and is blind to paraphrase.</li><li>You read the scores &mdash; you didn&rsquo;t take my word for it.</li></ul><div class="callout teal big">Neither is safe alone &rarr; hybrid.</div></section>
+
+<section class="slide stack tight" data-layout="concept"><p class="eyebrow">Lab 3 &middot; Brief</p><h2 class="slide-heading">Hybrid with FORK + FUSE</h2>
+<svg class="d11" viewBox="0 0 1700 270" role="img" aria-label="FORK splits into a BM25 branch and a semantic branch, which FUSE merges into one ranked list">
+  <defs><marker id="ah" markerUnits="userSpaceOnUse" markerWidth="22" markerHeight="22" refX="20" refY="11" orient="auto"><path d="M0,1 L20,11 L0,21 z" fill="#343741"/></marker></defs>
+  <g style="font-family:var(--font-code)">
+    <rect x="0" y="85" width="230" height="100" rx="14" fill="#101C3F"/>
+    <text x="115" y="148" text-anchor="middle" fill="#fff" font-size="40" font-weight="700">FORK</text>
+    <rect x="410" y="12" width="560" height="104" rx="14" fill="rgba(11,100,221,0.10)" stroke="#0B64DD" stroke-width="3"/>
+    <text x="690" y="58" text-anchor="middle" fill="#1C1E23" font-size="32" font-weight="700" font-family="Inter, system-ui, sans-serif">BM25 branch</text>
+    <text x="690" y="96" text-anchor="middle" fill="#343741" font-size="28">MATCH(body)</text>
+    <rect x="410" y="154" width="560" height="104" rx="14" fill="rgba(2,188,183,0.14)" stroke="#02BCB7" stroke-width="3"/>
+    <text x="690" y="200" text-anchor="middle" fill="#1C1E23" font-size="32" font-weight="700" font-family="Inter, system-ui, sans-serif">Semantic branch</text>
+    <text x="690" y="238" text-anchor="middle" fill="#343741" font-size="28">MATCH(body_semantic)</text>
+    <rect x="1100" y="85" width="230" height="100" rx="14" fill="#101C3F"/>
+    <text x="1215" y="148" text-anchor="middle" fill="#fff" font-size="40" font-weight="700">FUSE</text>
+    <rect x="1450" y="25" width="250" height="220" rx="14" fill="#fff" stroke="#101C3F" stroke-width="3"/>
+    <text x="1575" y="68" text-anchor="middle" fill="#1C1E23" font-size="26" font-weight="700" font-family="Inter, system-ui, sans-serif">One ranked list</text>
+    <rect x="1475" y="88" width="200" height="30" rx="6" fill="#48EFCF"/><text x="1490" y="110" fill="#1C1E23" font-size="22" font-weight="700">#1</text>
+    <rect x="1475" y="130" width="160" height="30" rx="6" fill="#DCE2EA"/><text x="1490" y="152" fill="#1C1E23" font-size="22">#2</text>
+    <rect x="1475" y="172" width="120" height="30" rx="6" fill="#DCE2EA"/><text x="1490" y="194" fill="#1C1E23" font-size="22">#3</text>
+  </g>
+  <g stroke="#343741" stroke-width="4" fill="none" marker-end="url(#ah)">
+    <path d="M230,135 C320,135 320,64 404,64"/>
+    <path d="M230,135 C320,135 320,206 404,206"/>
+    <path d="M970,64 C1030,64 1030,135 1094,135"/>
+    <path d="M970,206 C1030,206 1030,135 1094,135"/>
+    <path d="M1330,135 L1444,135"/>
+  </g>
+</svg><div class="split"><div class="split-code"><pre class="code "><code><span class="t-k">FROM</span> aiewf-workshop-docs <span class="t-k">METADATA</span> _score, _id, _index
+<span class="t-pi">|</span> <span class="t-k">FORK</span> ( <span class="t-k">WHERE</span> <span class="t-f">MATCH</span>(body, <span class="t-p">?q</span>)          <span class="t-pi">|</span> <span class="t-k">SORT</span> _score <span class="t-k">DESC</span> <span class="t-pi">|</span> <span class="t-k">LIMIT</span> 50 )
+       ( <span class="t-k">WHERE</span> <span class="t-f">MATCH</span>(body_semantic, <span class="t-p">?q</span>) <span class="t-pi">|</span> <span class="t-k">SORT</span> _score <span class="t-k">DESC</span> <span class="t-pi">|</span> <span class="t-k">LIMIT</span> 50 )
+<span class="t-pi">|</span> <span class="t-k">FUSE</span>
+<span class="t-pi">|</span> <span class="t-k">SORT</span> _score <span class="t-k">DESC</span> <span class="t-pi">|</span> <span class="t-k">LIMIT</span> 5</code></pre></div><div class="split-text"><ul class="bul sm"><li><strong>RRF</strong> (default): score = &Sigma; 1/(k + rank). Ranks, not raw scores. Zero tuning.</li><li><strong>FUSE LINEAR</strong>: MinMax-normalize each branch, then weight. Powerful &mdash; and brittle.</li></ul><div class="look"><span class="look-label">Look for</span><span>every trap from Lab 2 lands at #1. Then measure it (MRR, heatmap).</span></div></div></div></section>
+
+<section class="slide stack" data-layout="done"><p class="eyebrow">Lab 3 &middot; Recap</p><h2 class="slide-heading">Lab 3 recap</h2><ul class="bul xl"><li>RRF wins on <strong>every</strong> query that broke the others &mdash; measured, not eyeballed.</li><li>Linear can tie RRF &mdash; after you tune the weights. Those weights go stale when the corpus or model changes.</li><li><strong>RRF is your production default.</strong> Filter inside the FORK branches to scope.</li></ul></section>
+
+<section class="slide stack tight" data-layout="concept"><p class="eyebrow">Lab 4 &middot; Brief</p><h2 class="slide-heading">The whole RAG pipeline in one query</h2><div class="rag"><div class="rag-code"><pre class="code tight"><code><span class="t-k">FROM</span> aiewf-workshop-docs <span class="t-k">METADATA</span> _score, _id, _index
+<span class="t-pi">|</span> <span class="t-k">FORK</span> ( <span class="t-k">WHERE</span> <span class="t-f">MATCH</span>(body, <span class="t-p">?q</span>) <span class="t-pi">|</span> <span class="t-k">SORT</span> _score <span class="t-k">DESC</span> <span class="t-pi">|</span> <span class="t-k">LIMIT</span> 50 )
+       ( <span class="t-k">WHERE</span> <span class="t-f">MATCH</span>(body_semantic, <span class="t-p">?q</span>) <span class="t-pi">|</span> <span class="t-k">SORT</span> _score <span class="t-k">DESC</span> <span class="t-pi">|</span> <span class="t-k">LIMIT</span> 50 )
+<span class="t-pi">|</span> <span class="t-k">FUSE</span> <span class="t-pi">|</span> <span class="t-k">SORT</span> _score <span class="t-k">DESC</span> <span class="t-pi">|</span> <span class="t-k">LIMIT</span> 20
+<span class="t-pi">|</span> <span class="t-k">RERANK</span> <span class="t-p">?q</span> <span class="t-k">ON</span> body <span class="t-k">WITH</span> {<span class="t-s">&quot;inference_id&quot;</span>: <span class="t-s">&quot;.jina-reranker-v3&quot;</span>}
+<span class="t-pi">|</span> <span class="t-k">SORT</span> _score <span class="t-k">DESC</span> <span class="t-pi">|</span> <span class="t-k">LIMIT</span> 1
+<span class="t-pi">|</span> <span class="t-k">EVAL</span> prompt = <span class="t-f">CONCAT</span>(...)
+<span class="t-pi">|</span> <span class="t-k">COMPLETION</span> answer = prompt <span class="t-k">WITH</span> {<span class="t-s">&quot;inference_id&quot;</span>: <span class="t-s">&quot;.anthropic-claude-4.5-haiku-completion&quot;</span>}</code></pre></div>
+<div class="stages">
+  <div class="stage"><span>1</span>Retrieve</div>
+  <div class="stage"><span>2</span>Fuse</div>
+  <div class="stage"><span>3</span>Rerank</div>
+  <div class="stage gen"><span>4</span>Generate</div>
+</div></div><p class="lead nomargin"><strong>Retrieve &rarr; fuse &rarr; rerank &rarr; generate.</strong> No orchestration code.</p><div class="look"><span class="look-label">The experiment</span><span>same model, same question &mdash; good retrieval vs deliberately bad retrieval.</span></div></section>
+
+<section class="slide cols" data-layout="concept"><div class="col-diagram">
+<div class="flow">
+  <div class="fnode plain"><span class="fk">Same hybrid query</span><span class="fs">FORK + FUSE</span></div>
+  <div class="farrow"></div>
+  <div class="fnode blue"><span class="fk">Agent Builder tool</span><span class="fs">search-workshop-docs-hybrid</span></div>
+  <div class="farrow"></div>
+  <div class="fnode plain"><span class="fk">Search the symptom</span></div>
+  <div class="farrow"></div>
+  <div class="fnode plain"><span class="fk">Search the fix</span></div>
+  <div class="farrow"></div>
+  <div class="fnode teal"><span class="fk">Cited answer</span></div>
+</div></div><div class="col-text"><p class="eyebrow">Lab 4 &middot; Brief</p><h2 class="slide-heading">Then hand it to an agent</h2><ul class="bul "><li>The same hybrid query becomes an <strong>Agent Builder tool</strong>.</li><li>A multi-hop agent: search the symptom &rarr; search the fix &rarr; cited answer.</li><li>In the <strong>Agent Builder</strong> tab: pick <strong>Anthropic Claude Sonnet 4.5</strong> in the model picker under the chat box.</li><li>Ask a two-part question. Watch for <strong>two</strong> <span class="chip">tool: search-workshop-docs-hybrid</span> chips.</li></ul></div></section>
+
+<section class="slide stack" data-layout="problem"><p class="eyebrow">Lab 4 &middot; Recap</p><h2 class="slide-heading">Lab 4 recap</h2>
+<div class="cmp">
+  <div class="cmp-card good"><span class="cmp-k">Good retrieval</span><span class="cmp-v">&rarr; great answer</span></div>
+  <div class="cmp-mid">Same<br>model</div>
+  <div class="cmp-card bad"><span class="cmp-k">Bad retrieval</span><span class="cmp-v">&rarr; &ldquo;I don&rsquo;t have enough information.&rdquo;</span></div>
+</div>
+<p class="big-line">The model never changed.</p>
+<p class="lead nomargin">One-shot RAG &rarr; hand-rolled loop &rarr; real agent: the framework is swappable. <strong>Retrieval quality is not.</strong></p>
+</section>
+
+<section class="slide cols" data-layout="concept"><div class="col-diagram narrow">
+<svg class="d16" viewBox="0 0 800 700" role="img" aria-label="Two-stage funnel: recall then precision">
+  <g font-family="Inter, system-ui, sans-serif">
+    <polygon points="0,0 800,0 640,260 160,260" fill="rgba(11,100,221,0.10)" stroke="#0B64DD" stroke-width="4"/>
+    <text x="400" y="62" text-anchor="middle" font-size="26" font-weight="700" fill="#0B64DD" style="font-family:var(--font-code)" letter-spacing="2">STAGE 1</text>
+    <text x="400" y="106" text-anchor="middle" font-size="38" font-weight="700" fill="#1C1E23">FORK + FUSE</text>
+    <text x="400" y="148" text-anchor="middle" font-size="34" fill="#343741">Recall</text>
+    <g fill="#ABB4C4">
+      <circle cx="250" cy="195" r="10"/><circle cx="295" cy="195" r="10"/><circle cx="340" cy="195" r="10"/><circle cx="385" cy="195" r="10"/><circle cx="430" cy="195" r="10"/><circle cx="475" cy="195" r="10"/><circle cx="520" cy="195" r="10"/><circle cx="565" cy="195" r="10"/>
+      <circle cx="272" cy="228" r="10"/><circle cx="317" cy="228" r="10"/><circle cx="362" cy="228" r="10"/><circle cx="407" cy="228" r="10"/><circle cx="452" cy="228" r="10"/><circle cx="497" cy="228" r="10"/><circle cx="542" cy="228" r="10"/>
+    </g>
+    <path d="M400,272 L400,330" stroke="#343741" stroke-width="5" fill="none"/>
+    <path d="M382,322 L400,346 L418,322 z" fill="#343741"/>
+    <text x="440" y="316" font-size="28" fill="#343741">top N</text>
+    <polygon points="250,360 550,360 490,600 310,600" fill="rgba(2,188,183,0.16)" stroke="#02BCB7" stroke-width="4"/>
+    <text x="400" y="408" text-anchor="middle" font-size="26" font-weight="700" fill="#006B68" style="font-family:var(--font-code)" letter-spacing="2">STAGE 2</text>
+    <text x="400" y="452" text-anchor="middle" font-size="38" font-weight="700" fill="#1C1E23">RERANK</text>
+    <text x="400" y="494" text-anchor="middle" font-size="34" fill="#343741">Precision</text>
+    <g fill="#02BCB7"><circle cx="360" cy="540" r="11"/><circle cx="400" cy="540" r="11"/><circle cx="440" cy="540" r="11"/></g>
+    <rect x="230" y="635" width="340" height="56" rx="10" fill="#101C3F"/>
+    <text x="400" y="672" text-anchor="middle" font-size="30" font-weight="700" fill="#fff">exact top result</text>
+    <path d="M400,602 L400,630" stroke="#343741" stroke-width="5" fill="none"/>
+  </g>
+</svg></div><div class="col-text"><p class="eyebrow">Bonus</p><h2 class="slide-heading">Reranking</h2><ul class="bul "><li>Stage 1 (FORK + FUSE) = <strong>recall</strong>. Stage 2 (RERANK) = <strong>precision</strong> on the top N.</li><li>Pointwise (<code>jina-reranker-v2</code>) scores each doc alone; listwise (<code>jina-reranker-v3</code>) compares candidates together.</li><li>Gotcha: <code>RERANK</code> rewrites <code>_score</code> but doesn&rsquo;t reorder &mdash; always <code>| SORT _score DESC</code> after it.</li><li>Worth the latency when the exact top result matters.</li></ul></div></section>
+
+<section class="slide stack" data-layout="done"><h2 class="slide-heading">Which retriever, when</h2>
+<table class="choose">
+  <thead><tr><th>Situation</th><th>Use</th></tr></thead>
+  <tbody>
+    <tr><td>Default for search / RAG / agent tools</td><td>Hybrid <strong>RRF</strong> (<code>FORK &hellip; | FUSE</code>)</td></tr>
+    <tr><td>Exact IDs, codes, config keys dominate</td><td>Make sure BM25 is in the mix</td></tr>
+    <tr><td>You&rsquo;ve measured weights on your data</td><td><code>FUSE LINEAR</code> &mdash; re-measure when things change</td></tr>
+    <tr><td>The #1 result must be right</td><td>Add <code>RERANK</code> on the top 20&ndash;50</td></tr>
+    <tr><td>Scope / multi-tenant</td><td>Filter inside every FORK branch (and real RBAC/DLS for security)</td></tr>
+  </tbody>
+</table></section>
+
+<section class="slide stack" data-layout="done"><h2 class="slide-heading">Take it home</h2><ul class="bul xl"><li><strong>Repo:</strong> <code>github.com/jeffvestal/elastic-vectorsearch-workshop</code> &mdash; corpus, ingest, notebooks, every query.</li><li>Try it on your own data: swap the index, keep the queries.</li><li><strong>Docs:</strong> ES|QL search (MATCH, FORK/FUSE, RERANK, COMPLETION) &middot; Agent Builder.</li><li>Questions? Find me at the booth.</li></ul><img class="elastic-logo" alt="Elastic" src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjgwIiBoZWlnaHQ9IjI4MCIgdmlld0JveD0iMCAwIDI4MCAyODAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxwYXRoIGQ9Ik0yMjAgMTQzLjQ5NEMyMjAuMDE0IDEzNy4wMDIgMjE4LjAyIDEzMC42NjQgMjE0LjI5MSAxMjUuMzQ4QzIxMC41NjMgMTIwLjAzMyAyMDUuMjgyIDExNiAxOTkuMTczIDExMy44MDJDMTk5LjczMSAxMTAuOTcgMjAwLjAxMiAxMDguMDkgMjAwLjAxNCAxMDUuMjA0QzIwMC4wMTYgOTUuNjQ2NiAxOTYuOTg5IDg2LjMzNDUgMTkxLjM2NyA3OC42MDZDMTg1Ljc0NCA3MC44Nzc0IDE3Ny44MTYgNjUuMTMwNCAxNjguNzIzIDYyLjE5MDhDMTU5LjYyOSA1OS4yNTExIDE0OS44MzcgNTkuMjcwMyAxNDAuNzU0IDYyLjI0NTZDMTMxLjY3MiA2NS4yMjA4IDEyMy43NjcgNzAuOTk4OSAxMTguMTc1IDc4Ljc0OTVDMTE0LjA1MSA3NS41NTUzIDEwOC45OTkgNzMuNzkxOSAxMDMuNzgzIDczLjcyNjRDOTguNTY2OSA3My42NjA5IDkzLjQ3MTkgNzUuMjk2OCA4OS4yNjkxIDc4LjM4NjRDODUuMDY2NCA4MS40NzYxIDgxLjk4NSA4NS44NTExIDgwLjQ5MTUgOTAuODQ5Qzc4Ljk5OCA5NS44NDY4IDc5LjE3MzggMTAxLjE5NSA4MC45OTI0IDEwNi4wODRDNzQuODY2NyAxMDguMzEzIDY5LjU3MSAxMTIuMzY1IDY1LjgxNzkgMTE3LjY5NUM2Mi4wNjQ3IDEyMy4wMjUgNjAuMDM0NCAxMjkuMzc2IDYwLjAwMDIgMTM1Ljg5NEM1OS45Nzk2IDE0Mi40MTMgNjEuOTgwNSAxNDguNzc4IDY1LjcyNzMgMTU0LjExM0M2OS40NzQxIDE1OS40NDcgNzQuNzgyNSAxNjMuNDg5IDgwLjkyMTYgMTY1LjY4MUM4MC4zODk2IDE2OC41MTQgODAuMTI2NCAxNzEuMzkgODAuMTM1NyAxNzQuMjcxQzgwLjExODYgMTgzLjgyNiA4My4xMzg5IDE5My4xMzkgODguNzYwMyAyMDAuODY2Qzk0LjM4MTggMjA4LjU5MiAxMDIuMzEzIDIxNC4zMzEgMTExLjQxIDIxNy4yNTVDMTIwLjUwNiAyMjAuMTc5IDEzMC4yOTcgMjIwLjEzNyAxMzkuMzY3IDIxNy4xMzNDMTQ4LjQzOCAyMTQuMTI5IDE1Ni4zMTkgMjA4LjMyIDE2MS44NzMgMjAwLjU0NUMxNjUuOTg0IDIwMy43NTMgMTcxLjAzIDIwNS41MzMgMTc2LjI0NSAyMDUuNjEzQzE4MS40NiAyMDUuNjkzIDE4Ni41NTggMjA0LjA3IDE5MC43NjcgMjAwLjk4OUMxOTQuOTc1IDE5Ny45MDkgMTk4LjA2NCAxOTMuNTQgMTk5LjU2NCAxODguNTQ1QzIwMS4wNjQgMTgzLjU1IDIwMC44OTQgMTc4LjIwMiAxOTkuMDc4IDE3My4zMTNDMjA1LjE5MiAxNzEuMDcyIDIxMC40NzQgMTY3LjAxMyAyMTQuMjEzIDE2MS42ODNDMjE3Ljk1MyAxNTYuMzUzIDIxOS45NzMgMTUwLjAwNiAyMjAgMTQzLjQ5NFpNMTIxLjk0NyA4My41NzUxQzEyNy4wOTkgNzYuMDgxNSAxMzQuNjc5IDcwLjU5NTEgMTQzLjQwNyA2OC4wNDJDMTUyLjEzNSA2NS40ODg5IDE2MS40NzcgNjYuMDI1NCAxNjkuODU1IDY5LjU2MTFDMTc4LjIzMyA3My4wOTY4IDE4NS4xMzUgNzkuNDE1IDE4OS4zOTUgODcuNDQ5MkMxOTMuNjU2IDk1LjQ4MzQgMTk1LjAxMyAxMDQuNzQxIDE5My4yMzkgMTEzLjY2MUwxNTcuOTE5IDE0NC41OTVMMTIyLjkwNiAxMjguNjRMMTE2LjA2OCAxMTQuMDQ2TDEyMS45NDcgODMuNTc1MVpNMTA0LjI0IDc5LjY0NTRDMTA4LjM5MiA3OS42NDQ2IDExMi40MyA4MS4wMDg4IDExNS43MzEgODMuNTI3OUwxMTAuNDMzIDExMC43OTJMODYuNDQ2NyAxMDUuMTI1Qzg1LjQwNjUgMTAyLjI2MSA4NS4wNzA3IDk5LjE4ODMgODUuNDY3NyA5Ni4xNjY4Qzg1Ljg2NDcgOTMuMTQ1MyA4Ni45ODI3IDkwLjI2MzcgODguNzI3NSA4Ny43NjUyQzkwLjQ3MjMgODUuMjY2NyA5Mi43OTI2IDgzLjIyNDcgOTUuNDkyNSA4MS44MTE0Qzk4LjE5MjUgODAuMzk4MiAxMDEuMTkzIDc5LjY1NTMgMTA0LjI0IDc5LjY0NTRaTTY2LjE4NTQgMTM1Ljk2NUM2Ni4yMjA3IDEzMC40MDMgNjcuOTkxMiAxMjQuOTkgNzEuMjQ5OSAxMjAuNDgxQzc0LjUwODYgMTE1Ljk3MyA3OS4wOTMxIDExMi41OTQgODQuMzY0IDExMC44MTVMMTEwLjY5MyAxMTcuMDMyTDExNi44NyAxMzAuMjQ0TDgzLjIwODcgMTYwLjY5MUM3OC4yMDAyIDE1OC43NzkgNzMuODkwNCAxNTUuMzkyIDcwLjg1MDQgMTUwLjk3NkM2Ny44MTA0IDE0Ni41NjEgNjYuMTgzNiAxNDEuMzI2IDY2LjE4NTQgMTM1Ljk2NVpNMTU4LjIxIDE5NS44NDVDMTUzLjQ1NCAyMDIuODQ4IDE0Ni41NzcgMjA4LjE0IDEzOC41OTEgMjEwLjk0NkMxMzAuNjA0IDIxMy43NTEgMTIxLjkyOCAyMTMuOTIxIDExMy44MzggMjExLjQzMkMxMDUuNzQ3IDIwOC45NDIgOTguNjY4MSAyMDMuOTI0IDkzLjY0MDQgMTk3LjExNEM4OC42MTI3IDE5MC4zMDMgODUuOTAxMyAxODIuMDYxIDg1LjkwNDQgMTczLjU5NkM4NS45MDgxIDE3MC45NTYgODYuMTcxNCAxNjguMzI0IDg2LjY5MDQgMTY1LjczNkwxMjEuMTE0IDEzNC41ODJMMTU2LjI2MSAxNTAuNTk5TDE2NC4wNDIgMTY1LjQ2OUwxNTguMjEgMTk1Ljg0NVpNMTc1Ljc5OSAxOTkuNzc1QzE3MS42NTkgMTk5Ljc2MSAxNjcuNjM5IDE5OC4zNzkgMTY0LjM2NCAxOTUuODQ1TDE2OS41ODIgMTY4LjY2OEwxOTMuNTUzIDE3NC4yNzFDMTk0LjU5NiAxNzcuMTMzIDE5NC45MzUgMTgwLjIwNCAxOTQuNTQxIDE4My4yMjRDMTk0LjE0OCAxODYuMjQ0IDE5My4wMzQgMTg5LjEyNSAxOTEuMjkzIDE5MS42MjRDMTg5LjU1MiAxOTQuMTI0IDE4Ny4yMzYgMTk2LjE2NyAxODQuNTM5IDE5Ny41ODNDMTgxLjg0MyAxOTguOTk5IDE3OC44NDUgMTk5Ljc0NSAxNzUuNzk5IDE5OS43NTlWMTk5Ljc3NVpNMTk1LjYzNiAxNjguNTY2TDE2OS4yNDUgMTYyLjM5NkwxNjIuMjM0IDE0OS4wMzVMMTk2Ljc1MiAxMTguNzkzQzIwMS43NjUgMTIwLjY4OCAyMDYuMDgyIDEyNC4wNjQgMjA5LjEzIDEyOC40NzJDMjEyLjE3OCAxMzIuODggMjEzLjgxMiAxMzguMTEyIDIxMy44MTUgMTQzLjQ3MUMyMTMuNzY1IDE0OS4wMjEgMjExLjk4NyAxNTQuNDE5IDIwOC43MyAxNTguOTEzQzIwNS40NzIgMTYzLjQwNyAyMDAuODk2IDE2Ni43NzYgMTk1LjYzNiAxNjguNTVWMTY4LjU2NloiIGZpbGw9IndoaXRlIj48L3BhdGg+Cjwvc3ZnPg=="/></section>
+
+<section class="slide stack" data-layout="problem"><p class="eyebrow">Backup slide</p><h2 class="slide-heading">Troubleshooting</h2><ul class="trouble"><li><span class="sym">Discover shows a classic KQL bar</span><span class="arr">&rarr;</span><span class="fix">switch the query language to <strong>ES|QL</strong>.</span></li><li><span class="sym">Query error near <code>--</code></span><span class="arr">&rarr;</span><span class="fix">ES|QL comments are <code>//</code>.</span></li><li><span class="sym">Agent did only one search</span><span class="arr">&rarr;</span><span class="fix"><strong>New chat</strong>, check model = Claude Sonnet 4.5, ask again.</span></li><li><span class="sym">Notebook cell failed</span><span class="arr">&rarr;</span><span class="fix">re-run the <strong>setup cell</strong> at the top, then continue.</span></li><li><span class="sym">Lab 4 Discover peek spins for a while</span><span class="arr">&rarr;</span><span class="fix">expected: reranker + LLM call.</span></li></ul></section>
+
+</div>
+
+<div id="nav-bar">
+  <button id="btn-prev" aria-label="Previous slide">&#8592; Prev</button>
+  <span id="slide-counter">1 / 19</span>
+  <button id="btn-overview" aria-label="Overview">Overview</button>
+  <button id="btn-next" aria-label="Next slide">Next &#8594;</button>
+</div>
+<div id="overview" role="dialog" aria-label="Slide overview"></div>
+<script>
+(function () {
+  'use strict';
+  var slides, current = 0;
+  function $(id) { return document.getElementById(id); }
+  function init() {
+    slides = Array.prototype.slice.call(document.querySelectorAll('.deck > section.slide'));
+    var h = parseInt(window.location.hash.replace('#/', ''), 10);
+    buildOverview();
+    goTo(isNaN(h) ? 0 : h - 1);
+    document.addEventListener('keydown', onKey);
+    $('btn-prev').addEventListener('click', prev);
+    $('btn-next').addEventListener('click', next);
+    $('btn-overview').addEventListener('click', toggleOverview);
+  }
+  function goTo(i) {
+    current = Math.max(0, Math.min(i, slides.length - 1));
+    slides.forEach(function (s, k) { s.classList.toggle('active', k === current); });
+    $('btn-prev').disabled = current === 0;
+    $('btn-next').disabled = current === slides.length - 1;
+    $('slide-counter').textContent = (current + 1) + ' / ' + slides.length;
+    try { history.replaceState(null, '', '#/' + (current + 1)); } catch (e) {}
+    Array.prototype.forEach.call(document.querySelectorAll('.overview-thumb'), function (t, k) { t.classList.toggle('current', k === current); });
+  }
+  function next() { goTo(current + 1); }
+  function prev() { goTo(current - 1); }
+  function onKey(e) {
+    if (e.ctrlKey || e.metaKey || e.altKey) return;
+    if ($('overview').classList.contains('open')) { if (e.key === 'Escape' || e.key === 'o') closeOverview(); return; }
+    switch (e.key) {
+      case 'ArrowRight': case 'ArrowDown': case 'PageDown': case ' ': e.preventDefault(); next(); break;
+      case 'ArrowLeft': case 'ArrowUp': case 'PageUp': e.preventDefault(); prev(); break;
+      case 'Home': e.preventDefault(); goTo(0); break;
+      case 'End': e.preventDefault(); goTo(slides.length - 1); break;
+      case 'o': toggleOverview(); break;
+    }
+  }
+  function buildOverview() {
+    var grid = $('overview');
+    slides.forEach(function (slide, i) {
+      var t = document.createElement('div'); t.className = 'overview-thumb';
+      var n = document.createElement('div'); n.className = 'overview-num'; n.textContent = i + 1;
+      var h = slide.querySelector('.slide-title, .slide-heading, .thesis');
+      var l = document.createElement('div'); l.textContent = h ? h.textContent.slice(0, 60) : '';
+      t.appendChild(n); t.appendChild(l);
+      t.addEventListener('click', function () { goTo(i); closeOverview(); });
+      grid.appendChild(t);
+    });
+  }
+  function toggleOverview() { $('overview').classList.toggle('open'); }
+  function closeOverview() { $('overview').classList.remove('open'); }
+  document.addEventListener('DOMContentLoaded', init);
+}());
+</script>
+</body>
+</html>
