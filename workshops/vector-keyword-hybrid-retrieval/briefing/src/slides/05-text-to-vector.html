@@ -1,0 +1,516 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=1280" />
+  <title>From text to vector embedding</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+  <script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.168.0/build/three.module.min.js"}}</script>
+  <style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html,body{width:1280px;height:720px;overflow:hidden;-webkit-font-smoothing:antialiased;}
+body{background:#0a0e16;font-family:"Inter",sans-serif;color:#fff;position:relative;}
+body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+  background-image:radial-gradient(ellipse 900px 600px at 50% 40%,rgba(0,191,179,.07) 0%,transparent 70%),radial-gradient(rgba(255,255,255,.025) 1px,transparent 1px);
+  background-size:auto,32px 32px;}
+@keyframes fade-up{from{opacity:0;transform:translateY(14px);}to{opacity:1;transform:none;}}
+@keyframes pop{from{opacity:0;transform:scale(.9);}to{opacity:1;transform:none;}}
+@keyframes pulse-ring{0%,100%{box-shadow:0 0 0 0 rgba(0,191,179,.55);}50%{box-shadow:0 0 0 9px rgba(0,191,179,0);}}
+.slide{width:1280px;height:720px;position:relative;z-index:1;padding:34px 50px 62px;display:flex;flex-direction:column;}
+h1{font-size:30px;font-weight:900;letter-spacing:-.03em;line-height:1.1;margin-top:7px;opacity:0;animation:fade-up .5s ease forwards .14s;}
+h1 em{font-style:normal;color:#6fe9da;}
+.sub{font-size:18px;color:rgba(255,255,255,.52);margin-top:6px;font-weight:400;opacity:0;animation:fade-up .5s ease forwards .22s;}
+.mono{font-family:"JetBrains Mono",monospace;}
+.lbl{font-family:"JetBrains Mono",monospace;font-size:13px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.4);}
+code,.code{font-family:"JetBrains Mono",monospace;}
+.btn{font-family:"Inter",sans-serif;font-size:17px;font-weight:800;color:#6fe9da;cursor:pointer;
+  background:linear-gradient(135deg,rgba(0,191,179,.22),rgba(0,191,179,.08));border:1.5px solid rgba(0,191,179,.6);
+  border-radius:999px;padding:10px 24px;transition:background .15s,box-shadow .15s,transform .08s,opacity .2s,border-color .2s;white-space:nowrap;}
+.btn:hover{background:rgba(0,191,179,.3);box-shadow:0 0 18px rgba(0,191,179,.35);}
+.btn:active{transform:scale(.97);}
+.btn.next{animation:pulse-ring 1.8s ease-in-out infinite;}
+.btn.done{opacity:.6;animation:none;}
+.btn.y{color:#fec514;background:linear-gradient(135deg,rgba(254,197,20,.2),rgba(254,197,20,.06));border-color:rgba(254,197,20,.6);}
+.btn.y:hover{background:rgba(254,197,20,.28);box-shadow:0 0 18px rgba(254,197,20,.3);}
+.btn.p{color:#ef5098;background:linear-gradient(135deg,rgba(239,80,152,.2),rgba(239,80,152,.06));border-color:rgba(239,80,152,.6);}
+.btn.p:hover{background:rgba(239,80,152,.28);box-shadow:0 0 18px rgba(239,80,152,.3);}
+.btn[disabled]{opacity:.3;pointer-events:none;}
+.replay-btn{position:absolute;top:44px;right:50px;font-size:22px;cursor:pointer;opacity:.4;transition:opacity .2s,transform .25s;user-select:none;z-index:100;background:none;border:none;color:#fff;line-height:1;}
+.replay-btn:hover{opacity:1;transform:rotate(-30deg) scale(1.2);}
+.elastic-logo{position:absolute;bottom:22px;left:50px;display:flex;align-items:center;gap:8px;opacity:0;animation:fade-up .5s ease forwards .5s;z-index:2;}
+.elastic-logo .name{font-weight:600;font-size:16px;color:rgba(255,255,255,.88);}
+.panel{border-radius:14px;background:rgba(255,255,255,.028);border:1px solid rgba(255,255,255,.08);position:relative;}
+.hide{opacity:0;pointer-events:none;}
+
+.slide{padding:34px 50px 58px}
+.content{flex:1;display:flex;gap:16px;margin-top:8px;min-height:0}
+.left-col{width:500px;flex-shrink:0;display:flex;flex-direction:column;gap:5px}
+.right-col{flex:1;display:flex;flex-direction:column;gap:5px;min-width:0}
+.col-hdr{font-family:"JetBrains Mono",monospace;font-size:13px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.42);text-align:center;height:17px}
+.left-panel{flex:1;min-height:0;position:relative;overflow:hidden;border:1px solid rgba(255,255,255,.07);border-radius:14px;background:rgba(255,255,255,.018)}
+.stage{position:absolute;inset:0;padding:12px 14px 12px;display:flex;flex-direction:column;align-items:center;opacity:0;pointer-events:none;transition:opacity .4s ease}
+.stage.active{opacity:1;pointer-events:all}
+#gridStage{justify-content:flex-start;gap:8px}
+.grid-label{font-family:"JetBrains Mono",monospace;font-size:13px;font-weight:600;letter-spacing:.15em;text-transform:uppercase;color:rgba(255,255,255,.4);text-align:center;transition:opacity .2s}
+.doc-grid{display:grid;grid-template-columns:repeat(3,1fr);grid-auto-rows:19px;gap:3px 5px;width:100%;position:relative}
+.doc-chip{height:19px;border-radius:6px;border:1px solid;padding:0 7px;font-size:13px;font-weight:500;line-height:17px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;transition:transform .75s cubic-bezier(.4,0,.2,1),opacity .65s ease;color:rgba(255,255,255,.88)}
+.vectorize-btn{margin-top:auto;font-size:17px;padding:10px 24px}
+#funnelStage{justify-content:center;gap:9px}
+.stack-preview{position:relative;width:56px;height:48px;flex-shrink:0}
+.stack-card{position:absolute;width:48px;height:34px;border-radius:6px;border:1px solid rgba(255,255,255,.18);background:rgba(255,255,255,.08)}
+.stack-card:nth-child(1){top:12px;left:8px;opacity:.5}.stack-card:nth-child(2){top:6px;left:4px;opacity:.75}.stack-card:nth-child(3){top:0;left:0}
+.funnel-arrow{color:rgba(255,255,255,.3);font-size:22px;line-height:1}
+.model-box{width:100%;background:linear-gradient(135deg,rgba(0,191,179,.16),rgba(0,191,179,.05));border:1.5px solid rgba(0,191,179,.5);border-radius:12px;padding:12px 16px;text-align:center}
+.model-name{font-size:18px;font-weight:800;letter-spacing:.03em;text-transform:uppercase;color:#6fe9da}
+.model-sub{font-size:13px;font-weight:500;color:rgba(111,233,218,.7);margin-top:3px;font-family:"JetBrains Mono",monospace}
+.model-sub2{font-size:15px;color:rgba(255,255,255,.55);margin-top:5px}
+.vec-strip{width:100%;background:rgba(0,0,0,.45);border:1px solid rgba(0,191,179,.22);border-radius:8px;padding:9px 12px;font-family:"JetBrains Mono",monospace;height:128px;overflow:hidden}
+.vec-hdr{font-size:13px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.38);margin-bottom:5px}
+.vrow{display:flex;align-items:center;gap:8px;height:21px;opacity:0;transform:translateY(3px);transition:opacity .25s,transform .25s;white-space:nowrap}
+.vrow.visible{opacity:1;transform:none}
+.vrow .vn{font-family:"Inter",sans-serif;font-size:13px;font-weight:600;width:150px;overflow:hidden;text-overflow:ellipsis;flex-shrink:0}
+.vrow .cells{display:flex;align-items:center;gap:2px;height:16px}
+.vrow .cells i{display:block;width:5px;border-radius:2px}
+.vrow .dm{color:rgba(255,255,255,.35);font-size:13px}
+.progress-line{font-family:"JetBrains Mono",monospace;font-size:15px;color:rgba(255,255,255,.45);text-align:center}
+.progress-line b{color:#6fe9da;font-weight:700}
+#searchTrigger{margin-top:4px;font-size:16px;padding:10px 18px;opacity:0;pointer-events:none;transition:opacity .4s,box-shadow .15s,background .15s}
+#searchTrigger.show{opacity:1;pointer-events:all;animation:pulse-ring 1.8s ease-in-out infinite}
+#searchStage{justify-content:flex-start;gap:12px;padding-top:16px}
+.search-bar-wrap{display:flex;gap:8px;width:100%}
+.search-bar{flex:1;background:rgba(255,255,255,.06);border:1.5px solid rgba(255,255,255,.2);border-radius:10px;padding:0 14px;font-size:17px;font-weight:500;min-height:48px;display:flex;align-items:center}
+.cursor{display:inline-block;width:2px;height:1.1em;background:#39ff14;margin-left:1px;animation:cursor-blink .7s step-end infinite}
+@keyframes cursor-blink{0%,100%{opacity:1}50%{opacity:0}}
+.go-btn{background:#00bfb3;border:none;border-radius:10px;padding:0 14px;font-family:"Inter",sans-serif;font-size:17px;font-weight:800;color:#04110f}
+.go-btn.clicked{background:#6fe9da;transform:scale(.95)}
+.model-badge{display:flex;align-items:center;gap:12px;background:rgba(0,191,179,.08);border:1px solid rgba(0,191,179,.3);border-radius:10px;padding:9px 14px;width:100%}
+.badge-title{font-size:16px;font-weight:700;color:#6fe9da}
+.badge-sub{font-size:13px;color:rgba(255,255,255,.45);font-family:"JetBrains Mono",monospace;margin-top:1px}
+.res{width:100%;display:flex;flex-direction:column;gap:6px;visibility:hidden}
+.res.show{visibility:visible}
+.res-hdr{font-family:"JetBrains Mono",monospace;font-size:13px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.42)}
+.res-row{display:flex;align-items:center;gap:12px;padding:5px 12px;border-radius:9px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.035);opacity:0;transform:translateX(-8px);transition:all .4s ease}
+.res-row.show{opacity:1;transform:none}
+.res-note{font-size:16px;color:rgba(255,255,255,.5);margin-top:6px}
+.res-row .rk{width:26px;height:26px;border-radius:50%;background:#39ff14;color:#000;font-weight:900;font-size:15px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.res-row .rt{flex:1;font-size:18px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.res-row .rc{font-family:"JetBrains Mono",monospace;font-size:18px;font-weight:700;color:#39ff14}
+.res-row .dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.viz-panel{flex:1;min-height:0;position:relative;overflow:hidden;border:1px solid rgba(255,255,255,.07);border-radius:14px;background:rgba(0,0,0,.28)}
+#canvas3d{width:100%;height:100%;display:block;cursor:grab}
+.tooltip{position:absolute;pointer-events:none;background:rgba(8,12,24,.96);border:1px solid rgba(255,255,255,.18);border-radius:10px;padding:7px 11px;z-index:10;opacity:0;transition:opacity .12s;transform:translate(-50%,-130%)}
+.tooltip.show{opacity:1}
+.tip-name{font-size:15px;font-weight:700;white-space:nowrap}
+.tip-cat{font-family:"JetBrains Mono",monospace;font-size:13px;margin-top:1px}
+.legend{position:absolute;top:12px;right:14px;display:flex;flex-direction:column;gap:3px;opacity:0;transition:opacity .5s;background:rgba(8,12,22,.6);padding:8px 12px;border-radius:10px;border:1px solid rgba(255,255,255,.07)}
+.legend.show{opacity:1}
+.leg-item{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:600;color:rgba(255,255,255,.75)}
+.leg-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.hintc{position:absolute;left:0;right:0;top:44%;text-align:center;font-size:19px;color:rgba(255,255,255,.4);pointer-events:none;transition:opacity .5s}
+.cap{position:absolute;left:18px;bottom:12px;max-width:560px;font-size:18px;line-height:1.35;color:rgba(255,255,255,.86);text-shadow:0 0 12px #000,0 0 6px #000;pointer-events:none}
+.cap b{color:#6fe9da;font-weight:700}
+.cap code{font-size:16px;color:#39ff14}
+.lab{position:absolute;display:flex;align-items:center;gap:5px;z-index:20;pointer-events:none;transform:translate(-50%,-50%) scale(0);animation:pop-in .32s cubic-bezier(.34,1.56,.64,1) forwards;background:rgba(5,10,5,.82);border:1px solid #39ff14;border-radius:999px;padding:1px 8px 1px 2px;font-family:"JetBrains Mono",monospace;font-size:13px;font-weight:700;color:#39ff14}
+.lab i{font-style:normal;width:20px;height:20px;border-radius:50%;background:#39ff14;color:#000;font-family:"Inter",sans-serif;font-weight:900;font-size:13px;display:flex;align-items:center;justify-content:center}
+@keyframes pop-in{from{transform:translate(-50%,-50%) scale(0);opacity:0}to{transform:translate(-50%,-50%) scale(1);opacity:1}}
+.axl{position:absolute;font-family:"JetBrains Mono",monospace;font-size:13px;font-weight:700;pointer-events:none;z-index:5;opacity:.6}
+.fly-pill{position:fixed;font-family:"JetBrains Mono",monospace;font-size:14px;font-weight:600;color:#39ff14;padding:5px 12px;background:rgba(57,255,20,.1);border:1px solid rgba(57,255,20,.35);border-radius:999px;pointer-events:none;z-index:200;white-space:nowrap;transition:left .7s cubic-bezier(.4,0,.2,1),top .7s cubic-bezier(.4,0,.2,1),opacity .7s,transform .7s}
+</style>
+</head>
+<body>
+<div class="slide">
+  <h1 id="h1">From <em>text</em> to vector embedding</h1>
+  <div class="content">
+    <div class="left-col">
+      <div class="col-hdr" id="lhdr">Data &amp; ingestion</div>
+      <div class="left-panel">
+        <div id="gridStage" class="stage active">
+          <div class="grid-label">62 docs in the index</div>
+          <div class="doc-grid" id="docGrid"></div>
+          <button id="vectorizeBtn" class="btn vectorize-btn next">⚡ Embed &amp; ingest 62 docs</button>
+        </div>
+        <div id="funnelStage" class="stage">
+          <div class="stack-preview"><div class="stack-card"></div><div class="stack-card"></div><div class="stack-card"></div></div>
+          <div class="funnel-arrow">↓</div>
+          <div class="model-box">
+            <div class="model-name">Jina v5 · on EIS</div>
+            <div class="model-sub">.jina-embeddings-v5-text-small</div>
+            <div class="model-sub2">text in &rarr; 1,024 numbers out</div>
+          </div>
+          <div class="funnel-arrow">↓</div>
+          <div class="vec-strip"><div class="vec-hdr">vectors &rarr; 3D space</div><div id="vecRows"></div></div>
+          <div class="progress-line"><b id="vecCount">0</b> / 62 docs embedded</div>
+          <button id="searchTrigger" class="btn">🔎 Search: notify me when something goes wrong</button>
+        </div>
+        <div id="searchStage" class="stage">
+          <div class="grid-label">Search query</div>
+          <div class="search-bar-wrap"><div class="search-bar" id="searchBarText"><span class="cursor"></span></div><button class="go-btn" id="goBtnEl">Search</button></div>
+          <div class="model-badge"><div style="font-size:22px">⚡</div><div><div class="badge-title">Same model embeds the query</div><div class="badge-sub">1,024 numbers, same space</div></div></div>
+          <div class="res" id="res"><div class="res-hdr">5 nearest docs &middot; cosine</div><div id="resRows" style="display:flex;flex-direction:column;gap:6px"></div><div class="res-note">Cosine: 1.0 = same direction. Elasticsearch reports <code>_score</code> = (1 + cosine) ÷ 2, so 0.51 here shows up as ~0.75.</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="right-col">
+      <div class="col-hdr">3D simplification (PCA) of the real 1,024-d vectors</div>
+      <div class="viz-panel" id="vizPanel">
+        <canvas id="canvas3d"></canvas>
+        <div class="hintc" id="hintc">Click &ldquo;Embed &amp; ingest&rdquo; to place the docs in vector space</div>
+        <div class="tooltip" id="tooltip"><div class="tip-name" id="tipName"></div><div class="tip-cat" id="tipCat"></div></div>
+        <div class="legend" id="legend"></div>
+        <div class="cap">Jina v5 turns text into <b>1,024 numbers</b>. Close in space = close in meaning. Vector <code>_score</code> = how close (cosine).</div>
+      </div>
+    </div>
+  </div>
+  <button class="replay-btn" id="replayBtn" title="Restart">🔁</button>
+</div>
+<div class="elastic-logo"><svg width="24" height="24" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" aria-label="Elastic"><path d="M32 16.77c0-2.678-1.664-5.03-4.166-5.937a9.14 9.14 0 0 0 .162-1.718c0-5-4.057-9.048-9.035-9.048-2.92 0-5.626 1.393-7.33 3.746a4.78 4.78 0 0 0-2.935-1c-2.65 0-4.8 2.15-4.8 4.8 0 .582.108 1.15.298 1.677A6.36 6.36 0 0 0 0 15.243a6.31 6.31 0 0 0 4.179 5.951 9.02 9.02 0 0 0-.162 1.718 9.03 9.03 0 0 0 9.021 9.021c2.92 0 5.626-1.407 7.317-3.76.84.663 1.866 1.028 2.935 1.028 2.65 0 4.8-2.15 4.8-4.8 0-.582-.108-1.15-.298-1.677A6.37 6.37 0 0 0 32 16.771" fill="#fff"/><path d="M12.578 13.795l7.006 3.192 7.06-6.194a7.4 7.4 0 0 0 .149-1.555 7.91 7.91 0 0 0-7.899-7.899 7.89 7.89 0 0 0-6.505 3.435l-1.177 6.1z" fill="#fed10a"/><path d="M5.33 21.207a7.66 7.66 0 0 0-.15 1.582c0 4.37 3.557 7.912 7.926 7.912a7.92 7.92 0 0 0 6.546-3.462l1.163-6.073-1.555-2.975-7.033-3.205z" fill="#24bbb1"/><path d="M5.288 9.09l4.8 1.136 1.055-5.45c-.65-.5-1.46-.77-2.3-.77A3.79 3.79 0 0 0 5.058 7.79c0 .446.08.893.23 1.298" fill="#ef5098"/><path d="M4.87 10.238c-2.137.703-3.638 2.76-3.638 5.018 0 2.205 1.366 4.166 3.408 4.95l6.735-6.086-1.23-2.637z" fill="#17a8e0"/><path d="M20.87 27.24a3.8 3.8 0 0 0 2.286.784 3.79 3.79 0 0 0 3.787-3.787 3.82 3.82 0 0 0-.23-1.312l-4.788-1.123z" fill="#93c83e"/><path d="M21.843 20.544l5.275 1.23a5.33 5.33 0 0 0 3.638-5.031 5.29 5.29 0 0 0-3.408-4.937l-6.898 6.046z" fill="#0779a1"/></svg><span class="name">elastic</span></div>
+<script type="module">
+import * as THREE from 'three';
+const DOCS=[["doc-001","SAML troubleshooting","SAML authentication troubleshooting",2,[-0.7443,0.7494,-0.3566],"SAML authentication troubleshooting"],["doc-002","Authz & role mapping","Troubleshoot authorization errors and role mapping",2,[-0.6937,0.8584,0.1133],"Troubleshoot authorization errors and role mapping"],["doc-003","Password setup fails","Diagnose password setup and connection failures",2,[-0.8802,0.7231,0.336],"Diagnose password setup and connection failures"],["doc-004","AD account lockout","Troubleshoot Active Directory account lockout",2,[-0.881,0.6504,-0.0249],"Troubleshoot Active Directory account lockout"],["doc-005","LDAP authentication","LDAP user authentication",2,[-0.6703,1.0,0.252],"LDAP user authentication"],["doc-006","Breaking changes","Elasticsearch breaking changes",5,[-0.385,0.2852,0.7763],"Breaking changes"],["doc-007","JVM settings","JVM settings for Elasticsearch",5,[-0.4477,-0.1639,0.6672],"JVM settings for Elasticsearch"],["doc-008","Shard allocation","Cluster-level shard allocation and routing settings",1,[-0.3397,-0.4616,0.868],"Cluster-level shard allocation and routing settings"],["doc-009","Self-managed security","Set up security in self-managed Elasticsearch deployments",2,[-0.7193,0.6087,0.7091],"Set up security in self-managed Elasticsearch deployments"],["doc-010","TLS for the cluster","TLS encryption for cluster communications",2,[-0.6299,0.5327,0.6636],"TLS encryption for cluster communications"],["doc-011","Dense vector field","Dense vector field type",4,[0.7804,0.0181,-0.1164],"Dense vector field type"],["doc-012","semantic_text field","Semantic text field type reference",4,[0.8822,0.3619,0.261],"Semantic text field type reference"],["doc-013","Hybrid search","Hybrid search in Elasticsearch",4,[0.7489,0.483,0.272],"Hybrid search"],["doc-014","Retrievers","Retrievers in Elasticsearch",4,[0.8257,0.4226,0.2482],"Retrievers"],["doc-015","Linear retriever","Linear retriever",4,[0.7283,0.2116,-0.3127],"Linear retriever"],["doc-016","semantic_text tutorial","Semantic search with semantic_text tutorial",5,[0.561,0.4293,0.477],"Semantic search with semantic_text tutorial"],["doc-017","ILM overview","Index lifecycle management overview",0,[-0.0449,-0.5504,0.3576],"Index lifecycle management overview"],["doc-018","Create an ILM policy","Create an ILM policy in Elasticsearch",0,[-0.156,-0.4182,0.636],"Create an ILM policy"],["doc-019","Ingest pipelines","Ingest pipelines in Elasticsearch",5,[0.1741,0.1745,0.2547],"Ingest pipelines"],["doc-020","Node roles","Node roles in Elasticsearch",1,[-0.3536,-0.2497,0.6622],"Node roles"],["doc-021","Cluster health","Red or yellow cluster health status troubleshooting",1,[-0.6077,-0.3632,0.4667],"Red or yellow cluster health status troubleshooting"],["doc-022","Data streams","Data streams in Elasticsearch",0,[0.1467,-0.1908,0.6565],"Data streams"],["doc-023","Upgrade","Upgrade Elasticsearch",5,[-0.5398,-0.084,0.7843],"Upgrade Elasticsearch"],["doc-024","Kibana auth","Authentication in Kibana",2,[-0.4843,0.8892,0.1867],"Authentication in Kibana"],["doc-025","Snapshot troubleshoot","Troubleshoot snapshot and restore in Elasticsearch",1,[-0.6025,-0.1461,0.4581],"Troubleshoot snapshot and restore"],["doc-026","kNN vector search","Vector search with kNN in Elasticsearch",4,[0.6408,0.3164,0.4813],"Vector search with kNN"],["doc-027","Inference API","Elasticsearch Inference API overview",5,[0.4938,0.2963,0.446],"Inference API overview"],["doc-028","High JVM pressure","High JVM memory pressure troubleshooting",6,[-0.3176,-0.3349,0.5625],"High JVM memory pressure troubleshooting"],["doc-029","Mapping overview","Elasticsearch mapping overview",5,[0.5438,0.3076,0.5457],"Mapping overview"],["doc-030","Text field type","Text field type in Elasticsearch",4,[0.7323,0.4631,0.3649],"Text field type"],["doc-031","Query DSL overview","Elasticsearch query DSL overview",4,[0.6841,0.4343,0.4343],"Query DSL overview"],["doc-032","Cross-cluster search","Elasticsearch cross-cluster search",5,[0.0021,0.2866,0.6604],"Cross-cluster search"],["doc-033","Aggregations","Elasticsearch aggregations overview",3,[0.5999,0.0648,0.3989],"Aggregations overview"],["doc-034","Keyword field type","Keyword field type in Elasticsearch",4,[0.6964,0.3183,0.2344],"Keyword field type"],["doc-035","REST conventions","Elasticsearch REST API conventions",5,[0.1351,0.2408,0.6983],"REST API conventions"],["doc-036","Index settings","Elasticsearch index settings",5,[0.0819,-0.1362,1.0],"Index settings"],["doc-037","Snapshot & restore","Elasticsearch snapshot and restore overview",0,[-0.1269,-0.2228,0.8379],"Snapshot and restore overview"],["doc-038","Security overview","Elasticsearch security overview",2,[-0.4376,0.7096,0.5337],"Security overview"],["doc-039","Deployment config","Elasticsearch deployment configuration guide",5,[-0.4545,0.0129,0.9559],"Deployment configuration guide"],["doc-040","Painless scripting","Elasticsearch scripting with Painless",5,[0.4077,0.2667,0.2982],"Scripting with Painless"],["doc-041","Data tiers","Elasticsearch data tiers",0,[-0.057,-0.4476,0.7427],"Data tiers"],["doc-042","Circuit breakers","Elasticsearch circuit breaker settings",6,[-0.2467,-0.3341,0.3908],"Circuit breaker settings"],["doc-043","Cat APIs overview","Elasticsearch cat APIs overview",5,[0.0488,-0.2364,0.6543],"Cat APIs overview"],["doc-044","Inference Service","Elasticsearch Elastic Inference Service (EIS)",5,[0.2529,0.2644,0.5938],"Elastic Inference Service (EIS)"],["doc-045","Aliases","Elasticsearch aliases",0,[0.1268,-0.0432,0.7387],"Aliases"],["doc-046","ML model deploy","Elasticsearch ML model deployment",5,[0.1843,0.2247,0.5387],"ML model deployment"],["doc-047","Index templates","Elasticsearch index templates",0,[0.108,-0.015,0.7851],"Index templates"],["doc-048","Transforms","Elasticsearch transforms",3,[0.2441,-0.1016,0.4351],"Transforms"],["doc-049","Watcher alerting","Elasticsearch Watcher alerting",5,[-0.1527,0.025,0.3666],"Watcher alerting"],["doc-050","ES|QL","Elasticsearch ES|QL query language",5,[0.4332,0.1771,0.5657],"ES|QL query language"],["doc-051","Reindexing","Elasticsearch reindexing",0,[0.1524,-0.0974,0.859],"Reindexing"],["doc-052","Discover & dashboards","Elasticsearch Kibana Discover and dashboards",5,[0.2564,0.2774,0.4528],"Kibana Discover and dashboards"],["doc-053","Vector storage","Elasticsearch vector storage optimization",4,[0.4924,-0.0924,0.4225],"Vector storage optimization"],["doc-054","Enrich policies","Elasticsearch enrich policies",0,[0.3432,0.2587,0.3999],"Enrich policies"],["doc-055","Cluster mgmt","Elasticsearch cluster management best practices",5,[-0.5225,-0.2475,0.9498],"Cluster management best practices"],["doc-056","9.x what’s new","Elasticsearch 9.x what's new overview",5,[-0.106,0.1815,0.7492],"9.x what's new overview"],["doc-057","8.18 release notes","Elasticsearch 8.18 release notes",5,[-0.2039,0.2793,0.5987],"8.18 release notes"],["doc-058","8.15 release notes","Elasticsearch 8.15 release notes",5,[0.173,0.3752,0.5667],"8.15 release notes"],["doc-059","Relevance tuning","Elasticsearch relevance tuning and explain API",4,[0.4022,0.6091,0.066],"Relevance tuning and explain API"],["doc-060","Search after","Elasticsearch search after and pagination",5,[0.4214,0.1118,0.6786],"Search after and pagination"],["doc-061","Container exit codes","Container exit codes when a process is killed (OOM and signals)",6,[-0.5158,-0.4619,-0.7801],"Container exit codes when a process is killed (OOM and signals)"],["doc-062","App crashes","Troubleshooting application crashes and restarts",6,[-0.7345,-0.4877,-0.6578],"Troubleshooting application crashes and restarts"]];const CL=[["Data lifecycle","#fec514"],["Cluster ops","#3aa0ff"],["Security & auth","#ef5098"],["Analytics","#a78bfa"],["Search & vectors","#6fe9da"],["Config & versions","#ff9f43"],["Memory & crashes","#ff5a5f"]];const QUERY="notify me when something goes wrong";const QXYZ=[-0.4026,-0.1519,-0.7372];const HITS=[[48,0.5102],[61,0.3163],[18,0.3003],[20,0.2995],[41,0.2846]];
+const $=id=>document.getElementById(id);
+const hex=c=>parseInt(c.slice(1),16);
+const vizPanel=$('vizPanel'), canvas3d=$('canvas3d');
+let CW,CH; function measure(){const r=vizPanel.getBoundingClientRect();CW=r.width;CH=r.height;} measure();
+const renderer=new THREE.WebGLRenderer({canvas:canvas3d,antialias:true,alpha:true});
+renderer.setPixelRatio(window.devicePixelRatio||1); renderer.setClearColor(0,0); renderer.setSize(CW,CH);
+const scene=new THREE.Scene();
+const camera=new THREE.PerspectiveCamera(42,CW/CH,0.01,100);
+const CAM={x:0.2,y:0.55,z:4.1}; let zoom=1;
+const pivot=new THREE.Group(); scene.add(pivot);
+const world=new THREE.Group(); pivot.add(world);
+const SX=1.15, SY=1.05, SZ=1.15;
+const P=(a)=>new THREE.Vector3(a[0]*SX,a[1]*SY,a[2]*SZ);
+// centre of everything (docs + query) so the cloud rotates about its middle
+(function(){
+  const pts=DOCS.map(d=>d[4]).concat([QXYZ]); const mn=[9,9,9],mx=[-9,-9,-9];
+  pts.forEach(p=>p.forEach((v,i)=>{mn[i]=Math.min(mn[i],v);mx[i]=Math.max(mx[i],v);}));
+  world.position.set(-(mn[0]+mx[0])/2*SX,-(mn[1]+mx[1])/2*SY,-(mn[2]+mx[2])/2*SZ);
+  window._minY=mn[1]*SY;
+})();
+let yaw=0, idleUntil=0, dragging=false, lastX=0, yawTarget=null;
+const AUTO=0.0030;
+canvas3d.addEventListener('mousedown',e=>{dragging=true;lastX=e.clientX;canvas3d.style.cursor='grabbing';});
+window.addEventListener('mouseup',()=>{if(dragging){dragging=false;canvas3d.style.cursor='grab';idleUntil=performance.now()+6000;}});
+window.addEventListener('mousemove',e=>{if(dragging){yawTarget=null;yaw+=(e.clientX-lastX)*0.007;lastX=e.clientX;idleUntil=performance.now()+6000;}});
+canvas3d.addEventListener('wheel',e=>{e.preventDefault();zoom=Math.min(2.2,Math.max(.45,zoom*(e.deltaY>0?1.08:.926)));idleUntil=performance.now()+6000;},{passive:false});
+// axes + grid
+(function(){
+  const L=1.35;
+  [[[1,0,0],[-L,0,0],0xff4455],[[0,1,0],[0,-L,0],0x44dd77],[[0,0,1],[0,0,-L],0x4488ff]].forEach(([d,o,c])=>{
+    world.add(new THREE.ArrowHelper(new THREE.Vector3(...d),new THREE.Vector3(...o),L*2,c,0.14,0.07));
+  });
+  const g=new THREE.GridHelper(3.2,14,0x1a2240,0x101830); g.position.y=window._minY-0.12; world.add(g);
+})();
+const axPos=[[1.5,0,0,'X','#ff4455'],[0,1.5,0,'Y','#44dd77'],[0,0,1.5,'Z','#4488ff']];
+const axEls=axPos.map(a=>{const d=document.createElement('div');d.className='axl';d.textContent=a[3];d.style.color=a[4];vizPanel.appendChild(d);return d;});
+const tmp=new THREE.Vector3();
+function toScreen(obj3dOrVec,isVec){
+  if(isVec){tmp.copy(obj3dOrVec);world.localToWorld(tmp);} else {obj3dOrVec.getWorldPosition(tmp);}
+  tmp.project(camera); return [(tmp.x*.5+.5)*CW,(-tmp.y*.5+.5)*CH];
+}
+// sprites
+const matCache={};
+function spriteMat(color){
+  if(matCache[color]) return matCache[color];
+  const c=document.createElement('canvas');c.width=c.height=64;const x=c.getContext('2d');
+  const col=color; const g=x.createRadialGradient(32,32,12,32,32,32);
+  g.addColorStop(0,col+'aa');g.addColorStop(1,col+'00');x.fillStyle=g;x.fillRect(0,0,64,64);
+  x.fillStyle=col;x.beginPath();x.arc(32,32,13,0,Math.PI*2);x.fill();
+  x.strokeStyle='rgba(255,255,255,.55)';x.lineWidth=2;x.stroke();
+  return matCache[color]=new THREE.SpriteMaterial({map:new THREE.CanvasTexture(c),sizeAttenuation:false,depthWrite:false});
+}
+const sprites=[]; const pending=[]; const extras=[]; const labels=[];
+let gen=0; const later=(fn,ms)=>{const g=gen;return setTimeout(()=>{if(g===gen)fn();},ms);};
+function addDoc(i){
+  const d=DOCS[i], target=P(d[4]), color=CL[d[3]][1];
+  const mesh=new THREE.Mesh(new THREE.SphereGeometry(0.05,10,10),new THREE.MeshBasicMaterial({color:hex(color)}));
+  world.add(mesh);
+  const line=new THREE.Line(new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(),new THREE.Vector3()]),new THREE.LineBasicMaterial({color:hex(color),transparent:true,opacity:.3}));
+  world.add(line);
+  const sp=new THREE.Sprite(spriteMat(color)); sp.scale.setScalar(0.05); sp.position.copy(target); sp.visible=false;
+  sp.userData={idx:i}; world.add(sp); sprites[i]=sp;
+  pending.push({mesh,line,sp,target,t0:performance.now(),dur:520});
+}
+let qSprite=null;
+function addQuery(){
+  const target=P(QXYZ), color='#39ff14';
+  const mesh=new THREE.Mesh(new THREE.SphereGeometry(0.07,12,12),new THREE.MeshBasicMaterial({color:hex(color)})); world.add(mesh);
+  const line=new THREE.Line(new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(),new THREE.Vector3()]),new THREE.LineBasicMaterial({color:hex(color),transparent:true,opacity:.7})); world.add(line);
+  const sp=new THREE.Sprite(spriteMat(color)); sp.scale.setScalar(0.12); sp.position.copy(target); sp.visible=false; sp.userData={query:true}; world.add(sp); qSprite=sp;
+  pending.push({mesh,line,sp,target,t0:performance.now(),dur:700,done:()=>later(showHits,350)});
+}
+function beam(a,b,color,r){
+  const dir=new THREE.Vector3().subVectors(b,a), len=dir.length();
+  const m=new THREE.Mesh(new THREE.CylinderGeometry(r,r,1,6),new THREE.MeshBasicMaterial({color:hex(color),transparent:true,opacity:.75}));
+  m.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0),dir.clone().normalize());
+  m.position.copy(a); m.scale.set(1,0.001,1); world.add(m);
+  return {m,a,b,len,dir:dir.normalize(),t0:performance.now(),dur:550};
+}
+const beams=[];
+function bestYaw(){
+  const pts=[QXYZ].concat(HITS.map(h=>DOCS[h[0]][4])).map(p=>P(p));
+  const keep=pivot.rotation.y; let best=0,bs=-1;
+  for(let k=0;k<72;k++){
+    const ang=k/72*Math.PI*2; pivot.rotation.y=ang; pivot.updateMatrixWorld(true);
+    const sc=pts.map(v=>toScreen(v,true)); let mn=1e9;
+    for(let i=0;i<sc.length;i++)for(let j=i+1;j<sc.length;j++){mn=Math.min(mn,Math.hypot(sc[i][0]-sc[j][0],(sc[i][1]-sc[j][1])*1.6));}
+    // keep everything inside the panel, away from legend (top-right)
+    const inside=sc.every(c=>c[0]>60&&c[0]<CW-190&&c[1]>60&&c[1]<CH-110);
+    const score=mn+(inside?200:0);
+    if(score>bs){bs=score;best=ang;}
+  }
+  pivot.rotation.y=keep; pivot.updateMatrixWorld(true);
+  let d=((best-yaw+Math.PI)%(2*Math.PI)+2*Math.PI)%(2*Math.PI)-Math.PI; return yaw+d;
+}
+function showHits(){
+  yawTarget=bestYaw(); idleUntil=performance.now()+1e9;
+  const a=P(QXYZ);
+  HITS.forEach(([di,cos],rank)=>{
+    const sp=sprites[di]; sp.scale.setScalar(0.1);
+    later(()=>{
+      beams.push(beam(a,sp.position,'#39ff14',0.007));
+      const el=document.createElement('div'); el.className='lab'; el.innerHTML=`<i>${rank+1}</i>${cos.toFixed(2)}`; vizPanel.appendChild(el); labels.push({el,sp});
+      const row=$('resRows').children[rank]; if(row) row.classList.add('show');
+    },rank*260);
+  });
+  sprites.forEach((s2,k)=>{if(s2&&!HITS.some(h=>h[0]===k)) s2.scale.setScalar(0.034);});
+  $('res').classList.add('show');
+  $('legend').dataset.q='1'; $('qleg').style.display='flex';
+}
+// legend
+$('legend').innerHTML=CL.map(c=>`<div class="leg-item"><div class="leg-dot" style="background:${c[1]}"></div>${c[0]}</div>`).join('')+'<div class="leg-item" id="qleg" style="display:none"><div class="leg-dot" style="background:#39ff14"></div>search query</div>';
+// hover
+const ray=new THREE.Raycaster(); ray.params.Sprite={threshold:0.04}; const mouse=new THREE.Vector2(-10,-10);
+canvas3d.addEventListener('mousemove',e=>{const r=canvas3d.getBoundingClientRect();mouse.x=((e.clientX-r.left)/r.width)*2-1;mouse.y=-((e.clientY-r.top)/r.height)*2+1;});
+canvas3d.addEventListener('mouseleave',()=>{mouse.set(-10,-10);$('tooltip').classList.remove('show');});
+let hov=null;
+function doRay(){
+  ray.setFromCamera(mouse,camera);
+  const t=sprites.filter(s=>s&&s.visible).concat(qSprite&&qSprite.visible?[qSprite]:[]);
+  const h=ray.intersectObjects(t);
+  if(h.length){const s=h[0].object; if(s!==hov){hov=s;
+    if(s.userData.query){$('tipName').textContent='“'+QUERY+'”';$('tipCat').textContent='search query';$('tipCat').style.color='#39ff14';}
+    else{const d=DOCS[s.userData.idx];$('tipName').textContent=d[2];$('tipCat').textContent=CL[d[3]][0];$('tipCat').style.color=CL[d[3]][1];}
+  }
+  const [x,y]=toScreen(hov,false); const tt=$('tooltip'); tt.style.left=x+'px';tt.style.top=y+'px';tt.classList.add('show');}
+  else if(hov){hov=null;$('tooltip').classList.remove('show');}
+}
+const ease=t=>t<.5?2*t*t:-1+(4-2*t)*t;
+(function loop(){
+  requestAnimationFrame(loop);
+  const now=performance.now();
+  if(!dragging && now>idleUntil) yaw+=AUTO;
+  if(yawTarget!==null&&!dragging){const df=yawTarget-yaw;if(Math.abs(df)<0.003){yaw=yawTarget;yawTarget=null;}else yaw+=df*0.07;}
+  pivot.rotation.y=yaw;
+  camera.position.set(CAM.x*zoom,CAM.y*zoom,CAM.z*zoom); camera.lookAt(0,0,0);
+  for(let i=pending.length-1;i>=0;i--){
+    const a=pending[i], t=Math.min(1,(now-a.t0)/a.dur), e=ease(t);
+    a.mesh.position.lerpVectors(new THREE.Vector3(),a.target,e);
+    const pos=a.line.geometry.attributes.position; pos.setXYZ(1,a.mesh.position.x,a.mesh.position.y,a.mesh.position.z); pos.needsUpdate=true;
+    if(t>=1){world.remove(a.mesh);world.remove(a.line);a.sp.visible=true;pending.splice(i,1);if(a.done)a.done();}
+  }
+  beams.forEach(b=>{const t=Math.min(1,(now-b.t0)/b.dur),e=ease(t);b.m.scale.y=Math.max(0.001,b.len*e);b.m.position.copy(b.a).addScaledVector(b.dir,b.len*e/2);});
+  pivot.updateMatrixWorld(true);
+  labels.forEach(({el,sp})=>{const [x,y]=toScreen(sp,false);el.style.left=x+'px';el.style.top=(y-24)+'px';});
+  axPos.forEach((a,i)=>{const [x,y]=toScreen(new THREE.Vector3(a[0],a[1],a[2]),true);axEls[i].style.left=(x-4)+'px';axEls[i].style.top=(y-8)+'px';});
+  doRay();
+  renderer.render(scene,camera);
+})();
+// ---------- left panel ----------
+const grid=$('docGrid');
+DOCS.forEach((d,i)=>{
+  const c=document.createElement('div'); c.className='doc-chip'; c.textContent=d[1]; c.title=d[2];
+  const col=CL[d[3]][1]; c.style.borderColor=col+'88'; c.style.background=col+'1f'; c.id='chip'+i; grid.appendChild(c);
+});
+let state=0, fired=0;
+const hash=(s)=>{let h=2166136261;for(const ch of s){h^=ch.charCodeAt(0);h=Math.imul(h,16777619);}return h>>>0;};
+function cellsFor(d){
+  let h=hash(d[0]); let html=''; const col=CL[d[3]][1];
+  for(let i=0;i<22;i++){h=Math.imul(h^(h>>>13),0x5bd1e995)>>>0; const v=(h%1000)/1000; html+=`<i style="height:${3+Math.round(v*13)}px;background:${col};opacity:${(.35+v*.65).toFixed(2)}"></i>`;}
+  return html;
+}
+function phase1(){
+  state=1; $('hintc').style.opacity=0;
+  const gl=document.querySelector('.grid-label'); gl.style.opacity=0;
+  const chips=[...document.querySelectorAll('.doc-chip')];
+  const gr=grid.getBoundingClientRect();
+  chips.forEach((c,i)=>{const r=c.getBoundingClientRect(); const dx=(gr.left+gr.width/2)-(r.left+r.width/2), dy=(gr.top+60)-(r.top+r.height/2);
+    c.style.transform=`translate(${dx}px,${dy}px) scale(.3)`; c.style.opacity='0';});
+  later(phase2,850);
+}
+function phase2(){
+  state=2; $('gridStage').classList.remove('active'); $('funnelStage').classList.add('active'); later(fire,450);
+}
+function fire(){
+  if(fired>=DOCS.length){state=5;$('legend').classList.add('show');$('searchTrigger').classList.add('show');$('lhdr').textContent='Data & ingestion';return;}
+  const i=fired++, d=DOCS[i];
+  const row=document.createElement('div'); row.className='vrow';
+  row.innerHTML=`<span class="vn" style="color:${CL[d[3]][1]}">${d[1]}</span><span class="cells">${cellsFor(d)}</span><span class="dm">&middot;&middot;&middot;</span>`;
+  const rows=$('vecRows'); if(rows.children.length>=4) rows.removeChild(rows.firstChild); rows.appendChild(row);
+  requestAnimationFrame(()=>row.classList.add('visible'));
+  $('vecCount').textContent=fired; addDoc(i);
+  later(fire,88);
+}
+$('vectorizeBtn').onclick=()=>{ if(state!==0)return; $('vectorizeBtn').style.opacity=0; $('vectorizeBtn').style.pointerEvents='none'; later(phase1,250); };
+// search
+const resRows=$('resRows');
+HITS.forEach(([di,cos],r)=>{const d=DOCS[di];const row=document.createElement('div');row.className='res-row';row.title=d[2];
+  row.innerHTML=`<div class="rk">${r+1}</div><div class="rt">${d[5]}</div><div class="dot" style="background:${CL[d[3]][1]}"></div><div class="rc">${cos.toFixed(2)}</div>`; resRows.appendChild(row);});
+$('searchTrigger').onclick=()=>{
+  if(state!==5)return; state=6;
+  $('h1').innerHTML="Now we're ready for <em>vector search</em>";
+  $('lhdr').textContent='Search';
+  $('funnelStage').classList.remove('active'); $('searchStage').classList.add('active');
+  later(type,400);
+};
+let typed=0;
+function type(){
+  const bar=$('searchBarText');
+  if(typed<=QUERY.length){bar.innerHTML=QUERY.substring(0,typed)+'<span class="cursor"></span>';typed++;later(type,typed<QUERY.length?30:0);}
+  else later(fireSearch,500);
+}
+function fireSearch(){
+  $('goBtnEl').classList.add('clicked');
+  const bar=$('searchBarText').getBoundingClientRect(); const pill=document.createElement('div'); pill.className='fly-pill'; pill.textContent='“'+QUERY+'”';
+  pill.style.left=bar.left+'px'; pill.style.top=bar.top+'px'; document.body.appendChild(pill);
+  const vb=vizPanel.getBoundingClientRect();
+  setTimeout(()=>{pill.style.left=(vb.left+vb.width/2-80)+'px';pill.style.top=(vb.top+vb.height/2)+'px';pill.style.opacity='0';pill.style.transform='scale(.7)';},60);
+  later(()=>{pill.remove();addQuery();},760);
+}
+// reset
+function reset(){
+  gen++; state=0; fired=0; typed=0;
+  sprites.forEach(s=>s&&world.remove(s)); sprites.length=0; pending.forEach(a=>{world.remove(a.mesh);world.remove(a.line);}); pending.length=0;
+  if(qSprite){world.remove(qSprite);qSprite=null;} beams.forEach(b=>world.remove(b.m)); beams.length=0;
+  labels.forEach(l=>l.el.remove()); labels.length=0; document.querySelectorAll('.fly-pill').forEach(p=>p.remove());
+  yaw=0; yawTarget=null; zoom=1; idleUntil=0; hov=null; $('tooltip').classList.remove('show');
+  $('h1').innerHTML='From <em>text</em> to vector embedding'; $('lhdr').textContent='Data & ingestion';
+  $('gridStage').classList.add('active'); $('funnelStage').classList.remove('active'); $('searchStage').classList.remove('active');
+  $('legend').classList.remove('show'); $('qleg').style.display='none'; $('searchTrigger').classList.remove('show');
+  $('vecRows').innerHTML=''; $('vecCount').textContent='0'; $('searchBarText').innerHTML='<span class="cursor"></span>'; $('goBtnEl').classList.remove('clicked');
+  $('res').classList.remove('show'); [...resRows.children].forEach(r=>r.classList.remove('show'));
+  document.querySelector('.grid-label').style.opacity=1; $('hintc').style.opacity=1;
+  document.querySelectorAll('.doc-chip').forEach(c=>{c.style.transition='none';c.style.transform='';c.style.opacity='';void c.offsetWidth;c.style.transition='';});
+  $('vectorizeBtn').style.opacity=1; $('vectorizeBtn').style.pointerEvents='';
+}
+$('replayBtn').onclick=reset;
+</script>
+<script>'use strict';
+
+// Slides list is injected by the server as window.FUCKSLIDES_SLIDES
+// Falls back to a single-slide no-op so slides still work opened directly
+const SLIDES = window.FUCKSLIDES_SLIDES || [window.location.pathname.split('/').pop() || 'index.html'];
+
+function currentSlideIndex() {
+  const file = window.location.pathname.split('/').pop() || SLIDES[0];
+  const idx  = SLIDES.indexOf(file);
+  return idx === -1 ? 0 : idx;
+}
+
+function toggleFullscreen() {
+  if (!document.fullscreenElement) document.documentElement.requestFullscreen().catch(() => {});
+  else document.exitFullscreen();
+}
+
+function saveFs() {
+  if (document.fullscreenElement) sessionStorage.setItem('fs-fs', '1');
+}
+
+const inPlayer = window !== window.top;
+
+if (inPlayer) {
+  document.addEventListener('keydown', e => {
+    window.parent.postMessage({ type: 'keydown', key: e.key }, '*');
+  });
+}
+
+if (!inPlayer) {
+  document.addEventListener('keydown', e => {
+    if (e.metaKey || e.ctrlKey || e.altKey) return;
+    if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+    const idx = currentSlideIndex();
+    if ((e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === ' ') && idx < SLIDES.length - 1) {
+      e.preventDefault(); saveFs(); window.location.href = SLIDES[idx + 1];
+    }
+    if ((e.key === 'ArrowLeft' || e.key === 'ArrowUp') && idx > 0) {
+      e.preventDefault(); saveFs(); window.location.href = SLIDES[idx - 1];
+    }
+    if (e.key === 'f' || e.key === 'F') toggleFullscreen();
+  });
+}
+
+function injectNav() {
+  const style = document.createElement('style');
+  style.textContent = `
+    .fs-nav { position:fixed; bottom:1.5rem; right:1.5rem; display:flex; align-items:center; gap:.25rem; z-index:9999; background:rgba(34,36,44,.82); backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px); border:1px solid rgba(255,255,255,.12); border-radius:40px; padding:.3rem .45rem; }
+    .fs-nav .nav-btn { display:flex; align-items:center; justify-content:center; width:30px; height:30px; border-radius:50%; color:rgba(255,255,255,.7); text-decoration:none; transition:background .15s,color .15s; cursor:pointer; }
+    .fs-nav .nav-btn:hover { background:rgba(255,255,255,.15); color:#fff; }
+    .fs-nav .nav-btn svg { width:13px; height:13px; }
+    .fs-nav .nav-btn--disabled { opacity:.2; pointer-events:none; }
+    .fs-nav .nav-counter { font-family:'Inter',-apple-system,sans-serif; font-size:.62rem; font-weight:600; color:rgba(255,255,255,.45); letter-spacing:.06em; padding:0 .35rem; user-select:none; }
+  `;
+  document.head.appendChild(style);
+
+  const idx   = currentSlideIndex();
+  const chevL = `<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 3L6 8l4 5"/></svg>`;
+  const chevR = `<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3l4 5-4 5"/></svg>`;
+  const fsIco = `<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 6V2h4M10 2h4v4M14 10v4h-4M6 14H2v-4"/></svg>`;
+
+  const prevEl = idx > 0
+    ? `<a href="${SLIDES[idx - 1]}" class="nav-btn" title="Previous (←)">${chevL}</a>`
+    : `<span class="nav-btn nav-btn--disabled">${chevL}</span>`;
+  const nextEl = idx < SLIDES.length - 1
+    ? `<a href="${SLIDES[idx + 1]}" class="nav-btn" title="Next (→)">${chevR}</a>`
+    : `<span class="nav-btn nav-btn--disabled">${chevR}</span>`;
+
+  const nav = document.createElement('nav');
+  nav.className = 'fs-nav';
+  nav.innerHTML = `${prevEl}<span class="nav-counter">${idx + 1}&thinsp;/&thinsp;${SLIDES.length}</span><a href="#" id="fs-fullscreen" class="nav-btn" title="Fullscreen (F)">${fsIco}</a>${nextEl}`;
+  document.body.appendChild(nav);
+
+  document.getElementById('fs-fullscreen').addEventListener('click', e => { e.preventDefault(); e.stopPropagation(); toggleFullscreen(); });
+  nav.querySelectorAll('a[href]').forEach(a => a.addEventListener('click', e => { e.stopPropagation(); saveFs(); }));
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  if (inPlayer) return;
+  if (sessionStorage.getItem('fs-fs')) {
+    sessionStorage.removeItem('fs-fs');
+    document.documentElement.requestFullscreen().catch(() => {});
+  }
+  injectNav();
+});
+
+// Reveal on scroll
+const revealObserver = new IntersectionObserver(entries => {
+  entries.forEach(el => { if (el.isIntersecting) el.target.classList.add('visible'); });
+}, { threshold: 0.12 });
+document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+// Animated stat counters
+function animateCounter(el) {
+  const target = parseFloat(el.dataset.target);
+  const suffix = el.dataset.suffix || '';
+  const prefix = el.dataset.prefix || '';
+  const start  = performance.now();
+  const dur    = 1400;
+  function step(now) {
+    const ease  = 1 - Math.pow(1 - Math.min((now - start) / dur, 1), 3);
+    el.textContent = prefix + (Number.isInteger(target) ? Math.round(target * ease) : (target * ease).toFixed(1)) + suffix;
+    if (ease < 1) requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+}
+const counterObserver = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting && !e.target.dataset.counted) {
+      e.target.dataset.counted = 'true';
+      animateCounter(e.target);
+    }
+  });
+}, { threshold: 0.5 });
+document.querySelectorAll('[data-target]').forEach(el => counterObserver.observe(el));
+</script>
+</body>
+</html>
