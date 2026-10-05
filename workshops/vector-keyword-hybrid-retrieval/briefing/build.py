@@ -156,6 +156,15 @@ def notes_html(path):
         out.append('<p>%s</p>' % md_inline(ln))
     return '\n'.join(out)
 
+NAV = ('<nav id="bar" aria-label="Slide navigation">'
+       '<button id="btn-prev" type="button" aria-label="Previous"><svg class="arw rev" viewBox="0 0 24 12" aria-hidden="true"><path d="M0 6h20M15 1l6 5-6 5" fill="none" stroke="currentColor" stroke-width="1.8"/></svg>Prev</button>'
+       '<span id="count" aria-live="polite">1 / 1</span>'
+       '<span class="sp"></span>'
+       '<button id="btn-overview" type="button" aria-label="Overview of all slides (O)" aria-haspopup="dialog"><svg viewBox="0 0 14 14" aria-hidden="true"><path d="M1 1h5v5H1zM8 1h5v5H8zM1 8h5v5H1zM8 8h5v5H8z" fill="currentColor"/></svg>Overview</button>'
+       '<span class="sp"></span>'
+       '<button id="btn-next" type="button" aria-label="Next">Next<svg class="arw" viewBox="0 0 24 12" aria-hidden="true"><path d="M0 6h20M15 1l6 5-6 5" fill="none" stroke="currentColor" stroke-width="1.8"/></svg></button>'
+       '</nav>\n'
+       '<div id="overview" role="dialog" aria-modal="true" aria-label="All slides" hidden><div class="ovh">All slides <span>Click a tile, or press Esc</span></div><div class="ovg" id="ovg"></div></div>\n')
 ARW = '<svg class="arw" viewBox="0 0 24 12" aria-hidden="true"><path d="M0 6h20M15 1l6 5-6 5" fill="none" stroke="currentColor" stroke-width="1.8"/></svg>'
 STAR = '<svg class="star" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1.5l3.1 6.6 7.2.9-5.3 5 1.4 7.1L12 17.6l-6.4 3.5L7 14l-5.3-5 7.2-.9z" fill="currentColor"/></svg>'
 
@@ -175,7 +184,7 @@ def main():
               .replace('{{ARW}}', ARW).replace('{{STAR}}', STAR)
               .replace('{{N_FLAT}}', str(info07['n_flat'])).replace('{{N_HNSW}}', str(info07['n_hnsw'])).replace('{{N_DISK}}', str(info07['n_disk'])))
         foot = re.search(r'data-foot="([^"]*)"', h).group(1)
-        chrome = ('<div class="ew-foot"><span class="lg">%s elastic</span><span class="rt"><span>%s</span><span class="ct"></span></span></div>' % (mark, htmllib.escape(foot)))
+        chrome = ('<div class="ew-foot"><span class="lg">%s elastic</span><span class="rt"><span>%s</span></span></div>' % (mark, htmllib.escape(foot)))
         notes = notes_html(os.path.join(HERE, 'notes', base + '.md'))
         if not notes: warn.append('no notes for ' + base)
         h = h.replace('</section>', chrome + '\n<aside class="nt">' + notes + '</aside>\n</section>')
@@ -191,6 +200,7 @@ def main():
             '<title>Vector search: the briefing</title>\n'
             '<style>\n' + fonts_css() + '\n' + eweb_css() + '\n' + read(os.path.join(HERE, 'src', 'deck.css')) + '\n</style>\n</head>\n<body>\n'
             '<div id="stage">\n' + '\n'.join(slides) + '\n</div>\n'
+            + NAV +
             '<aside id="notes"><div class="nh"><span>Speaker notes</span><span id="notes-n"></span></div><div id="notes-body"></div><div class="nf">N to hide</div></aside>\n'
             '<script>\n' + eweb_js() + '\n</script>\n'
             '<script>\n' + read(os.path.join(HERE, 'src', 'engine3d.js')) + '\n</script>\n'

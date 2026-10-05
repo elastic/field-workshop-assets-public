@@ -1,6 +1,7 @@
 /* Briefing deck v2: deck layer on top of eweb.css (Elastic web kit). Role colours are consistent across all slides. */
 html,body{margin:0;background:#fff}
 body{position:fixed;inset:0;overflow:hidden}
+:root{--bar:44px}
 #stage{position:absolute;left:0;top:0;width:1280px;height:720px;transform-origin:0 0}
 .slide{font-size:18px}
 .mono{font-family:var(--mono)}
@@ -533,3 +534,26 @@ aside.nt{display:none}
 #s11[data-step="3"] .rp1,#s11[data-step="4"] .rp1{opacity:0}
 #s11 .read{margin-top:14px;background:#D9E8FF;border-left:5px solid #0B64DD;padding:10px 14px;font-size:19px;line-height:1.4;color:var(--ink)}
 #s11 .hk.lab3{margin-top:8px;color:var(--ink)}
+
+/* ---------- bottom nav bar + overview ---------- */
+#bar{position:fixed;left:0;right:0;bottom:0;height:var(--bar);background:#fff;border-top:1px solid var(--line);display:flex;align-items:center;gap:14px;padding:0 18px;font:500 12px var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--grey);z-index:30}
+#bar .sp{flex:1}
+#bar button{display:inline-flex;align-items:center;gap:8px;font:inherit;letter-spacing:inherit;text-transform:inherit;color:var(--ink);background:#fff;border:1px solid var(--line);border-radius:3px;padding:6px 12px;cursor:pointer;transition:border-color .15s,color .15s}
+#bar button:hover:not(:disabled){border-color:var(--ink)}
+#bar button:focus-visible,#ovg .tile:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+#bar button:disabled{opacity:.35;cursor:default}
+#bar button svg{width:14px;height:10px;flex:none}
+#bar button svg.arw{width:20px;height:10px}
+#bar .arw.rev{transform:scaleX(-1)}
+#count{min-width:64px;color:var(--ink);font-weight:600}
+#overview{position:fixed;left:0;right:0;top:0;bottom:var(--bar);background:rgba(255,255,255,.98);z-index:25;overflow:auto;padding:26px 36px;font-family:var(--sans)}
+#overview[hidden]{display:none}
+#overview .ovh{font:600 12px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--ink);padding-bottom:12px;border-bottom:1px solid var(--ink);margin-bottom:18px;display:flex;gap:16px;align-items:baseline}
+#overview .ovh span{font-weight:400;color:var(--grey)}
+#ovg{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:12px}
+#ovg .tile{display:flex;flex-direction:column;gap:8px;text-align:left;background:#fff;border:1px solid var(--line);padding:12px 14px;min-height:92px;cursor:pointer;font:inherit;color:var(--ink)}
+#ovg .tile i{font:600 12px var(--mono);font-style:normal;color:var(--blue);letter-spacing:.06em}
+#ovg .tile span{font:500 16px/1.25 var(--sans);letter-spacing:-.2px}
+#ovg .tile:hover{border-color:var(--ink);box-shadow:4px 4px 0 var(--blue)}
+#ovg .tile.cur{border-color:var(--blue);background:#D9E8FF}
+#notes{bottom:var(--bar)}
