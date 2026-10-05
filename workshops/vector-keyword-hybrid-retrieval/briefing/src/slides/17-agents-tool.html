@@ -1,0 +1,22 @@
+<section class="slide" id="s17" data-steps="3" data-foot="Agents and search">
+  <div class="z">
+    <div class="eyebrow in1">Lab 4 · <b>Agent Builder</b> <span class="illus">Illustrative</span></div>
+    <h1 class="in2">Agents use your search <span class="b">as a tool.</span></h1>
+  </div>
+  <div class="q17 in3"><span class="tag">Ask the agent</span><span class="qt">My container keeps dying with exit code 137, why, and what JVM settings should I change?</span></div>
+  <div class="loop17 in4">
+    <div class="gl keyn"><b>Agent</b><span>The LLM plans, calls the tool, reads what comes back</span></div>
+    <div class="hops17">
+      <div class="hop17 rv" data-s="2"><div class="hn">Hop 1 · cause</div>
+        <div class="rq"><span class="mono">search-workshop-docs-hybrid(“container exit code 137”)</span>{{ARW}}</div>
+        <div class="rs"><span class="rev">{{ARW}}</span><span><b>doc-061</b> killed by the OOM killer: out of memory</span></div></div>
+      <div class="hop17 rv" data-s="3"><div class="hn">Hop 2 · fix</div>
+        <div class="rq"><span class="mono">search-workshop-docs-hybrid(“JVM heap memory settings”)</span>{{ARW}}</div>
+        <div class="rs"><span class="rev">{{ARW}}</span><span><b>doc-007</b> JVM heap and memory settings</span></div></div>
+    </div>
+    <div class="gl tool rrfn"><b>Tool</b><span class="mono sm">search-workshop-docs-hybrid</span><span>the same FORK + FUSE ES|QL you wrote in Lab 3</span></div>
+  </div>
+  <div class="ans17 rv" data-s="3"><b>Answer:</b> the container was OOM-killed; raise the memory limit and set the JVM heap to fit it.</div>
+  <div class="tip17 in5"><span class="tag">Lab 4 tip</span><div>Watch for <b>two</b> <span class="mono">search-workshop-docs-hybrid</span> tool calls: cause, then fix.
+    <div class="order17"><span class="mono">load_skill “Diagnose and Fix”</span>{{ARW}}<span class="mono">search (cause)</span>{{ARW}}<span class="mono">search (fix)</span></div></div></div>
+</section>

@@ -1,0 +1,40 @@
+<section class="slide" id="s11" data-steps="4" data-foot="Keeping score: MRR">
+  <div class="z">
+    <div class="eyebrow in1">Measuring · <b>MRR = Mean Reciprocal Rank</b> <span class="illus">Example</span></div>
+    <h1 class="in2">Keeping score: <span class="b">MRR.</span></h1>
+  </div>
+  <p class="intro14 in3">A judgment set pairs each query with the doc we <b>know</b> is right. Where did the retriever put it?</p>
+  <div class="t14 in4">
+    <div class="th"><span></span><span>Query</span><span>Known-right doc</span><span>Landed at</span><span>1 ÷ rank</span></div>
+    <div class="trw"><span class="n">Q1</span><span class="q">reset the elastic password</span><span class="d">Reset built-in user passwords</span><span class="rk1">#1</span><span class="rr14 rv" data-s="2">1</span></div>
+    <div class="trw"><span class="n">Q2</span><span class="q">why is my cluster yellow</span><span class="d">Cluster health explained</span><span class="rk2">#2</span><span class="rr14 rv" data-s="2">0.5</span></div>
+    <div class="trw"><span class="n">Q3</span><span class="q">restore a snapshot</span><span class="d">Snapshot restore guide</span><span class="rk5">#5</span><span class="rr14 rv" data-s="2">0.2</span></div>
+    <div class="trw"><span class="n">Q4</span><span class="q">limit shards per node</span><span class="d">Shard allocation settings</span><span class="rk0">not found</span><span class="rr14 rv" data-s="2">0</span></div>
+    <div class="mrr rv" data-s="3"><span class="sum mono">1 + 0.5 + 0.2 + 0 = 1.7, ÷ 4</span><span class="eqs">MRR</span><span class="mv">0.425</span></div>
+  </div>
+  <div class="rp rp1">
+    <div class="tag">What it is</div>
+    <p>For each query: <b>1 ÷ the rank</b> of the first right doc.</p>
+    <div class="scale"><span><b>#1</b> = 1</span><span><b>#2</b> = 0.5</span><span><b>#5</b> = 0.2</span><span><b>missed</b> = 0</span></div>
+    <p>Then <b>average</b> over all your queries.</p>
+  </div>
+  <div class="rp rp2">
+    <div class="tag">Why you care</div>
+    <p>One number for “how high does the right answer land?” <b>1.0 means always #1.</b></p>
+    <p>RAG and agents mostly read only the top few results, so #1 vs #5 is a right answer vs a wrong one.</p>
+    <div class="read"><b>MRR 0.425:</b> on average the right doc lands around #2–#3, and one query missed it entirely.</div>
+  </div>
+  <div class="heat rv" data-s="4">
+    <div class="tag">One column per retriever, one row per query</div>
+    <div class="hg">
+      <span></span><span class="hh">This example</span><span class="hh">What you want</span>
+      <span class="ql">Q1</span><div class="hc g1">#1</div><div class="hc g1">#1</div>
+      <span class="ql">Q2</span><div class="hc g2">#2</div><div class="hc g1">#1</div>
+      <span class="ql">Q3</span><div class="hc g5">#5</div><div class="hc g1">#1</div>
+      <span class="ql">Q4</span><div class="hc g0">miss</div><div class="hc g1">#1</div>
+    </div>
+    <div class="hleg"><span><i class="g1"></i>#1</span><span><i class="g2"></i>#2</span><span><i class="g34"></i>#3–4</span><span><i class="g5"></i>#5+</span><span><i class="g0"></i>miss</span></div>
+    <p class="hk">A column of <b>teal</b> = a retriever you can trust.</p>
+    <p class="hk lab3">In <b>Lab 3</b> you compute MRR for BM25 vs semantic vs hybrid.</p>
+  </div>
+</section>

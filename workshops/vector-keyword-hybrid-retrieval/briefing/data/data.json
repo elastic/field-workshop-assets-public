@@ -1,0 +1,9736 @@
+{
+ "N": 62,
+ "docs": [
+  {
+   "id": "doc-001",
+   "title": "SAML authentication troubleshooting",
+   "product": "elasticsearch",
+   "xyz": [
+    -0.7443,
+    0.7494,
+    -0.3566
+   ],
+   "cluster": 2
+  },
+  {
+   "id": "doc-002",
+   "title": "Troubleshoot authorization errors and role mapping",
+   "product": "elasticsearch",
+   "xyz": [
+    -0.6937,
+    0.8584,
+    0.1133
+   ],
+   "cluster": 2
+  },
+  {
+   "id": "doc-003",
+   "title": "Diagnose password setup and connection failures",
+   "product": "elasticsearch",
+   "xyz": [
+    -0.8802,
+    0.7231,
+    0.336
+   ],
+   "cluster": 2
+  },
+  {
+   "id": "doc-004",
+   "title": "Troubleshoot Active Directory account lockout",
+   "product": "elasticsearch",
+   "xyz": [
+    -0.881,
+    0.6504,
+    -0.0249
+   ],
+   "cluster": 2
+  },
+  {
+   "id": "doc-005",
+   "title": "LDAP user authentication",
+   "product": "elasticsearch",
+   "xyz": [
+    -0.6703,
+    1.0,
+    0.252
+   ],
+   "cluster": 2
+  },
+  {
+   "id": "doc-006",
+   "title": "Elasticsearch breaking changes",
+   "product": "elasticsearch",
+   "xyz": [
+    -0.385,
+    0.2852,
+    0.7763
+   ],
+   "cluster": 5
+  },
+  {
+   "id": "doc-007",
+   "title": "JVM settings for Elasticsearch",
+   "product": "elasticsearch",
+   "xyz": [
+    -0.4477,
+    -0.1639,
+    0.6672
+   ],
+   "cluster": 5
+  },
+  {
+   "id": "doc-008",
+   "title": "Cluster-level shard allocation and routing settings",
+   "product": "elasticsearch",
+   "xyz": [
+    -0.3397,
+    -0.4616,
+    0.868
+   ],
+   "cluster": 1
+  },
+  {
+   "id": "doc-009",
+   "title": "Set up security in self-managed Elasticsearch deployments",
+   "product": "elasticsearch",
+   "xyz": [
+    -0.7193,
+    0.6087,
+    0.7091
+   ],
+   "cluster": 2
+  },
+  {
+   "id": "doc-010",
+   "title": "TLS encryption for cluster communications",
+   "product": "elasticsearch",
+   "xyz": [
+    -0.6299,
+    0.5327,
+    0.6636
+   ],
+   "cluster": 2
+  },
+  {
+   "id": "doc-011",
+   "title": "Dense vector field type",
+   "product": "elasticsearch",
+   "xyz": [
+    0.7804,
+    0.0181,
+    -0.1164
+   ],
+   "cluster": 4
+  },
+  {
+   "id": "doc-012",
+   "title": "Semantic text field type reference",
+   "product": "elasticsearch",
+   "xyz": [
+    0.8822,
+    0.3619,
+    0.261
+   ],
+   "cluster": 4
+  },
+  {
+   "id": "doc-013",
+   "title": "Hybrid search in Elasticsearch",
+   "product": "elasticsearch",
+   "xyz": [
+    0.7489,
+    0.483,
+    0.272
+   ],
+   "cluster": 4
+  },
+  {
+   "id": "doc-014",
+   "title": "Retrievers in Elasticsearch",
+   "product": "elasticsearch",
+   "xyz": [
+    0.8257,
+    0.4226,
+    0.2482
+   ],
+   "cluster": 4
+  },
+  {
+   "id": "doc-015",
+   "title": "Linear retriever",
+   "product": "elasticsearch",
+   "xyz": [
+    0.7283,
+    0.2116,
+    -0.3127
+   ],
+   "cluster": 4
+  },
+  {
+   "id": "doc-016",
+   "title": "Semantic search with semantic_text tutorial",
+   "product": "elasticsearch",
+   "xyz": [
+    0.561,
+    0.4293,
+    0.477
+   ],
+   "cluster": 5
+  },
+  {
+   "id": "doc-017",
+   "title": "Index lifecycle management overview",
+   "product": "elasticsearch",
+   "xyz": [
+    -0.0449,
+    -0.5504,
+    0.3576
+   ],
+   "cluster": 0
+  },
+  {
+   "id": "doc-018",
+   "title": "Create an ILM policy in Elasticsearch",
+   "product": "elasticsearch",
+   "xyz": [
+    -0.156,
+    -0.4182,
+    0.636
+   ],
+   "cluster": 0
+  },
+  {
+   "id": "doc-019",
+   "title": "Ingest pipelines in Elasticsearch",
+   "product": "elasticsearch",
+   "xyz": [
+    0.1741,
+    0.1745,
+    0.2547
+   ],
+   "cluster": 5
+  },
+  {
+   "id": "doc-020",
+   "title": "Node roles in Elasticsearch",
+   "product": "elasticsearch",
+   "xyz": [
+    -0.3536,
+    -0.2497,
+    0.6622
+   ],
+   "cluster": 1
+  },
+  {
+   "id": "doc-021",
+   "title": "Red or yellow cluster health status troubleshooting",
+   "product": "elasticsearch",
+   "xyz": [
+    -0.6077,
+    -0.3632,
+    0.4667
+   ],
+   "cluster": 1
+  },
+  {
+   "id": "doc-022",
+   "title": "Data streams in Elasticsearch",
+   "product": "elasticsearch",
+   "xyz": [
+    0.1467,
+    -0.1908,
+    0.6565
+   ],
+   "cluster": 0
+  },
+  {
+   "id": "doc-023",
+   "title": "Upgrade Elasticsearch",
+   "product": "elasticsearch",
+   "xyz": [
+    -0.5398,
+    -0.084,
+    0.7843
+   ],
+   "cluster": 5
+  },
+  {
+   "id": "doc-024",
+   "title": "Authentication in Kibana",
+   "product": "kibana",
+   "xyz": [
+    -0.4843,
+    0.8892,
+    0.1867
+   ],
+   "cluster": 2
+  },
+  {
+   "id": "doc-025",
+   "title": "Troubleshoot snapshot and restore in Elasticsearch",
+   "product": "elasticsearch",
+   "xyz": [
+    -0.6025,
+    -0.1461,
+    0.4581
+   ],
+   "cluster": 1
+  },
+  {
+   "id": "doc-026",
+   "title": "Vector search with kNN in Elasticsearch",
+   "product": "elasticsearch",
+   "xyz": [
+    0.6408,
+    0.3164,
+    0.4813
+   ],
+   "cluster": 4
+  },
+  {
+   "id": "doc-027",
+   "title": "Elasticsearch Inference API overview",
+   "product": "elasticsearch",
+   "xyz": [
+    0.4938,
+    0.2963,
+    0.446
+   ],
+   "cluster": 5
+  },
+  {
+   "id": "doc-028",
+   "title": "High JVM memory pressure troubleshooting",
+   "product": "elasticsearch",
+   "xyz": [
+    -0.3176,
+    -0.3349,
+    0.5625
+   ],
+   "cluster": 6
+  },
+  {
+   "id": "doc-029",
+   "title": "Elasticsearch mapping overview",
+   "product": "elasticsearch",
+   "xyz": [
+    0.5438,
+    0.3076,
+    0.5457
+   ],
+   "cluster": 5
+  },
+  {
+   "id": "doc-030",
+   "title": "Text field type in Elasticsearch",
+   "product": "elasticsearch",
+   "xyz": [
+    0.7323,
+    0.4631,
+    0.3649
+   ],
+   "cluster": 4
+  },
+  {
+   "id": "doc-031",
+   "title": "Elasticsearch query DSL overview",
+   "product": "elasticsearch",
+   "xyz": [
+    0.6841,
+    0.4343,
+    0.4343
+   ],
+   "cluster": 4
+  },
+  {
+   "id": "doc-032",
+   "title": "Elasticsearch cross-cluster search",
+   "product": "elasticsearch",
+   "xyz": [
+    0.0021,
+    0.2866,
+    0.6604
+   ],
+   "cluster": 5
+  },
+  {
+   "id": "doc-033",
+   "title": "Elasticsearch aggregations overview",
+   "product": "elasticsearch",
+   "xyz": [
+    0.5999,
+    0.0648,
+    0.3989
+   ],
+   "cluster": 3
+  },
+  {
+   "id": "doc-034",
+   "title": "Keyword field type in Elasticsearch",
+   "product": "elasticsearch",
+   "xyz": [
+    0.6964,
+    0.3183,
+    0.2344
+   ],
+   "cluster": 4
+  },
+  {
+   "id": "doc-035",
+   "title": "Elasticsearch REST API conventions",
+   "product": "elasticsearch",
+   "xyz": [
+    0.1351,
+    0.2408,
+    0.6983
+   ],
+   "cluster": 5
+  },
+  {
+   "id": "doc-036",
+   "title": "Elasticsearch index settings",
+   "product": "elasticsearch",
+   "xyz": [
+    0.0819,
+    -0.1362,
+    1.0
+   ],
+   "cluster": 5
+  },
+  {
+   "id": "doc-037",
+   "title": "Elasticsearch snapshot and restore overview",
+   "product": "elasticsearch",
+   "xyz": [
+    -0.1269,
+    -0.2228,
+    0.8379
+   ],
+   "cluster": 0
+  },
+  {
+   "id": "doc-038",
+   "title": "Elasticsearch security overview",
+   "product": "elasticsearch",
+   "xyz": [
+    -0.4376,
+    0.7096,
+    0.5337
+   ],
+   "cluster": 2
+  },
+  {
+   "id": "doc-039",
+   "title": "Elasticsearch deployment configuration guide",
+   "product": "elasticsearch",
+   "xyz": [
+    -0.4545,
+    0.0129,
+    0.9559
+   ],
+   "cluster": 5
+  },
+  {
+   "id": "doc-040",
+   "title": "Elasticsearch scripting with Painless",
+   "product": "elasticsearch",
+   "xyz": [
+    0.4077,
+    0.2667,
+    0.2982
+   ],
+   "cluster": 5
+  },
+  {
+   "id": "doc-041",
+   "title": "Elasticsearch data tiers",
+   "product": "elasticsearch",
+   "xyz": [
+    -0.057,
+    -0.4476,
+    0.7427
+   ],
+   "cluster": 0
+  },
+  {
+   "id": "doc-042",
+   "title": "Elasticsearch circuit breaker settings",
+   "product": "elasticsearch",
+   "xyz": [
+    -0.2467,
+    -0.3341,
+    0.3908
+   ],
+   "cluster": 6
+  },
+  {
+   "id": "doc-043",
+   "title": "Elasticsearch cat APIs overview",
+   "product": "elasticsearch",
+   "xyz": [
+    0.0488,
+    -0.2364,
+    0.6543
+   ],
+   "cluster": 5
+  },
+  {
+   "id": "doc-044",
+   "title": "Elasticsearch Elastic Inference Service (EIS)",
+   "product": "elasticsearch",
+   "xyz": [
+    0.2529,
+    0.2644,
+    0.5938
+   ],
+   "cluster": 5
+  },
+  {
+   "id": "doc-045",
+   "title": "Elasticsearch aliases",
+   "product": "elasticsearch",
+   "xyz": [
+    0.1268,
+    -0.0432,
+    0.7387
+   ],
+   "cluster": 0
+  },
+  {
+   "id": "doc-046",
+   "title": "Elasticsearch ML model deployment",
+   "product": "elasticsearch",
+   "xyz": [
+    0.1843,
+    0.2247,
+    0.5387
+   ],
+   "cluster": 5
+  },
+  {
+   "id": "doc-047",
+   "title": "Elasticsearch index templates",
+   "product": "elasticsearch",
+   "xyz": [
+    0.108,
+    -0.015,
+    0.7851
+   ],
+   "cluster": 0
+  },
+  {
+   "id": "doc-048",
+   "title": "Elasticsearch transforms",
+   "product": "elasticsearch",
+   "xyz": [
+    0.2441,
+    -0.1016,
+    0.4351
+   ],
+   "cluster": 3
+  },
+  {
+   "id": "doc-049",
+   "title": "Elasticsearch Watcher alerting",
+   "product": "elasticsearch",
+   "xyz": [
+    -0.1527,
+    0.025,
+    0.3666
+   ],
+   "cluster": 5
+  },
+  {
+   "id": "doc-050",
+   "title": "Elasticsearch ES|QL query language",
+   "product": "elasticsearch",
+   "xyz": [
+    0.4332,
+    0.1771,
+    0.5657
+   ],
+   "cluster": 5
+  },
+  {
+   "id": "doc-051",
+   "title": "Elasticsearch reindexing",
+   "product": "elasticsearch",
+   "xyz": [
+    0.1524,
+    -0.0974,
+    0.859
+   ],
+   "cluster": 0
+  },
+  {
+   "id": "doc-052",
+   "title": "Elasticsearch Kibana Discover and dashboards",
+   "product": "kibana",
+   "xyz": [
+    0.2564,
+    0.2774,
+    0.4528
+   ],
+   "cluster": 5
+  },
+  {
+   "id": "doc-053",
+   "title": "Elasticsearch vector storage optimization",
+   "product": "elasticsearch",
+   "xyz": [
+    0.4924,
+    -0.0924,
+    0.4225
+   ],
+   "cluster": 4
+  },
+  {
+   "id": "doc-054",
+   "title": "Elasticsearch enrich policies",
+   "product": "elasticsearch",
+   "xyz": [
+    0.3432,
+    0.2587,
+    0.3999
+   ],
+   "cluster": 0
+  },
+  {
+   "id": "doc-055",
+   "title": "Elasticsearch cluster management best practices",
+   "product": "elasticsearch",
+   "xyz": [
+    -0.5225,
+    -0.2475,
+    0.9498
+   ],
+   "cluster": 5
+  },
+  {
+   "id": "doc-056",
+   "title": "Elasticsearch 9.x what's new overview",
+   "product": "elasticsearch",
+   "xyz": [
+    -0.106,
+    0.1815,
+    0.7492
+   ],
+   "cluster": 5
+  },
+  {
+   "id": "doc-057",
+   "title": "Elasticsearch 8.18 release notes",
+   "product": "elasticsearch",
+   "xyz": [
+    -0.2039,
+    0.2793,
+    0.5987
+   ],
+   "cluster": 5
+  },
+  {
+   "id": "doc-058",
+   "title": "Elasticsearch 8.15 release notes",
+   "product": "elasticsearch",
+   "xyz": [
+    0.173,
+    0.3752,
+    0.5667
+   ],
+   "cluster": 5
+  },
+  {
+   "id": "doc-059",
+   "title": "Elasticsearch relevance tuning and explain API",
+   "product": "elasticsearch",
+   "xyz": [
+    0.4022,
+    0.6091,
+    0.066
+   ],
+   "cluster": 4
+  },
+  {
+   "id": "doc-060",
+   "title": "Elasticsearch search after and pagination",
+   "product": "elasticsearch",
+   "xyz": [
+    0.4214,
+    0.1118,
+    0.6786
+   ],
+   "cluster": 5
+  },
+  {
+   "id": "doc-061",
+   "title": "Container exit codes when a process is killed (OOM and signals)",
+   "product": "elasticsearch",
+   "xyz": [
+    -0.5158,
+    -0.4619,
+    -0.7801
+   ],
+   "cluster": 6
+  },
+  {
+   "id": "doc-062",
+   "title": "Troubleshooting application crashes and restarts",
+   "product": "elasticsearch",
+   "xyz": [
+    -0.7345,
+    -0.4877,
+    -0.6578
+   ],
+   "cluster": 6
+  }
+ ],
+ "chunks": [
+  {
+   "doc": "doc-001",
+   "xyz": [
+    -1.0,
+    0.8112,
+    -0.5801
+   ],
+   "cluster": 2
+  },
+  {
+   "doc": "doc-001",
+   "xyz": [
+    -0.9467,
+    0.6463,
+    -0.9398
+   ],
+   "cluster": 2
+  },
+  {
+   "doc": "doc-001",
+   "xyz": [
+    -0.6703,
+    0.8435,
+    -0.0894
+   ],
+   "cluster": 2
+  },
+  {
+   "doc": "doc-001",
+   "xyz": [
+    -0.5891,
+    0.6871,
+    -0.4361
+   ],
+   "cluster": 2
+  },
+  {
+   "doc": "doc-001",
+   "xyz": [
+    -0.707,
+    0.4669,
+    -0.1865
+   ],
+   "cluster": 2
+  },
+  {
+   "doc": "doc-001",
+   "xyz": [
+    -0.7065,
+    0.2741,
+    -0.9321
+   ],
+   "cluster": 2
+  },
+  {
+   "doc": "doc-001",
+   "xyz": [
+    -0.8231,
+    0.7336,
+    -0.9201
+   ],
+   "cluster": 2
+  },
+  {
+   "doc": "doc-001",
+   "xyz": [
+    -0.7929,
+    0.5891,
+    -0.9572
+   ],
+   "cluster": 2
+  },
+  {
+   "doc": "doc-001",
+   "xyz": [
+    -0.7773,
+    0.4684,
+    -0.8619
+   ],
+   "cluster": 2
+  },
+  {
+   "doc": "doc-001",
+   "xyz": [
+    -0.9687,
+    0.8646,
+    -0.081
+   ],
+   "cluster": 2
+  },
+  {
+   "doc": "doc-001",
+   "xyz": [
+    -0.8364,
+    0.6645,
+    -0.8461
+   ],
+   "cluster": 2
+  },
+  {
+   "doc": "doc-001",
+   "xyz": [
+    -0.3463,
+    0.4534,
+    0.0933
+   ],
+   "cluster": 2
+  },
+  {
+   "doc": "doc-002",
+   "xyz": [
+    -0.3303,
+    0.5693,
+    0.2389
+   ],
+   "cluster": 2
+  },
+  {
+   "doc": "doc-002",
+   "xyz": [
+    -0.6544,
+    0.417,
+    -0.3611
+   ],
+   "cluster": 2
+  },
+  {
+   "doc": "doc-002",
+   "xyz": [
+    -0.715,
+    0.7799,
+    -0.003
+   ],
+   "cluster": 2
+  },
+  {
+   "doc": "doc-002",
+   "xyz": [
+    -0.8743,
+    0.5853,
+    -0.7011
+   ],
+   "cluster": 2
+  },
+  {
+   "doc": "doc-002",
+   "xyz": [
+    -0.8494,
+    0.5385,
+    -0.9311
+   ],
+   "cluster": 2
+  },
+  {
+   "doc": "doc-002",
+   "xyz": [
+    -0.715,
+    0.6733,
+    0.1012
+   ],
+   "cluster": 2
+  },
+  {
+   "doc": "doc-002",
+   "xyz": [
+    -0.7097,
+    0.4882,
+    0.0067
+   ],
+   "cluster": 2
+  },
+  {
+   "doc": "doc-003",
+   "xyz": [
+    -0.7693,
+    0.6672,
+    0.2564
+   ],
+   "cluster": 2
+  },
+  {
+   "doc": "doc-003",
+   "xyz": [
+    -0.7295,
+    0.706,
+    0.264
+   ],
+   "cluster": 2
+  },
+  {
+   "doc": "doc-003",
+   "xyz": [
+    -0.7951,
+    0.4466,
+    -0.5664
+   ],
+   "cluster": 2
+  },
+  {
+   "doc": "doc-003",
+   "xyz": [
+    -0.7373,
+    0.5138,
+    0.3655
+   ],
+   "cluster": 2
+  },
+  {
+   "doc": "doc-003",
+   "xyz": [
+    -0.7718,
+    0.6394,
+    0.283
+   ],
+   "cluster": 2
+  },
+  {
+   "doc": "doc-004",
+   "xyz": [
+    -0.726,
+    0.4806,
+    -0.1915
+   ],
+   "cluster": 2
+  },
+  {
+   "doc": "doc-004",
+   "xyz": [
+    -0.8825,
+    0.5491,
+    -0.8785
+   ],
+   "cluster": 2
+  },
+  {
+   "doc": "doc-004",
+   "xyz": [
+    -0.837,
+    0.6093,
+    0.1002
+   ],
+   "cluster": 2
+  },
+  {
+   "doc": "doc-004",
+   "xyz": [
+    -0.9794,
+    0.5579,
+    -0.8788
+   ],
+   "cluster": 2
+  },
+  {
+   "doc": "doc-004",
+   "xyz": [
+    -0.8984,
+    0.5593,
+    -0.8401
+   ],
+   "cluster": 2
+  },
+  {
+   "doc": "doc-005",
+   "xyz": [
+    -0.5169,
+    0.9544,
+    0.3613
+   ],
+   "cluster": 2
+  },
+  {
+   "doc": "doc-005",
+   "xyz": [
+    -0.3478,
+    0.838,
+    0.3339
+   ],
+   "cluster": 2
+  },
+  {
+   "doc": "doc-005",
+   "xyz": [
+    -0.4893,
+    0.7798,
+    0.0316
+   ],
+   "cluster": 2
+  },
+  {
+   "doc": "doc-005",
+   "xyz": [
+    -0.6076,
+    0.6844,
+    -0.0571
+   ],
+   "cluster": 2
+  },
+  {
+   "doc": "doc-005",
+   "xyz": [
+    -0.4178,
+    0.5406,
+    -0.619
+   ],
+   "cluster": 2
+  },
+  {
+   "doc": "doc-005",
+   "xyz": [
+    -0.934,
+    0.5451,
+    -0.7564
+   ],
+   "cluster": 2
+  },
+  {
+   "doc": "doc-005",
+   "xyz": [
+    -0.628,
+    0.6165,
+    -0.0889
+   ],
+   "cluster": 2
+  },
+  {
+   "doc": "doc-006",
+   "xyz": [
+    -0.6061,
+    0.4311,
+    0.49
+   ],
+   "cluster": 5
+  },
+  {
+   "doc": "doc-006",
+   "xyz": [
+    -0.8255,
+    0.7318,
+    0.252
+   ],
+   "cluster": 2
+  },
+  {
+   "doc": "doc-006",
+   "xyz": [
+    -0.4485,
+    0.0246,
+    0.08
+   ],
+   "cluster": 5
+  },
+  {
+   "doc": "doc-006",
+   "xyz": [
+    -0.0105,
+    -0.4512,
+    0.1902
+   ],
+   "cluster": 0
+  },
+  {
+   "doc": "doc-006",
+   "xyz": [
+    0.5833,
+    0.2689,
+    -0.1295
+   ],
+   "cluster": 4
+  },
+  {
+   "doc": "doc-006",
+   "xyz": [
+    -0.6359,
+    -0.4603,
+    -0.1874
+   ],
+   "cluster": 6
+  },
+  {
+   "doc": "doc-006",
+   "xyz": [
+    -0.4864,
+    0.098,
+    0.208
+   ],
+   "cluster": 5
+  },
+  {
+   "doc": "doc-006",
+   "xyz": [
+    -0.266,
+    -0.0132,
+    0.6485
+   ],
+   "cluster": 5
+  },
+  {
+   "doc": "doc-006",
+   "xyz": [
+    0.7534,
+    0.2221,
+    0.0619
+   ],
+   "cluster": 4
+  },
+  {
+   "doc": "doc-006",
+   "xyz": [
+    0.0369,
+    -0.0242,
+    0.3387
+   ],
+   "cluster": 5
+  },
+  {
+   "doc": "doc-006",
+   "xyz": [
+    -0.153,
+    -0.4771,
+    -0.1356
+   ],
+   "cluster": 0
+  },
+  {
+   "doc": "doc-007",
+   "xyz": [
+    -0.2608,
+    -0.1031,
+    0.7561
+   ],
+   "cluster": 5
+  },
+  {
+   "doc": "doc-007",
+   "xyz": [
+    -0.4477,
+    -0.583,
+    -0.1311
+   ],
+   "cluster": 6
+  },
+  {
+   "doc": "doc-007",
+   "xyz": [
+    -0.2478,
+    -0.6963,
+    -0.2818
+   ],
+   "cluster": 6
+  },
+  {
+   "doc": "doc-007",
+   "xyz": [
+    -0.5588,
+    -0.3792,
+    0.2832
+   ],
+   "cluster": 6
+  },
+  {
+   "doc": "doc-007",
+   "xyz": [
+    -0.5446,
+    -0.2132,
+    0.2138
+   ],
+   "cluster": 6
+  },
+  {
+   "doc": "doc-007",
+   "xyz": [
+    -0.4283,
+    0.0722,
+    0.6184
+   ],
+   "cluster": 5
+  },
+  {
+   "doc": "doc-007",
+   "xyz": [
+    -0.5895,
+    -0.3432,
+    0.2954
+   ],
+   "cluster": 6
+  },
+  {
+   "doc": "doc-007",
+   "xyz": [
+    -0.5482,
+    -0.2397,
+    0.03
+   ],
+   "cluster": 6
+  },
+  {
+   "doc": "doc-008",
+   "xyz": [
+    -0.3282,
+    -0.3436,
+    0.7192
+   ],
+   "cluster": 1
+  },
+  {
+   "doc": "doc-008",
+   "xyz": [
+    -0.1287,
+    -0.6766,
+    0.2902
+   ],
+   "cluster": 1
+  },
+  {
+   "doc": "doc-008",
+   "xyz": [
+    -0.6567,
+    -0.5735,
+    0.1743
+   ],
+   "cluster": 1
+  },
+  {
+   "doc": "doc-008",
+   "xyz": [
+    -0.4553,
+    -0.7115,
+    0.1312
+   ],
+   "cluster": 1
+  },
+  {
+   "doc": "doc-008",
+   "xyz": [
+    -0.4532,
+    -0.4564,
+    0.7078
+   ],
+   "cluster": 1
+  },
+  {
+   "doc": "doc-008",
+   "xyz": [
+    -0.1698,
+    -0.3571,
+    0.8204
+   ],
+   "cluster": 5
+  },
+  {
+   "doc": "doc-008",
+   "xyz": [
+    -0.245,
+    -0.7134,
+    -0.1149
+   ],
+   "cluster": 1
+  },
+  {
+   "doc": "doc-008",
+   "xyz": [
+    -0.4635,
+    -0.4426,
+    -0.015
+   ],
+   "cluster": 1
+  },
+  {
+   "doc": "doc-008",
+   "xyz": [
+    -0.3815,
+    -0.6962,
+    -0.075
+   ],
+   "cluster": 1
+  },
+  {
+   "doc": "doc-008",
+   "xyz": [
+    -0.4918,
+    -0.7243,
+    0.0467
+   ],
+   "cluster": 1
+  },
+  {
+   "doc": "doc-009",
+   "xyz": [
+    -0.4655,
+    0.4492,
+    0.5897
+   ],
+   "cluster": 5
+  },
+  {
+   "doc": "doc-009",
+   "xyz": [
+    -0.5356,
+    0.5508,
+    0.432
+   ],
+   "cluster": 2
+  },
+  {
+   "doc": "doc-009",
+   "xyz": [
+    -0.7059,
+    0.3727,
+    0.1426
+   ],
+   "cluster": 2
+  },
+  {
+   "doc": "doc-009",
+   "xyz": [
+    -0.8796,
+    0.0575,
+    -0.0693
+   ],
+   "cluster": 2
+  },
+  {
+   "doc": "doc-009",
+   "xyz": [
+    -0.6712,
+    0.6595,
+    0.3549
+   ],
+   "cluster": 2
+  },
+  {
+   "doc": "doc-009",
+   "xyz": [
+    -0.7068,
+    0.4384,
+    0.2443
+   ],
+   "cluster": 2
+  },
+  {
+   "doc": "doc-010",
+   "xyz": [
+    -0.6248,
+    0.4238,
+    0.3174
+   ],
+   "cluster": 2
+  },
+  {
+   "doc": "doc-010",
+   "xyz": [
+    -0.3924,
+    0.3121,
+    0.6186
+   ],
+   "cluster": 5
+  },
+  {
+   "doc": "doc-010",
+   "xyz": [
+    -0.6594,
+    0.2608,
+    -0.3605
+   ],
+   "cluster": 2
+  },
+  {
+   "doc": "doc-010",
+   "xyz": [
+    -0.5652,
+    0.4851,
+    0.3854
+   ],
+   "cluster": 2
+  },
+  {
+   "doc": "doc-010",
+   "xyz": [
+    -0.7432,
+    0.639,
+    0.2269
+   ],
+   "cluster": 2
+  },
+  {
+   "doc": "doc-010",
+   "xyz": [
+    -0.622,
+    0.1688,
+    -0.0074
+   ],
+   "cluster": 2
+  },
+  {
+   "doc": "doc-011",
+   "xyz": [
+    0.7176,
+    0.1146,
+    -0.2602
+   ],
+   "cluster": 4
+  },
+  {
+   "doc": "doc-011",
+   "xyz": [
+    0.6776,
+    0.1318,
+    -0.0471
+   ],
+   "cluster": 4
+  },
+  {
+   "doc": "doc-011",
+   "xyz": [
+    0.6441,
+    0.1651,
+    -0.6112
+   ],
+   "cluster": 4
+  },
+  {
+   "doc": "doc-011",
+   "xyz": [
+    0.4723,
+    0.0158,
+    -0.7242
+   ],
+   "cluster": 4
+  },
+  {
+   "doc": "doc-011",
+   "xyz": [
+    0.545,
+    -0.0374,
+    -0.7493
+   ],
+   "cluster": 4
+  },
+  {
+   "doc": "doc-011",
+   "xyz": [
+    0.4698,
+    -0.1243,
+    -0.0431
+   ],
+   "cluster": 4
+  },
+  {
+   "doc": "doc-011",
+   "xyz": [
+    0.5908,
+    -0.1176,
+    0.0432
+   ],
+   "cluster": 4
+  },
+  {
+   "doc": "doc-011",
+   "xyz": [
+    0.3758,
+    -0.4178,
+    -0.3769
+   ],
+   "cluster": 4
+  },
+  {
+   "doc": "doc-011",
+   "xyz": [
+    0.4837,
+    -0.4054,
+    -0.2482
+   ],
+   "cluster": 4
+  },
+  {
+   "doc": "doc-011",
+   "xyz": [
+    0.7124,
+    -0.0838,
+    0.0939
+   ],
+   "cluster": 4
+  },
+  {
+   "doc": "doc-011",
+   "xyz": [
+    0.3871,
+    -0.2205,
+    -0.1712
+   ],
+   "cluster": 4
+  },
+  {
+   "doc": "doc-011",
+   "xyz": [
+    0.7208,
+    0.1822,
+    -0.0511
+   ],
+   "cluster": 4
+  },
+  {
+   "doc": "doc-011",
+   "xyz": [
+    0.9144,
+    0.2492,
+    -0.2508
+   ],
+   "cluster": 4
+  },
+  {
+   "doc": "doc-012",
+   "xyz": [
+    0.987,
+    0.3582,
+    -0.1141
+   ],
+   "cluster": 4
+  },
+  {
+   "doc": "doc-012",
+   "xyz": [
+    0.5787,
+    0.0004,
+    -0.0673
+   ],
+   "cluster": 4
+  },
+  {
+   "doc": "doc-012",
+   "xyz": [
+    0.5948,
+    -0.1507,
+    -0.2893
+   ],
+   "cluster": 4
+  },
+  {
+   "doc": "doc-012",
+   "xyz": [
+    0.3206,
+    -0.0784,
+    -0.4915
+   ],
+   "cluster": 4
+  },
+  {
+   "doc": "doc-012",
+   "xyz": [
+    0.962,
+    0.34,
+    -0.0652
+   ],
+   "cluster": 4
+  },
+  {
+   "doc": "doc-012",
+   "xyz": [
+    0.8766,
+    0.4273,
+    -0.0387
+   ],
+   "cluster": 4
+  },
+  {
+   "doc": "doc-012",
+   "xyz": [
+    0.6242,
+    0.0839,
+    -0.1251
+   ],
+   "cluster": 4
+  },
+  {
+   "doc": "doc-013",
+   "xyz": [
+    0.8403,
+    0.3147,
+    -0.165
+   ],
+   "cluster": 4
+  },
+  {
+   "doc": "doc-013",
+   "xyz": [
+    0.8366,
+    0.4507,
+    0.0952
+   ],
+   "cluster": 4
+  },
+  {
+   "doc": "doc-013",
+   "xyz": [
+    0.5664,
+    0.2876,
+    -0.1367
+   ],
+   "cluster": 4
+  },
+  {
+   "doc": "doc-013",
+   "xyz": [
+    0.8013,
+    0.275,
+    -0.3545
+   ],
+   "cluster": 4
+  },
+  {
+   "doc": "doc-013",
+   "xyz": [
+    0.6064,
+    0.226,
+    -0.3688
+   ],
+   "cluster": 4
+  },
+  {
+   "doc": "doc-014",
+   "xyz": [
+    0.6491,
+    0.2811,
+    0.2946
+   ],
+   "cluster": 4
+  },
+  {
+   "doc": "doc-014",
+   "xyz": [
+    0.9106,
+    0.3083,
+    -0.1594
+   ],
+   "cluster": 4
+  },
+  {
+   "doc": "doc-014",
+   "xyz": [
+    0.568,
+    0.0564,
+    -0.5633
+   ],
+   "cluster": 4
+  },
+  {
+   "doc": "doc-014",
+   "xyz": [
+    0.8471,
+    0.2133,
+    -0.3738
+   ],
+   "cluster": 4
+  },
+  {
+   "doc": "doc-014",
+   "xyz": [
+    0.7796,
+    0.168,
+    -0.3899
+   ],
+   "cluster": 4
+  },
+  {
+   "doc": "doc-015",
+   "xyz": [
+    0.4771,
+    0.0319,
+    -0.6167
+   ],
+   "cluster": 4
+  },
+  {
+   "doc": "doc-015",
+   "xyz": [
+    0.3906,
+    -0.0519,
+    -0.5907
+   ],
+   "cluster": 4
+  },
+  {
+   "doc": "doc-015",
+   "xyz": [
+    0.4579,
+    -0.1473,
+    -0.4277
+   ],
+   "cluster": 4
+  },
+  {
+   "doc": "doc-015",
+   "xyz": [
+    0.6044,
+    -0.0683,
+    -0.3466
+   ],
+   "cluster": 4
+  },
+  {
+   "doc": "doc-015",
+   "xyz": [
+    0.9715,
+    0.3097,
+    -0.2712
+   ],
+   "cluster": 4
+  },
+  {
+   "doc": "doc-015",
+   "xyz": [
+    0.7686,
+    0.1373,
+    -0.4956
+   ],
+   "cluster": 4
+  },
+  {
+   "doc": "doc-015",
+   "xyz": [
+    0.4708,
+    -0.0072,
+    -0.6332
+   ],
+   "cluster": 4
+  },
+  {
+   "doc": "doc-016",
+   "xyz": [
+    0.8664,
+    0.4095,
+    0.0958
+   ],
+   "cluster": 4
+  },
+  {
+   "doc": "doc-016",
+   "xyz": [
+    0.0048,
+    0.1131,
+    0.2933
+   ],
+   "cluster": 5
+  },
+  {
+   "doc": "doc-016",
+   "xyz": [
+    0.5782,
+    0.1691,
+    0.1
+   ],
+   "cluster": 4
+  },
+  {
+   "doc": "doc-016",
+   "xyz": [
+    0.6914,
+    0.0514,
+    -0.3698
+   ],
+   "cluster": 4
+  },
+  {
+   "doc": "doc-017",
+   "xyz": [
+    0.0078,
+    -0.4294,
+    0.0369
+   ],
+   "cluster": 0
+  },
+  {
+   "doc": "doc-017",
+   "xyz": [
+    0.257,
+    -0.5486,
+    0.1627
+   ],
+   "cluster": 0
+  },
+  {
+   "doc": "doc-017",
+   "xyz": [
+    0.0665,
+    -0.5933,
+    0.121
+   ],
+   "cluster": 0
+  },
+  {
+   "doc": "doc-017",
+   "xyz": [
+    -0.0537,
+    -0.6731,
+    0.222
+   ],
+   "cluster": 0
+  },
+  {
+   "doc": "doc-017",
+   "xyz": [
+    0.0692,
+    -0.4121,
+    0.2239
+   ],
+   "cluster": 0
+  },
+  {
+   "doc": "doc-017",
+   "xyz": [
+    -0.1373,
+    -0.2893,
+    0.2119
+   ],
+   "cluster": 0
+  },
+  {
+   "doc": "doc-017",
+   "xyz": [
+    -0.5906,
+    -0.5578,
+    -0.0992
+   ],
+   "cluster": 1
+  },
+  {
+   "doc": "doc-018",
+   "xyz": [
+    -0.1575,
+    -0.3886,
+    -0.0489
+   ],
+   "cluster": 0
+  },
+  {
+   "doc": "doc-018",
+   "xyz": [
+    0.0536,
+    -0.1439,
+    0.3762
+   ],
+   "cluster": 0
+  },
+  {
+   "doc": "doc-018",
+   "xyz": [
+    -0.3743,
+    -0.4548,
+    -0.2003
+   ],
+   "cluster": 0
+  },
+  {
+   "doc": "doc-019",
+   "xyz": [
+    0.2574,
+    -0.0197,
+    0.1376
+   ],
+   "cluster": 0
+  },
+  {
+   "doc": "doc-019",
+   "xyz": [
+    0.2819,
+    0.0198,
+    -0.4511
+   ],
+   "cluster": 3
+  },
+  {
+   "doc": "doc-019",
+   "xyz": [
+    0.4547,
+    -0.1196,
+    -0.713
+   ],
+   "cluster": 3
+  },
+  {
+   "doc": "doc-019",
+   "xyz": [
+    0.379,
+    -0.1053,
+    -0.5215
+   ],
+   "cluster": 3
+  },
+  {
+   "doc": "doc-019",
+   "xyz": [
+    -0.1054,
+    -0.0721,
+    -0.4342
+   ],
+   "cluster": 6
+  },
+  {
+   "doc": "doc-020",
+   "xyz": [
+    -0.4621,
+    0.0029,
+    0.6223
+   ],
+   "cluster": 1
+  },
+  {
+   "doc": "doc-020",
+   "xyz": [
+    -0.4411,
+    -0.4563,
+    0.0739
+   ],
+   "cluster": 1
+  },
+  {
+   "doc": "doc-020",
+   "xyz": [
+    0.45,
+    -0.278,
+    -0.1297
+   ],
+   "cluster": 3
+  },
+  {
+   "doc": "doc-020",
+   "xyz": [
+    0.4949,
+    -0.3809,
+    -0.2806
+   ],
+   "cluster": 3
+  },
+  {
+   "doc": "doc-020",
+   "xyz": [
+    0.1684,
+    -0.5383,
+    -0.2722
+   ],
+   "cluster": 3
+  },
+  {
+   "doc": "doc-020",
+   "xyz": [
+    0.051,
+    -0.6055,
+    -0.1187
+   ],
+   "cluster": 0
+  },
+  {
+   "doc": "doc-020",
+   "xyz": [
+    0.3083,
+    -0.479,
+    0.0598
+   ],
+   "cluster": 0
+  },
+  {
+   "doc": "doc-020",
+   "xyz": [
+    -0.1314,
+    -0.3058,
+    -0.1427
+   ],
+   "cluster": 1
+  },
+  {
+   "doc": "doc-020",
+   "xyz": [
+    -0.4002,
+    -0.3163,
+    -0.2625
+   ],
+   "cluster": 1
+  },
+  {
+   "doc": "doc-020",
+   "xyz": [
+    -0.6704,
+    -0.7568,
+    -0.0767
+   ],
+   "cluster": 1
+  },
+  {
+   "doc": "doc-021",
+   "xyz": [
+    -0.4418,
+    -0.4607,
+    0.0043
+   ],
+   "cluster": 1
+  },
+  {
+   "doc": "doc-021",
+   "xyz": [
+    -0.4502,
+    -0.4067,
+    0.1667
+   ],
+   "cluster": 1
+  },
+  {
+   "doc": "doc-021",
+   "xyz": [
+    -0.3483,
+    -0.4465,
+    -0.0272
+   ],
+   "cluster": 1
+  },
+  {
+   "doc": "doc-021",
+   "xyz": [
+    -0.5846,
+    -0.3083,
+    0.4449
+   ],
+   "cluster": 1
+  },
+  {
+   "doc": "doc-021",
+   "xyz": [
+    -0.4746,
+    -0.3734,
+    0.5083
+   ],
+   "cluster": 1
+  },
+  {
+   "doc": "doc-021",
+   "xyz": [
+    -0.7233,
+    -0.7122,
+    -0.0146
+   ],
+   "cluster": 1
+  },
+  {
+   "doc": "doc-021",
+   "xyz": [
+    -0.4434,
+    -0.6084,
+    0.3257
+   ],
+   "cluster": 1
+  },
+  {
+   "doc": "doc-021",
+   "xyz": [
+    -0.4452,
+    -0.6974,
+    -0.1392
+   ],
+   "cluster": 1
+  },
+  {
+   "doc": "doc-022",
+   "xyz": [
+    0.1964,
+    -0.4031,
+    -0.027
+   ],
+   "cluster": 0
+  },
+  {
+   "doc": "doc-022",
+   "xyz": [
+    0.3489,
+    -0.3452,
+    0.1276
+   ],
+   "cluster": 0
+  },
+  {
+   "doc": "doc-022",
+   "xyz": [
+    0.3075,
+    -0.3887,
+    0.2834
+   ],
+   "cluster": 0
+  },
+  {
+   "doc": "doc-022",
+   "xyz": [
+    0.1775,
+    0.031,
+    -0.0884
+   ],
+   "cluster": 0
+  },
+  {
+   "doc": "doc-022",
+   "xyz": [
+    -0.107,
+    -0.5585,
+    0.016
+   ],
+   "cluster": 0
+  },
+  {
+   "doc": "doc-022",
+   "xyz": [
+    -0.0034,
+    -0.286,
+    0.2329
+   ],
+   "cluster": 0
+  },
+  {
+   "doc": "doc-022",
+   "xyz": [
+    0.2599,
+    -0.3807,
+    0.0302
+   ],
+   "cluster": 0
+  },
+  {
+   "doc": "doc-023",
+   "xyz": [
+    -0.3804,
+    -0.0415,
+    0.5033
+   ],
+   "cluster": 5
+  },
+  {
+   "doc": "doc-023",
+   "xyz": [
+    -0.6086,
+    -0.1951,
+    -0.2543
+   ],
+   "cluster": 1
+  },
+  {
+   "doc": "doc-023",
+   "xyz": [
+    -0.3357,
+    -0.477,
+    -0.3189
+   ],
+   "cluster": 1
+  },
+  {
+   "doc": "doc-023",
+   "xyz": [
+    -0.4067,
+    -0.4525,
+    -0.2575
+   ],
+   "cluster": 1
+  },
+  {
+   "doc": "doc-023",
+   "xyz": [
+    -0.6668,
+    -0.5796,
+    0.0823
+   ],
+   "cluster": 1
+  },
+  {
+   "doc": "doc-023",
+   "xyz": [
+    -0.4847,
+    -0.2723,
+    0.3856
+   ],
+   "cluster": 5
+  },
+  {
+   "doc": "doc-023",
+   "xyz": [
+    -0.6217,
+    -0.2749,
+    -0.3719
+   ],
+   "cluster": 1
+  },
+  {
+   "doc": "doc-023",
+   "xyz": [
+    -0.8896,
+    -0.3116,
+    -0.1121
+   ],
+   "cluster": 1
+  },
+  {
+   "doc": "doc-023",
+   "xyz": [
+    -0.39,
+    0.0555,
+    0.5303
+   ],
+   "cluster": 5
+  },
+  {
+   "doc": "doc-023",
+   "xyz": [
+    -0.7156,
+    -0.3245,
+    0.2426
+   ],
+   "cluster": 1
+  },
+  {
+   "doc": "doc-023",
+   "xyz": [
+    -0.6683,
+    -0.5104,
+    -0.1975
+   ],
+   "cluster": 1
+  },
+  {
+   "doc": "doc-024",
+   "xyz": [
+    -0.4426,
+    0.814,
+    0.1637
+   ],
+   "cluster": 2
+  },
+  {
+   "doc": "doc-024",
+   "xyz": [
+    -0.3188,
+    0.7702,
+    0.1392
+   ],
+   "cluster": 2
+  },
+  {
+   "doc": "doc-024",
+   "xyz": [
+    -0.3265,
+    0.7016,
+    0.1578
+   ],
+   "cluster": 2
+  },
+  {
+   "doc": "doc-024",
+   "xyz": [
+    -0.6767,
+    0.8307,
+    -0.0568
+   ],
+   "cluster": 2
+  },
+  {
+   "doc": "doc-024",
+   "xyz": [
+    -0.5879,
+    0.6237,
+    -0.7581
+   ],
+   "cluster": 2
+  },
+  {
+   "doc": "doc-024",
+   "xyz": [
+    -0.4215,
+    0.6839,
+    -0.2799
+   ],
+   "cluster": 2
+  },
+  {
+   "doc": "doc-024",
+   "xyz": [
+    -0.3541,
+    0.6487,
+    0.2158
+   ],
+   "cluster": 2
+  },
+  {
+   "doc": "doc-024",
+   "xyz": [
+    -0.2997,
+    0.4807,
+    0.186
+   ],
+   "cluster": 2
+  },
+  {
+   "doc": "doc-024",
+   "xyz": [
+    -0.6089,
+    0.491,
+    -0.5642
+   ],
+   "cluster": 2
+  },
+  {
+   "doc": "doc-025",
+   "xyz": [
+    -0.5642,
+    -0.0751,
+    0.393
+   ],
+   "cluster": 1
+  },
+  {
+   "doc": "doc-025",
+   "xyz": [
+    -0.4648,
+    -0.4797,
+    0.2124
+   ],
+   "cluster": 1
+  },
+  {
+   "doc": "doc-025",
+   "xyz": [
+    -0.4897,
+    -0.0575,
+    0.4586
+   ],
+   "cluster": 5
+  },
+  {
+   "doc": "doc-025",
+   "xyz": [
+    -0.363,
+    -0.2133,
+    -0.4028
+   ],
+   "cluster": 1
+  },
+  {
+   "doc": "doc-025",
+   "xyz": [
+    -0.3389,
+    -0.0366,
+    0.5925
+   ],
+   "cluster": 5
+  },
+  {
+   "doc": "doc-025",
+   "xyz": [
+    -0.7551,
+    -0.4707,
+    -0.334
+   ],
+   "cluster": 1
+  },
+  {
+   "doc": "doc-025",
+   "xyz": [
+    -0.591,
+    -0.0664,
+    -0.7079
+   ],
+   "cluster": 6
+  },
+  {
+   "doc": "doc-026",
+   "xyz": [
+    0.6837,
+    0.3503,
+    0.2285
+   ],
+   "cluster": 4
+  },
+  {
+   "doc": "doc-026",
+   "xyz": [
+    0.4672,
+    0.0017,
+    -0.4024
+   ],
+   "cluster": 4
+  },
+  {
+   "doc": "doc-026",
+   "xyz": [
+    0.6299,
+    0.1444,
+    0.136
+   ],
+   "cluster": 4
+  },
+  {
+   "doc": "doc-026",
+   "xyz": [
+    0.8492,
+    0.2104,
+    -0.1468
+   ],
+   "cluster": 4
+  },
+  {
+   "doc": "doc-026",
+   "xyz": [
+    0.4083,
+    -0.2187,
+    -0.1664
+   ],
+   "cluster": 4
+  },
+  {
+   "doc": "doc-026",
+   "xyz": [
+    0.6044,
+    0.0122,
+    -0.1314
+   ],
+   "cluster": 4
+  },
+  {
+   "doc": "doc-026",
+   "xyz": [
+    0.8701,
+    0.3193,
+    -0.1757
+   ],
+   "cluster": 4
+  },
+  {
+   "doc": "doc-027",
+   "xyz": [
+    0.422,
+    0.2917,
+    0.1678
+   ],
+   "cluster": 5
+  },
+  {
+   "doc": "doc-027",
+   "xyz": [
+    0.7915,
+    0.1693,
+    -0.2772
+   ],
+   "cluster": 4
+  },
+  {
+   "doc": "doc-027",
+   "xyz": [
+    0.0978,
+    0.098,
+    0.2418
+   ],
+   "cluster": 5
+  },
+  {
+   "doc": "doc-027",
+   "xyz": [
+    -0.2175,
+    0.1695,
+    0.6791
+   ],
+   "cluster": 5
+  },
+  {
+   "doc": "doc-027",
+   "xyz": [
+    0.5676,
+    0.2254,
+    -0.2632
+   ],
+   "cluster": 4
+  },
+  {
+   "doc": "doc-028",
+   "xyz": [
+    -0.4406,
+    -0.4239,
+    0.3463
+   ],
+   "cluster": 6
+  },
+  {
+   "doc": "doc-028",
+   "xyz": [
+    -0.1902,
+    -0.3638,
+    0.2311
+   ],
+   "cluster": 6
+  },
+  {
+   "doc": "doc-028",
+   "xyz": [
+    -0.0737,
+    -0.3553,
+    -0.0409
+   ],
+   "cluster": 6
+  },
+  {
+   "doc": "doc-028",
+   "xyz": [
+    -0.3284,
+    -0.6312,
+    -0.2305
+   ],
+   "cluster": 6
+  },
+  {
+   "doc": "doc-028",
+   "xyz": [
+    0.5566,
+    -0.2806,
+    0.2347
+   ],
+   "cluster": 4
+  },
+  {
+   "doc": "doc-028",
+   "xyz": [
+    -0.3501,
+    -0.6797,
+    0.1573
+   ],
+   "cluster": 1
+  },
+  {
+   "doc": "doc-028",
+   "xyz": [
+    0.3838,
+    -0.2548,
+    -0.0707
+   ],
+   "cluster": 3
+  },
+  {
+   "doc": "doc-029",
+   "xyz": [
+    0.3621,
+    0.2011,
+    0.6906
+   ],
+   "cluster": 5
+  },
+  {
+   "doc": "doc-029",
+   "xyz": [
+    0.2793,
+    -0.0211,
+    -0.5383
+   ],
+   "cluster": 3
+  },
+  {
+   "doc": "doc-029",
+   "xyz": [
+    0.173,
+    -0.0364,
+    -0.4759
+   ],
+   "cluster": 3
+  },
+  {
+   "doc": "doc-029",
+   "xyz": [
+    0.9549,
+    0.2827,
+    -0.2827
+   ],
+   "cluster": 4
+  },
+  {
+   "doc": "doc-029",
+   "xyz": [
+    0.6548,
+    0.2309,
+    -0.3663
+   ],
+   "cluster": 3
+  },
+  {
+   "doc": "doc-029",
+   "xyz": [
+    0.9879,
+    0.2045,
+    -0.3646
+   ],
+   "cluster": 4
+  },
+  {
+   "doc": "doc-029",
+   "xyz": [
+    0.5085,
+    -0.0935,
+    -0.551
+   ],
+   "cluster": 3
+  },
+  {
+   "doc": "doc-029",
+   "xyz": [
+    0.7335,
+    0.0154,
+    0.0349
+   ],
+   "cluster": 3
+  },
+  {
+   "doc": "doc-029",
+   "xyz": [
+    0.6104,
+    0.0568,
+    -0.0665
+   ],
+   "cluster": 3
+  },
+  {
+   "doc": "doc-029",
+   "xyz": [
+    0.769,
+    0.0615,
+    -0.1133
+   ],
+   "cluster": 4
+  },
+  {
+   "doc": "doc-029",
+   "xyz": [
+    0.1329,
+    0.0242,
+    -0.3889
+   ],
+   "cluster": 3
+  },
+  {
+   "doc": "doc-030",
+   "xyz": [
+    0.8932,
+    0.371,
+    -0.0419
+   ],
+   "cluster": 4
+  },
+  {
+   "doc": "doc-030",
+   "xyz": [
+    0.392,
+    0.1338,
+    -0.6231
+   ],
+   "cluster": 4
+  },
+  {
+   "doc": "doc-030",
+   "xyz": [
+    0.6106,
+    0.1857,
+    -0.2444
+   ],
+   "cluster": 4
+  },
+  {
+   "doc": "doc-030",
+   "xyz": [
+    0.9788,
+    0.3796,
+    -0.1101
+   ],
+   "cluster": 4
+  },
+  {
+   "doc": "doc-030",
+   "xyz": [
+    0.7741,
+    0.093,
+    -0.4648
+   ],
+   "cluster": 4
+  },
+  {
+   "doc": "doc-030",
+   "xyz": [
+    0.0582,
+    0.5213,
+    -0.5305
+   ],
+   "cluster": 2
+  },
+  {
+   "doc": "doc-030",
+   "xyz": [
+    0.7277,
+    -0.1022,
+    0.2154
+   ],
+   "cluster": 4
+  },
+  {
+   "doc": "doc-030",
+   "xyz": [
+    0.9354,
+    0.1467,
+    -0.2881
+   ],
+   "cluster": 4
+  },
+  {
+   "doc": "doc-031",
+   "xyz": [
+    0.6186,
+    0.3946,
+    0.3537
+   ],
+   "cluster": 4
+  },
+  {
+   "doc": "doc-031",
+   "xyz": [
+    0.9286,
+    0.2487,
+    -0.0112
+   ],
+   "cluster": 4
+  },
+  {
+   "doc": "doc-031",
+   "xyz": [
+    0.9349,
+    0.2783,
+    -0.2407
+   ],
+   "cluster": 4
+  },
+  {
+   "doc": "doc-031",
+   "xyz": [
+    0.7359,
+    0.2095,
+    -0.2658
+   ],
+   "cluster": 4
+  },
+  {
+   "doc": "doc-031",
+   "xyz": [
+    0.3525,
+    -0.0173,
+    -0.6992
+   ],
+   "cluster": 4
+  },
+  {
+   "doc": "doc-031",
+   "xyz": [
+    0.6214,
+    0.2485,
+    -0.4546
+   ],
+   "cluster": 4
+  },
+  {
+   "doc": "doc-031",
+   "xyz": [
+    0.9096,
+    0.3649,
+    -0.0454
+   ],
+   "cluster": 4
+  },
+  {
+   "doc": "doc-031",
+   "xyz": [
+    0.7413,
+    0.364,
+    0.1353
+   ],
+   "cluster": 4
+  },
+  {
+   "doc": "doc-031",
+   "xyz": [
+    0.6323,
+    0.1145,
+    -0.4074
+   ],
+   "cluster": 3
+  },
+  {
+   "doc": "doc-032",
+   "xyz": [
+    0.1095,
+    0.1856,
+    0.5635
+   ],
+   "cluster": 5
+  },
+  {
+   "doc": "doc-032",
+   "xyz": [
+    -0.3824,
+    -0.0173,
+    0.3372
+   ],
+   "cluster": 1
+  },
+  {
+   "doc": "doc-032",
+   "xyz": [
+    0.3885,
+    0.173,
+    0.7228
+   ],
+   "cluster": 5
+  },
+  {
+   "doc": "doc-032",
+   "xyz": [
+    0.0162,
+    0.0988,
+    -0.0055
+   ],
+   "cluster": 1
+  },
+  {
+   "doc": "doc-032",
+   "xyz": [
+    0.2294,
+    -0.2472,
+    0.0945
+   ],
+   "cluster": 3
+  },
+  {
+   "doc": "doc-033",
+   "xyz": [
+    0.6957,
+    -0.0955,
+    -0.0995
+   ],
+   "cluster": 3
+  },
+  {
+   "doc": "doc-033",
+   "xyz": [
+    0.7046,
+    -0.0843,
+    -0.4089
+   ],
+   "cluster": 3
+  },
+  {
+   "doc": "doc-033",
+   "xyz": [
+    0.6094,
+    -0.1013,
+    -0.2248
+   ],
+   "cluster": 3
+  },
+  {
+   "doc": "doc-033",
+   "xyz": [
+    0.3272,
+    -0.2444,
+    -0.7409
+   ],
+   "cluster": 3
+  },
+  {
+   "doc": "doc-033",
+   "xyz": [
+    0.4701,
+    -0.2724,
+    -0.6754
+   ],
+   "cluster": 3
+  },
+  {
+   "doc": "doc-033",
+   "xyz": [
+    0.4569,
+    -0.3448,
+    -0.4465
+   ],
+   "cluster": 3
+  },
+  {
+   "doc": "doc-033",
+   "xyz": [
+    0.6442,
+    -0.1468,
+    -0.2881
+   ],
+   "cluster": 3
+  },
+  {
+   "doc": "doc-033",
+   "xyz": [
+    0.3473,
+    -0.3213,
+    -0.0116
+   ],
+   "cluster": 3
+  },
+  {
+   "doc": "doc-034",
+   "xyz": [
+    0.7176,
+    0.2382,
+    -0.1972
+   ],
+   "cluster": 4
+  },
+  {
+   "doc": "doc-034",
+   "xyz": [
+    0.4836,
+    -0.0602,
+    -0.4255
+   ],
+   "cluster": 4
+  },
+  {
+   "doc": "doc-034",
+   "xyz": [
+    0.7511,
+    0.0575,
+    -0.1253
+   ],
+   "cluster": 3
+  },
+  {
+   "doc": "doc-034",
+   "xyz": [
+    0.5994,
+    -0.0599,
+    -0.0632
+   ],
+   "cluster": 4
+  },
+  {
+   "doc": "doc-034",
+   "xyz": [
+    0.8849,
+    0.3721,
+    -0.3689
+   ],
+   "cluster": 4
+  },
+  {
+   "doc": "doc-035",
+   "xyz": [
+    0.2789,
+    0.3166,
+    0.5204
+   ],
+   "cluster": 5
+  },
+  {
+   "doc": "doc-035",
+   "xyz": [
+    0.201,
+    -0.1476,
+    -0.0521
+   ],
+   "cluster": 0
+  },
+  {
+   "doc": "doc-035",
+   "xyz": [
+    0.1465,
+    -0.0207,
+    -0.2903
+   ],
+   "cluster": 0
+  },
+  {
+   "doc": "doc-035",
+   "xyz": [
+    -0.5737,
+    0.354,
+    -0.7935
+   ],
+   "cluster": 2
+  },
+  {
+   "doc": "doc-035",
+   "xyz": [
+    -0.2591,
+    0.0758,
+    -0.4941
+   ],
+   "cluster": 6
+  },
+  {
+   "doc": "doc-035",
+   "xyz": [
+    -0.4664,
+    -0.2847,
+    -0.4264
+   ],
+   "cluster": 6
+  },
+  {
+   "doc": "doc-035",
+   "xyz": [
+    -0.551,
+    -0.2219,
+    -0.3151
+   ],
+   "cluster": 6
+  },
+  {
+   "doc": "doc-035",
+   "xyz": [
+    0.5022,
+    0.2065,
+    0.3225
+   ],
+   "cluster": 3
+  },
+  {
+   "doc": "doc-035",
+   "xyz": [
+    0.471,
+    0.1791,
+    0.3803
+   ],
+   "cluster": 0
+  },
+  {
+   "doc": "doc-035",
+   "xyz": [
+    -0.0109,
+    -0.1054,
+    -0.5529
+   ],
+   "cluster": 3
+  },
+  {
+   "doc": "doc-036",
+   "xyz": [
+    0.0652,
+    -0.21,
+    0.8854
+   ],
+   "cluster": 5
+  },
+  {
+   "doc": "doc-036",
+   "xyz": [
+    -0.2522,
+    -0.6371,
+    0.1978
+   ],
+   "cluster": 1
+  },
+  {
+   "doc": "doc-036",
+   "xyz": [
+    0.3154,
+    -0.4374,
+    0.3746
+   ],
+   "cluster": 0
+  },
+  {
+   "doc": "doc-036",
+   "xyz": [
+    -0.1408,
+    -0.5449,
+    0.1495
+   ],
+   "cluster": 1
+  },
+  {
+   "doc": "doc-036",
+   "xyz": [
+    -0.019,
+    -0.4792,
+    0.3904
+   ],
+   "cluster": 1
+  },
+  {
+   "doc": "doc-036",
+   "xyz": [
+    0.4802,
+    -0.1493,
+    0.2535
+   ],
+   "cluster": 4
+  },
+  {
+   "doc": "doc-036",
+   "xyz": [
+    0.4698,
+    -0.23,
+    -0.0427
+   ],
+   "cluster": 4
+  },
+  {
+   "doc": "doc-036",
+   "xyz": [
+    0.0015,
+    -0.5435,
+    -0.07
+   ],
+   "cluster": 0
+  },
+  {
+   "doc": "doc-036",
+   "xyz": [
+    0.0979,
+    -0.3754,
+    0.3344
+   ],
+   "cluster": 1
+  },
+  {
+   "doc": "doc-036",
+   "xyz": [
+    0.2048,
+    0.0676,
+    0.2726
+   ],
+   "cluster": 0
+  },
+  {
+   "doc": "doc-037",
+   "xyz": [
+    -0.1709,
+    -0.3325,
+    0.653
+   ],
+   "cluster": 0
+  },
+  {
+   "doc": "doc-037",
+   "xyz": [
+    -0.1741,
+    -0.1016,
+    -0.2645
+   ],
+   "cluster": 1
+  },
+  {
+   "doc": "doc-037",
+   "xyz": [
+    -0.011,
+    -0.185,
+    -0.3575
+   ],
+   "cluster": 3
+  },
+  {
+   "doc": "doc-037",
+   "xyz": [
+    -0.2505,
+    -0.3562,
+    0.094
+   ],
+   "cluster": 0
+  },
+  {
+   "doc": "doc-037",
+   "xyz": [
+    0.1826,
+    -0.2759,
+    0.4563
+   ],
+   "cluster": 0
+  },
+  {
+   "doc": "doc-037",
+   "xyz": [
+    -0.3002,
+    -0.6139,
+    -0.0014
+   ],
+   "cluster": 0
+  },
+  {
+   "doc": "doc-038",
+   "xyz": [
+    -0.3713,
+    0.5403,
+    0.5032
+   ],
+   "cluster": 2
+  },
+  {
+   "doc": "doc-038",
+   "xyz": [
+    -0.6325,
+    0.7151,
+    -0.8467
+   ],
+   "cluster": 2
+  },
+  {
+   "doc": "doc-038",
+   "xyz": [
+    -0.598,
+    0.2786,
+    -0.181
+   ],
+   "cluster": 2
+  },
+  {
+   "doc": "doc-038",
+   "xyz": [
+    -0.6285,
+    0.3992,
+    -0.6284
+   ],
+   "cluster": 2
+  },
+  {
+   "doc": "doc-038",
+   "xyz": [
+    -0.2969,
+    0.1064,
+    -0.2518
+   ],
+   "cluster": 2
+  },
+  {
+   "doc": "doc-038",
+   "xyz": [
+    -0.3536,
+    0.3216,
+    0.0923
+   ],
+   "cluster": 2
+  },
+  {
+   "doc": "doc-038",
+   "xyz": [
+    -0.7015,
+    0.7101,
+    0.0041
+   ],
+   "cluster": 2
+  },
+  {
+   "doc": "doc-038",
+   "xyz": [
+    -0.5296,
+    0.4748,
+    -0.159
+   ],
+   "cluster": 2
+  },
+  {
+   "doc": "doc-038",
+   "xyz": [
+    0.1067,
+    0.2623,
+    -0.3764
+   ],
+   "cluster": 3
+  },
+  {
+   "doc": "doc-039",
+   "xyz": [
+    -0.2886,
+    0.1703,
+    0.7266
+   ],
+   "cluster": 5
+  },
+  {
+   "doc": "doc-039",
+   "xyz": [
+    -0.4673,
+    0.0767,
+    0.6851
+   ],
+   "cluster": 5
+  },
+  {
+   "doc": "doc-039",
+   "xyz": [
+    -0.3315,
+    -0.3819,
+    -0.0023
+   ],
+   "cluster": 6
+  },
+  {
+   "doc": "doc-040",
+   "xyz": [
+    0.2887,
+    0.1908,
+    0.3111
+   ],
+   "cluster": 5
+  },
+  {
+   "doc": "doc-040",
+   "xyz": [
+    0.3763,
+    -0.2802,
+    -0.4402
+   ],
+   "cluster": 3
+  },
+  {
+   "doc": "doc-040",
+   "xyz": [
+    0.4348,
+    -0.0718,
+    -0.344
+   ],
+   "cluster": 3
+  },
+  {
+   "doc": "doc-040",
+   "xyz": [
+    0.5501,
+    -0.0293,
+    0.0225
+   ],
+   "cluster": 3
+  },
+  {
+   "doc": "doc-040",
+   "xyz": [
+    -0.5386,
+    0.0366,
+    -0.0844
+   ],
+   "cluster": 2
+  },
+  {
+   "doc": "doc-041",
+   "xyz": [
+    0.1613,
+    -0.4945,
+    -0.0092
+   ],
+   "cluster": 0
+  },
+  {
+   "doc": "doc-041",
+   "xyz": [
+    0.0179,
+    -0.661,
+    0.172
+   ],
+   "cluster": 0
+  },
+  {
+   "doc": "doc-041",
+   "xyz": [
+    -0.0647,
+    -0.6376,
+    -0.1919
+   ],
+   "cluster": 0
+  },
+  {
+   "doc": "doc-041",
+   "xyz": [
+    0.1888,
+    -0.5947,
+    0.0439
+   ],
+   "cluster": 0
+  },
+  {
+   "doc": "doc-041",
+   "xyz": [
+    0.0689,
+    -0.5473,
+    -0.0857
+   ],
+   "cluster": 0
+  },
+  {
+   "doc": "doc-041",
+   "xyz": [
+    -0.2939,
+    -0.7644,
+    -0.0112
+   ],
+   "cluster": 1
+  },
+  {
+   "doc": "doc-041",
+   "xyz": [
+    -0.2887,
+    -0.7864,
+    -0.2227
+   ],
+   "cluster": 1
+  },
+  {
+   "doc": "doc-041",
+   "xyz": [
+    -0.121,
+    -0.5703,
+    0.3722
+   ],
+   "cluster": 1
+  },
+  {
+   "doc": "doc-042",
+   "xyz": [
+    -0.4186,
+    -0.5488,
+    -0.4715
+   ],
+   "cluster": 6
+  },
+  {
+   "doc": "doc-042",
+   "xyz": [
+    -0.2296,
+    -0.6214,
+    -0.1328
+   ],
+   "cluster": 6
+  },
+  {
+   "doc": "doc-042",
+   "xyz": [
+    -0.021,
+    -0.6173,
+    -0.0364
+   ],
+   "cluster": 6
+  },
+  {
+   "doc": "doc-042",
+   "xyz": [
+    0.4326,
+    -0.3255,
+    0.0404
+   ],
+   "cluster": 3
+  },
+  {
+   "doc": "doc-042",
+   "xyz": [
+    -0.2964,
+    -0.409,
+    -0.4289
+   ],
+   "cluster": 6
+  },
+  {
+   "doc": "doc-042",
+   "xyz": [
+    -0.0728,
+    -0.4702,
+    -0.2754
+   ],
+   "cluster": 6
+  },
+  {
+   "doc": "doc-042",
+   "xyz": [
+    -0.2708,
+    -0.1517,
+    0.3145
+   ],
+   "cluster": 6
+  },
+  {
+   "doc": "doc-042",
+   "xyz": [
+    -0.4156,
+    -0.6375,
+    -0.4439
+   ],
+   "cluster": 6
+  },
+  {
+   "doc": "doc-043",
+   "xyz": [
+    -0.0056,
+    -0.0573,
+    0.2562
+   ],
+   "cluster": 3
+  },
+  {
+   "doc": "doc-043",
+   "xyz": [
+    0.0639,
+    -0.2054,
+    0.4819
+   ],
+   "cluster": 5
+  },
+  {
+   "doc": "doc-043",
+   "xyz": [
+    -0.2973,
+    -0.6745,
+    0.1879
+   ],
+   "cluster": 1
+  },
+  {
+   "doc": "doc-043",
+   "xyz": [
+    0.4015,
+    -0.212,
+    0.3535
+   ],
+   "cluster": 0
+  },
+  {
+   "doc": "doc-043",
+   "xyz": [
+    0.3756,
+    -0.3741,
+    -0.4935
+   ],
+   "cluster": 3
+  },
+  {
+   "doc": "doc-043",
+   "xyz": [
+    0.2377,
+    -0.1297,
+    -0.5845
+   ],
+   "cluster": 3
+  },
+  {
+   "doc": "doc-044",
+   "xyz": [
+    0.0083,
+    0.0893,
+    0.2729
+   ],
+   "cluster": 5
+  },
+  {
+   "doc": "doc-044",
+   "xyz": [
+    0.7406,
+    0.2118,
+    -0.3101
+   ],
+   "cluster": 4
+  },
+  {
+   "doc": "doc-044",
+   "xyz": [
+    0.1849,
+    0.2216,
+    0.1352
+   ],
+   "cluster": 5
+  },
+  {
+   "doc": "doc-044",
+   "xyz": [
+    -0.1701,
+    0.0634,
+    0.3802
+   ],
+   "cluster": 5
+  },
+  {
+   "doc": "doc-044",
+   "xyz": [
+    0.4222,
+    0.1444,
+    0.7143
+   ],
+   "cluster": 5
+  },
+  {
+   "doc": "doc-044",
+   "xyz": [
+    0.0005,
+    -0.0489,
+    0.1848
+   ],
+   "cluster": 1
+  },
+  {
+   "doc": "doc-045",
+   "xyz": [
+    0.0885,
+    -0.0882,
+    0.181
+   ],
+   "cluster": 0
+  },
+  {
+   "doc": "doc-045",
+   "xyz": [
+    0.1161,
+    -0.4248,
+    0.0022
+   ],
+   "cluster": 0
+  },
+  {
+   "doc": "doc-045",
+   "xyz": [
+    0.2494,
+    -0.2576,
+    -0.1269
+   ],
+   "cluster": 0
+  },
+  {
+   "doc": "doc-046",
+   "xyz": [
+    0.2838,
+    0.3672,
+    0.4283
+   ],
+   "cluster": 5
+  },
+  {
+   "doc": "doc-046",
+   "xyz": [
+    -0.3127,
+    -0.5283,
+    -0.1935
+   ],
+   "cluster": 1
+  },
+  {
+   "doc": "doc-046",
+   "xyz": [
+    -0.3024,
+    -0.404,
+    0.0955
+   ],
+   "cluster": 5
+  },
+  {
+   "doc": "doc-046",
+   "xyz": [
+    0.3326,
+    0.2486,
+    -0.0004
+   ],
+   "cluster": 5
+  },
+  {
+   "doc": "doc-046",
+   "xyz": [
+    0.8235,
+    0.2118,
+    -0.3317
+   ],
+   "cluster": 4
+  },
+  {
+   "doc": "doc-047",
+   "xyz": [
+    0.3098,
+    0.0474,
+    0.5934
+   ],
+   "cluster": 0
+  },
+  {
+   "doc": "doc-047",
+   "xyz": [
+    0.0179,
+    -0.0487,
+    0.637
+   ],
+   "cluster": 0
+  },
+  {
+   "doc": "doc-047",
+   "xyz": [
+    -0.2367,
+    -0.0921,
+    -0.015
+   ],
+   "cluster": 5
+  },
+  {
+   "doc": "doc-048",
+   "xyz": [
+    0.3795,
+    -0.3068,
+    -0.4149
+   ],
+   "cluster": 3
+  },
+  {
+   "doc": "doc-048",
+   "xyz": [
+    0.6318,
+    -0.0714,
+    -0.3426
+   ],
+   "cluster": 3
+  },
+  {
+   "doc": "doc-048",
+   "xyz": [
+    0.1493,
+    -0.4374,
+    -0.2962
+   ],
+   "cluster": 0
+  },
+  {
+   "doc": "doc-048",
+   "xyz": [
+    0.289,
+    -0.0385,
+    -0.1742
+   ],
+   "cluster": 3
+  },
+  {
+   "doc": "doc-048",
+   "xyz": [
+    0.1794,
+    -0.2796,
+    -0.5417
+   ],
+   "cluster": 3
+  },
+  {
+   "doc": "doc-049",
+   "xyz": [
+    -0.1296,
+    -0.0309,
+    0.2876
+   ],
+   "cluster": 5
+  },
+  {
+   "doc": "doc-049",
+   "xyz": [
+    0.2061,
+    -0.1353,
+    -0.4453
+   ],
+   "cluster": 3
+  },
+  {
+   "doc": "doc-049",
+   "xyz": [
+    0.0533,
+    -0.0582,
+    -0.6782
+   ],
+   "cluster": 3
+  },
+  {
+   "doc": "doc-049",
+   "xyz": [
+    -0.2281,
+    -0.1832,
+    -0.3291
+   ],
+   "cluster": 6
+  },
+  {
+   "doc": "doc-049",
+   "xyz": [
+    -0.193,
+    -0.1538,
+    0.2349
+   ],
+   "cluster": 5
+  },
+  {
+   "doc": "doc-050",
+   "xyz": [
+    0.4678,
+    0.2318,
+    0.5292
+   ],
+   "cluster": 5
+  },
+  {
+   "doc": "doc-050",
+   "xyz": [
+    0.1885,
+    0.0708,
+    0.3269
+   ],
+   "cluster": 3
+  },
+  {
+   "doc": "doc-050",
+   "xyz": [
+    0.0856,
+    -0.3435,
+    -0.43
+   ],
+   "cluster": 3
+  },
+  {
+   "doc": "doc-050",
+   "xyz": [
+    0.0669,
+    -0.2595,
+    -0.5574
+   ],
+   "cluster": 3
+  },
+  {
+   "doc": "doc-050",
+   "xyz": [
+    0.5789,
+    0.2865,
+    0.4063
+   ],
+   "cluster": 4
+  },
+  {
+   "doc": "doc-051",
+   "xyz": [
+    0.3413,
+    -0.1396,
+    0.5566
+   ],
+   "cluster": 0
+  },
+  {
+   "doc": "doc-051",
+   "xyz": [
+    0.3644,
+    -0.099,
+    0.439
+   ],
+   "cluster": 0
+  },
+  {
+   "doc": "doc-051",
+   "xyz": [
+    -0.0527,
+    -0.4757,
+    0.3347
+   ],
+   "cluster": 0
+  },
+  {
+   "doc": "doc-052",
+   "xyz": [
+    0.3165,
+    0.3621,
+    0.3761
+   ],
+   "cluster": 5
+  },
+  {
+   "doc": "doc-052",
+   "xyz": [
+    0.6496,
+    0.1735,
+    0.416
+   ],
+   "cluster": 3
+  },
+  {
+   "doc": "doc-052",
+   "xyz": [
+    0.3131,
+    -0.0309,
+    0.0345
+   ],
+   "cluster": 3
+  },
+  {
+   "doc": "doc-052",
+   "xyz": [
+    0.1688,
+    0.0703,
+    -0.0995
+   ],
+   "cluster": 3
+  },
+  {
+   "doc": "doc-052",
+   "xyz": [
+    0.0642,
+    0.1654,
+    0.068
+   ],
+   "cluster": 3
+  },
+  {
+   "doc": "doc-053",
+   "xyz": [
+    0.4142,
+    -0.2655,
+    -0.2447
+   ],
+   "cluster": 4
+  },
+  {
+   "doc": "doc-053",
+   "xyz": [
+    0.433,
+    -0.326,
+    -0.0314
+   ],
+   "cluster": 4
+  },
+  {
+   "doc": "doc-053",
+   "xyz": [
+    0.3632,
+    -0.4403,
+    -0.2015
+   ],
+   "cluster": 4
+  },
+  {
+   "doc": "doc-053",
+   "xyz": [
+    0.5487,
+    -0.3928,
+    -0.2887
+   ],
+   "cluster": 4
+  },
+  {
+   "doc": "doc-053",
+   "xyz": [
+    0.3992,
+    -0.3701,
+    -0.174
+   ],
+   "cluster": 4
+  },
+  {
+   "doc": "doc-053",
+   "xyz": [
+    0.3788,
+    -0.3536,
+    -0.4619
+   ],
+   "cluster": 4
+  },
+  {
+   "doc": "doc-054",
+   "xyz": [
+    0.3025,
+    -0.0141,
+    -0.2049
+   ],
+   "cluster": 0
+  },
+  {
+   "doc": "doc-054",
+   "xyz": [
+    0.4596,
+    -0.0366,
+    0.1831
+   ],
+   "cluster": 0
+  },
+  {
+   "doc": "doc-054",
+   "xyz": [
+    0.3446,
+    0.3322,
+    -0.1242
+   ],
+   "cluster": 4
+  },
+  {
+   "doc": "doc-054",
+   "xyz": [
+    0.7226,
+    0.1735,
+    -0.1704
+   ],
+   "cluster": 4
+  },
+  {
+   "doc": "doc-054",
+   "xyz": [
+    0.1775,
+    -0.3842,
+    0.2033
+   ],
+   "cluster": 0
+  },
+  {
+   "doc": "doc-055",
+   "xyz": [
+    -0.1246,
+    -0.1935,
+    0.8042
+   ],
+   "cluster": 5
+  },
+  {
+   "doc": "doc-055",
+   "xyz": [
+    -0.2827,
+    -0.8407,
+    0.0861
+   ],
+   "cluster": 1
+  },
+  {
+   "doc": "doc-055",
+   "xyz": [
+    -0.5385,
+    -0.7632,
+    0.1289
+   ],
+   "cluster": 1
+  },
+  {
+   "doc": "doc-055",
+   "xyz": [
+    -0.6677,
+    -0.7287,
+    -0.1133
+   ],
+   "cluster": 1
+  },
+  {
+   "doc": "doc-055",
+   "xyz": [
+    -0.2911,
+    -0.6851,
+    0.1704
+   ],
+   "cluster": 1
+  },
+  {
+   "doc": "doc-055",
+   "xyz": [
+    -0.3887,
+    -0.3183,
+    0.6835
+   ],
+   "cluster": 5
+  },
+  {
+   "doc": "doc-055",
+   "xyz": [
+    -0.7091,
+    0.4344,
+    -0.4376
+   ],
+   "cluster": 2
+  },
+  {
+   "doc": "doc-055",
+   "xyz": [
+    -0.5982,
+    0.0991,
+    -0.5288
+   ],
+   "cluster": 2
+  },
+  {
+   "doc": "doc-056",
+   "xyz": [
+    0.1531,
+    0.1279,
+    0.5182
+   ],
+   "cluster": 5
+  },
+  {
+   "doc": "doc-056",
+   "xyz": [
+    -0.3265,
+    0.3809,
+    -0.2205
+   ],
+   "cluster": 2
+  },
+  {
+   "doc": "doc-056",
+   "xyz": [
+    0.0018,
+    -0.1649,
+    0.5803
+   ],
+   "cluster": 5
+  },
+  {
+   "doc": "doc-056",
+   "xyz": [
+    0.0704,
+    0.1096,
+    0.4537
+   ],
+   "cluster": 5
+  },
+  {
+   "doc": "doc-056",
+   "xyz": [
+    0.1272,
+    -0.0515,
+    0.3954
+   ],
+   "cluster": 5
+  },
+  {
+   "doc": "doc-056",
+   "xyz": [
+    -0.218,
+    -0.4707,
+    0.0251
+   ],
+   "cluster": 0
+  },
+  {
+   "doc": "doc-056",
+   "xyz": [
+    -0.3508,
+    0.1078,
+    -0.206
+   ],
+   "cluster": 5
+  },
+  {
+   "doc": "doc-057",
+   "xyz": [
+    -0.1876,
+    0.1394,
+    0.4912
+   ],
+   "cluster": 5
+  },
+  {
+   "doc": "doc-057",
+   "xyz": [
+    -0.7932,
+    0.402,
+    -0.0155
+   ],
+   "cluster": 2
+  },
+  {
+   "doc": "doc-057",
+   "xyz": [
+    -0.1269,
+    -0.0005,
+    -0.3026
+   ],
+   "cluster": 5
+  },
+  {
+   "doc": "doc-057",
+   "xyz": [
+    0.6258,
+    0.1552,
+    -0.4115
+   ],
+   "cluster": 4
+  },
+  {
+   "doc": "doc-057",
+   "xyz": [
+    -0.1441,
+    -0.3181,
+    -0.0147
+   ],
+   "cluster": 0
+  },
+  {
+   "doc": "doc-057",
+   "xyz": [
+    -0.699,
+    -0.206,
+    -0.0079
+   ],
+   "cluster": 1
+  },
+  {
+   "doc": "doc-058",
+   "xyz": [
+    0.3745,
+    0.2885,
+    0.5429
+   ],
+   "cluster": 5
+  },
+  {
+   "doc": "doc-058",
+   "xyz": [
+    0.4163,
+    0.0923,
+    0.1639
+   ],
+   "cluster": 5
+  },
+  {
+   "doc": "doc-058",
+   "xyz": [
+    0.4031,
+    -0.0119,
+    -0.4076
+   ],
+   "cluster": 4
+  },
+  {
+   "doc": "doc-058",
+   "xyz": [
+    -0.1639,
+    0.5524,
+    0.2895
+   ],
+   "cluster": 5
+  },
+  {
+   "doc": "doc-058",
+   "xyz": [
+    -0.4471,
+    0.2202,
+    -0.4801
+   ],
+   "cluster": 2
+  },
+  {
+   "doc": "doc-058",
+   "xyz": [
+    0.126,
+    -0.0245,
+    0.0111
+   ],
+   "cluster": 5
+  },
+  {
+   "doc": "doc-059",
+   "xyz": [
+    0.5405,
+    0.3547,
+    0.1831
+   ],
+   "cluster": 4
+  },
+  {
+   "doc": "doc-059",
+   "xyz": [
+    0.68,
+    0.0794,
+    -0.4431
+   ],
+   "cluster": 4
+  },
+  {
+   "doc": "doc-059",
+   "xyz": [
+    0.8532,
+    0.1367,
+    -0.5796
+   ],
+   "cluster": 4
+  },
+  {
+   "doc": "doc-059",
+   "xyz": [
+    0.551,
+    0.4303,
+    -0.1949
+   ],
+   "cluster": 4
+  },
+  {
+   "doc": "doc-059",
+   "xyz": [
+    0.2057,
+    0.5484,
+    -0.5879
+   ],
+   "cluster": 4
+  },
+  {
+   "doc": "doc-059",
+   "xyz": [
+    0.1282,
+    0.6993,
+    -0.6388
+   ],
+   "cluster": 4
+  },
+  {
+   "doc": "doc-060",
+   "xyz": [
+    0.3295,
+    0.1031,
+    0.4517
+   ],
+   "cluster": 5
+  },
+  {
+   "doc": "doc-060",
+   "xyz": [
+    0.4044,
+    -0.0935,
+    -0.0444
+   ],
+   "cluster": 3
+  },
+  {
+   "doc": "doc-060",
+   "xyz": [
+    0.2042,
+    -0.2946,
+    0.1686
+   ],
+   "cluster": 0
+  },
+  {
+   "doc": "doc-060",
+   "xyz": [
+    0.6074,
+    0.113,
+    0.0789
+   ],
+   "cluster": 4
+  },
+  {
+   "doc": "doc-060",
+   "xyz": [
+    0.7797,
+    0.1525,
+    0.1241
+   ],
+   "cluster": 4
+  },
+  {
+   "doc": "doc-061",
+   "xyz": [
+    -0.4668,
+    -0.5076,
+    -0.8346
+   ],
+   "cluster": 6
+  },
+  {
+   "doc": "doc-061",
+   "xyz": [
+    -0.3632,
+    -0.3694,
+    -0.8755
+   ],
+   "cluster": 6
+  },
+  {
+   "doc": "doc-061",
+   "xyz": [
+    -0.3755,
+    -0.4982,
+    -0.7505
+   ],
+   "cluster": 6
+  },
+  {
+   "doc": "doc-061",
+   "xyz": [
+    -0.5846,
+    -0.5314,
+    -0.6386
+   ],
+   "cluster": 6
+  },
+  {
+   "doc": "doc-061",
+   "xyz": [
+    -0.5037,
+    -0.3659,
+    -0.6666
+   ],
+   "cluster": 6
+  },
+  {
+   "doc": "doc-061",
+   "xyz": [
+    -0.532,
+    -0.421,
+    -0.8566
+   ],
+   "cluster": 6
+  },
+  {
+   "doc": "doc-062",
+   "xyz": [
+    -0.5883,
+    -0.4344,
+    -0.7586
+   ],
+   "cluster": 6
+  },
+  {
+   "doc": "doc-062",
+   "xyz": [
+    -0.8132,
+    -0.4935,
+    -0.6344
+   ],
+   "cluster": 6
+  },
+  {
+   "doc": "doc-062",
+   "xyz": [
+    -0.7148,
+    -0.4587,
+    -0.6425
+   ],
+   "cluster": 6
+  },
+  {
+   "doc": "doc-062",
+   "xyz": [
+    -0.538,
+    -0.3864,
+    -0.684
+   ],
+   "cluster": 6
+  },
+  {
+   "doc": "doc-062",
+   "xyz": [
+    -0.6293,
+    -0.6135,
+    -0.6153
+   ],
+   "cluster": 6
+  },
+  {
+   "doc": "doc-062",
+   "xyz": [
+    -0.5648,
+    -0.4039,
+    -0.8639
+   ],
+   "cluster": 6
+  }
+ ],
+ "centroids": [
+  [
+   0.102,
+   -0.334,
+   0.1268
+  ],
+  [
+   -0.4124,
+   -0.4711,
+   0.0705
+  ],
+  [
+   -0.6347,
+   0.5426,
+   -0.2042
+  ],
+  [
+   0.3648,
+   -0.1079,
+   -0.2703
+  ],
+  [
+   0.6467,
+   0.1129,
+   -0.2113
+  ],
+  [
+   -0.0597,
+   0.0727,
+   0.4245
+  ],
+  [
+   -0.4199,
+   -0.399,
+   -0.3372
+  ]
+ ],
+ "edges": [
+  [
+   0,
+   1
+  ],
+  [
+   0,
+   2
+  ],
+  [
+   0,
+   6
+  ],
+  [
+   0,
+   7
+  ],
+  [
+   0,
+   9
+  ],
+  [
+   0,
+   16
+  ],
+  [
+   0,
+   27
+  ],
+  [
+   0,
+   220
+  ],
+  [
+   1,
+   3
+  ],
+  [
+   1,
+   4
+  ],
+  [
+   1,
+   5
+  ],
+  [
+   1,
+   6
+  ],
+  [
+   1,
+   7
+  ],
+  [
+   1,
+   8
+  ],
+  [
+   1,
+   16
+  ],
+  [
+   1,
+   34
+  ],
+  [
+   1,
+   173
+  ],
+  [
+   1,
+   184
+  ],
+  [
+   2,
+   3
+  ],
+  [
+   2,
+   4
+  ],
+  [
+   2,
+   9
+  ],
+  [
+   2,
+   10
+  ],
+  [
+   2,
+   12
+  ],
+  [
+   2,
+   17
+  ],
+  [
+   3,
+   4
+  ],
+  [
+   3,
+   6
+  ],
+  [
+   3,
+   8
+  ],
+  [
+   3,
+   173
+  ],
+  [
+   3,
+   177
+  ],
+  [
+   4,
+   5
+  ],
+  [
+   5,
+   6
+  ],
+  [
+   5,
+   8
+  ],
+  [
+   6,
+   7
+  ],
+  [
+   6,
+   8
+  ],
+  [
+   6,
+   16
+  ],
+  [
+   6,
+   173
+  ],
+  [
+   7,
+   8
+  ],
+  [
+   9,
+   11
+  ],
+  [
+   9,
+   17
+  ],
+  [
+   9,
+   20
+  ],
+  [
+   9,
+   24
+  ],
+  [
+   9,
+   26
+  ],
+  [
+   9,
+   34
+  ],
+  [
+   9,
+   35
+  ],
+  [
+   9,
+   37
+  ],
+  [
+   9,
+   172
+  ],
+  [
+   9,
+   282
+  ],
+  [
+   9,
+   382
+  ],
+  [
+   10,
+   13
+  ],
+  [
+   10,
+   14
+  ],
+  [
+   10,
+   15
+  ],
+  [
+   10,
+   17
+  ],
+  [
+   11,
+   17
+  ],
+  [
+   11,
+   35
+  ],
+  [
+   11,
+   66
+  ],
+  [
+   12,
+   13
+  ],
+  [
+   12,
+   17
+  ],
+  [
+   12,
+   29
+  ],
+  [
+   13,
+   15
+  ],
+  [
+   13,
+   17
+  ],
+  [
+   13,
+   18
+  ],
+  [
+   13,
+   33
+  ],
+  [
+   13,
+   253
+  ],
+  [
+   14,
+   15
+  ],
+  [
+   14,
+   17
+  ],
+  [
+   14,
+   18
+  ],
+  [
+   14,
+   31
+  ],
+  [
+   14,
+   32
+  ],
+  [
+   15,
+   17
+  ],
+  [
+   15,
+   25
+  ],
+  [
+   15,
+   27
+  ],
+  [
+   15,
+   32
+  ],
+  [
+   15,
+   33
+  ],
+  [
+   15,
+   34
+  ],
+  [
+   16,
+   253
+  ],
+  [
+   17,
+   18
+  ],
+  [
+   17,
+   26
+  ],
+  [
+   18,
+   282
+  ],
+  [
+   19,
+   20
+  ],
+  [
+   19,
+   21
+  ],
+  [
+   19,
+   22
+  ],
+  [
+   19,
+   23
+  ],
+  [
+   19,
+   75
+  ],
+  [
+   20,
+   21
+  ],
+  [
+   20,
+   22
+  ],
+  [
+   20,
+   75
+  ],
+  [
+   20,
+   172
+  ],
+  [
+   20,
+   382
+  ],
+  [
+   21,
+   34
+  ],
+  [
+   21,
+   75
+  ],
+  [
+   22,
+   37
+  ],
+  [
+   22,
+   66
+  ],
+  [
+   22,
+   70
+  ],
+  [
+   23,
+   26
+  ],
+  [
+   23,
+   29
+  ],
+  [
+   23,
+   282
+  ],
+  [
+   24,
+   26
+  ],
+  [
+   24,
+   27
+  ],
+  [
+   24,
+   28
+  ],
+  [
+   25,
+   27
+  ],
+  [
+   25,
+   28
+  ],
+  [
+   25,
+   33
+  ],
+  [
+   25,
+   283
+  ],
+  [
+   26,
+   29
+  ],
+  [
+   26,
+   220
+  ],
+  [
+   27,
+   28
+  ],
+  [
+   27,
+   34
+  ],
+  [
+   27,
+   279
+  ],
+  [
+   28,
+   277
+  ],
+  [
+   28,
+   283
+  ],
+  [
+   28,
+   391
+  ],
+  [
+   29,
+   30
+  ],
+  [
+   29,
+   31
+  ],
+  [
+   29,
+   32
+  ],
+  [
+   29,
+   35
+  ],
+  [
+   29,
+   36
+  ],
+  [
+   29,
+   37
+  ],
+  [
+   29,
+   170
+  ],
+  [
+   29,
+   276
+  ],
+  [
+   29,
+   390
+  ],
+  [
+   30,
+   31
+  ],
+  [
+   30,
+   33
+  ],
+  [
+   30,
+   36
+  ],
+  [
+   30,
+   37
+  ],
+  [
+   30,
+   170
+  ],
+  [
+   31,
+   32
+  ],
+  [
+   32,
+   278
+  ],
+  [
+   35,
+   279
+  ],
+  [
+   36,
+   37
+  ],
+  [
+   36,
+   43
+  ],
+  [
+   36,
+   166
+  ],
+  [
+   36,
+   374
+  ],
+  [
+   36,
+   375
+  ],
+  [
+   37,
+   375
+  ],
+  [
+   37,
+   382
+  ],
+  [
+   37,
+   390
+  ],
+  [
+   38,
+   39
+  ],
+  [
+   38,
+   159
+  ],
+  [
+   38,
+   379
+  ],
+  [
+   38,
+   380
+  ],
+  [
+   38,
+   385
+  ],
+  [
+   38,
+   386
+  ],
+  [
+   38,
+   392
+  ],
+  [
+   39,
+   119
+  ],
+  [
+   39,
+   139
+  ],
+  [
+   39,
+   297
+  ],
+  [
+   39,
+   370
+  ],
+  [
+   39,
+   376
+  ],
+  [
+   39,
+   379
+  ],
+  [
+   39,
+   385
+  ],
+  [
+   40,
+   78
+  ],
+  [
+   40,
+   88
+  ],
+  [
+   40,
+   102
+  ],
+  [
+   40,
+   185
+  ],
+  [
+   40,
+   187
+  ],
+  [
+   40,
+   191
+  ],
+  [
+   40,
+   375
+  ],
+  [
+   40,
+   380
+  ],
+  [
+   41,
+   148
+  ],
+  [
+   41,
+   255
+  ],
+  [
+   41,
+   301
+  ],
+  [
+   41,
+   307
+  ],
+  [
+   42,
+   255
+  ],
+  [
+   42,
+   307
+  ],
+  [
+   42,
+   376
+  ],
+  [
+   42,
+   377
+  ],
+  [
+   42,
+   380
+  ],
+  [
+   43,
+   182
+  ],
+  [
+   43,
+   376
+  ],
+  [
+   43,
+   377
+  ],
+  [
+   44,
+   87
+  ],
+  [
+   44,
+   212
+  ],
+  [
+   44,
+   265
+  ],
+  [
+   44,
+   328
+  ],
+  [
+   44,
+   359
+  ],
+  [
+   44,
+   402
+  ],
+  [
+   45,
+   60
+  ],
+  [
+   45,
+   87
+  ],
+  [
+   45,
+   359
+  ],
+  [
+   45,
+   378
+  ],
+  [
+   45,
+   391
+  ],
+  [
+   46,
+   152
+  ],
+  [
+   46,
+   294
+  ],
+  [
+   46,
+   322
+  ],
+  [
+   46,
+   379
+  ],
+  [
+   47,
+   48
+  ],
+  [
+   47,
+   50
+  ],
+  [
+   47,
+   51
+  ],
+  [
+   47,
+   52
+  ],
+  [
+   47,
+   53
+  ],
+  [
+   47,
+   197
+  ],
+  [
+   47,
+   285
+  ],
+  [
+   47,
+   287
+  ],
+  [
+   47,
+   303
+  ],
+  [
+   47,
+   366
+  ],
+  [
+   48,
+   49
+  ],
+  [
+   48,
+   200
+  ],
+  [
+   48,
+   303
+  ],
+  [
+   48,
+   366
+  ],
+  [
+   49,
+   200
+  ],
+  [
+   49,
+   302
+  ],
+  [
+   49,
+   303
+  ],
+  [
+   50,
+   51
+  ],
+  [
+   50,
+   53
+  ],
+  [
+   50,
+   54
+  ],
+  [
+   50,
+   197
+  ],
+  [
+   51,
+   54
+  ],
+  [
+   51,
+   197
+  ],
+  [
+   51,
+   287
+  ],
+  [
+   52,
+   60
+  ],
+  [
+   52,
+   285
+  ],
+  [
+   52,
+   366
+  ],
+  [
+   52,
+   371
+  ],
+  [
+   53,
+   54
+  ],
+  [
+   53,
+   197
+  ],
+  [
+   54,
+   406
+  ],
+  [
+   54,
+   407
+  ],
+  [
+   54,
+   415
+  ],
+  [
+   55,
+   56
+  ],
+  [
+   55,
+   57
+  ],
+  [
+   55,
+   58
+  ],
+  [
+   55,
+   59
+  ],
+  [
+   55,
+   62
+  ],
+  [
+   55,
+   133
+  ],
+  [
+   55,
+   260
+  ],
+  [
+   55,
+   268
+  ],
+  [
+   55,
+   286
+  ],
+  [
+   55,
+   300
+  ],
+  [
+   55,
+   325
+  ],
+  [
+   56,
+   149
+  ],
+  [
+   56,
+   261
+  ],
+  [
+   56,
+   262
+  ],
+  [
+   56,
+   300
+  ],
+  [
+   57,
+   58
+  ],
+  [
+   57,
+   62
+  ],
+  [
+   57,
+   63
+  ],
+  [
+   57,
+   64
+  ],
+  [
+   57,
+   147
+  ],
+  [
+   57,
+   162
+  ],
+  [
+   57,
+   165
+  ],
+  [
+   57,
+   167
+  ],
+  [
+   57,
+   168
+  ],
+  [
+   58,
+   64
+  ],
+  [
+   58,
+   148
+  ],
+  [
+   58,
+   263
+  ],
+  [
+   58,
+   369
+  ],
+  [
+   59,
+   60
+  ],
+  [
+   59,
+   147
+  ],
+  [
+   59,
+   148
+  ],
+  [
+   59,
+   149
+  ],
+  [
+   59,
+   366
+  ],
+  [
+   59,
+   371
+  ],
+  [
+   60,
+   61
+  ],
+  [
+   60,
+   149
+  ],
+  [
+   60,
+   182
+  ],
+  [
+   60,
+   260
+  ],
+  [
+   60,
+   264
+  ],
+  [
+   60,
+   267
+  ],
+  [
+   60,
+   268
+  ],
+  [
+   60,
+   287
+  ],
+  [
+   60,
+   319
+  ],
+  [
+   60,
+   370
+  ],
+  [
+   60,
+   371
+  ],
+  [
+   60,
+   376
+  ],
+  [
+   61,
+   149
+  ],
+  [
+   61,
+   268
+  ],
+  [
+   61,
+   370
+  ],
+  [
+   62,
+   148
+  ],
+  [
+   62,
+   268
+  ],
+  [
+   63,
+   64
+  ],
+  [
+   63,
+   147
+  ],
+  [
+   63,
+   311
+  ],
+  [
+   64,
+   261
+  ],
+  [
+   64,
+   367
+  ],
+  [
+   64,
+   368
+  ],
+  [
+   65,
+   66
+  ],
+  [
+   65,
+   69
+  ],
+  [
+   65,
+   276
+  ],
+  [
+   65,
+   282
+  ],
+  [
+   66,
+   69
+  ],
+  [
+   66,
+   70
+  ],
+  [
+   66,
+   71
+  ],
+  [
+   66,
+   72
+  ],
+  [
+   66,
+   73
+  ],
+  [
+   66,
+   74
+  ],
+  [
+   66,
+   276
+  ],
+  [
+   66,
+   278
+  ],
+  [
+   66,
+   372
+  ],
+  [
+   67,
+   69
+  ],
+  [
+   67,
+   171
+  ],
+  [
+   67,
+   281
+  ],
+  [
+   67,
+   282
+  ],
+  [
+   67,
+   292
+  ],
+  [
+   68,
+   71
+  ],
+  [
+   68,
+   158
+  ],
+  [
+   68,
+   164
+  ],
+  [
+   68,
+   165
+  ],
+  [
+   68,
+   168
+  ],
+  [
+   68,
+   386
+  ],
+  [
+   69,
+   70
+  ],
+  [
+   69,
+   74
+  ],
+  [
+   69,
+   75
+  ],
+  [
+   69,
+   76
+  ],
+  [
+   69,
+   276
+  ],
+  [
+   69,
+   372
+  ],
+  [
+   70,
+   74
+  ],
+  [
+   70,
+   292
+  ],
+  [
+   71,
+   72
+  ],
+  [
+   71,
+   74
+  ],
+  [
+   71,
+   75
+  ],
+  [
+   71,
+   76
+  ],
+  [
+   72,
+   74
+  ],
+  [
+   72,
+   133
+  ],
+  [
+   73,
+   74
+  ],
+  [
+   73,
+   278
+  ],
+  [
+   73,
+   372
+  ],
+  [
+   74,
+   75
+  ],
+  [
+   74,
+   76
+  ],
+  [
+   74,
+   278
+  ],
+  [
+   74,
+   372
+  ],
+  [
+   75,
+   76
+  ],
+  [
+   75,
+   172
+  ],
+  [
+   77,
+   78
+  ],
+  [
+   77,
+   88
+  ],
+  [
+   77,
+   185
+  ],
+  [
+   77,
+   209
+  ],
+  [
+   77,
+   355
+  ],
+  [
+   78,
+   86
+  ],
+  [
+   78,
+   87
+  ],
+  [
+   78,
+   88
+  ],
+  [
+   78,
+   187
+  ],
+  [
+   78,
+   209
+  ],
+  [
+   78,
+   211
+  ],
+  [
+   79,
+   80
+  ],
+  [
+   79,
+   81
+  ],
+  [
+   79,
+   89
+  ],
+  [
+   79,
+   112
+  ],
+  [
+   80,
+   81
+  ],
+  [
+   80,
+   112
+  ],
+  [
+   80,
+   113
+  ],
+  [
+   81,
+   89
+  ],
+  [
+   81,
+   113
+  ],
+  [
+   82,
+   83
+  ],
+  [
+   82,
+   86
+  ],
+  [
+   82,
+   186
+  ],
+  [
+   82,
+   190
+  ],
+  [
+   83,
+   86
+  ],
+  [
+   83,
+   189
+  ],
+  [
+   83,
+   190
+  ],
+  [
+   83,
+   262
+  ],
+  [
+   83,
+   265
+  ],
+  [
+   83,
+   360
+  ],
+  [
+   84,
+   85
+  ],
+  [
+   84,
+   355
+  ],
+  [
+   84,
+   357
+  ],
+  [
+   84,
+   358
+  ],
+  [
+   84,
+   359
+  ],
+  [
+   85,
+   357
+  ],
+  [
+   85,
+   358
+  ],
+  [
+   85,
+   359
+  ],
+  [
+   86,
+   188
+  ],
+  [
+   86,
+   189
+  ],
+  [
+   86,
+   356
+  ],
+  [
+   86,
+   358
+  ],
+  [
+   86,
+   360
+  ],
+  [
+   87,
+   359
+  ],
+  [
+   88,
+   185
+  ],
+  [
+   88,
+   186
+  ],
+  [
+   88,
+   187
+  ],
+  [
+   88,
+   188
+  ],
+  [
+   88,
+   190
+  ],
+  [
+   89,
+   94
+  ],
+  [
+   89,
+   98
+  ],
+  [
+   89,
+   103
+  ],
+  [
+   89,
+   188
+  ],
+  [
+   89,
+   393
+  ],
+  [
+   90,
+   91
+  ],
+  [
+   90,
+   94
+  ],
+  [
+   90,
+   95
+  ],
+  [
+   90,
+   96
+  ],
+  [
+   90,
+   101
+  ],
+  [
+   90,
+   114
+  ],
+  [
+   90,
+   116
+  ],
+  [
+   90,
+   196
+  ],
+  [
+   90,
+   209
+  ],
+  [
+   90,
+   215
+  ],
+  [
+   90,
+   328
+  ],
+  [
+   90,
+   384
+  ],
+  [
+   90,
+   396
+  ],
+  [
+   91,
+   92
+  ],
+  [
+   91,
+   93
+  ],
+  [
+   91,
+   96
+  ],
+  [
+   91,
+   116
+  ],
+  [
+   91,
+   193
+  ],
+  [
+   91,
+   196
+  ],
+  [
+   92,
+   246
+  ],
+  [
+   92,
+   249
+  ],
+  [
+   92,
+   395
+  ],
+  [
+   93,
+   193
+  ],
+  [
+   93,
+   316
+  ],
+  [
+   93,
+   328
+  ],
+  [
+   94,
+   95
+  ],
+  [
+   94,
+   114
+  ],
+  [
+   95,
+   111
+  ],
+  [
+   95,
+   114
+  ],
+  [
+   95,
+   229
+  ],
+  [
+   95,
+   320
+  ],
+  [
+   95,
+   346
+  ],
+  [
+   95,
+   396
+  ],
+  [
+   96,
+   114
+  ],
+  [
+   96,
+   116
+  ],
+  [
+   96,
+   384
+  ],
+  [
+   96,
+   392
+  ],
+  [
+   97,
+   98
+  ],
+  [
+   97,
+   100
+  ],
+  [
+   97,
+   101
+  ],
+  [
+   97,
+   191
+  ],
+  [
+   97,
+   398
+  ],
+  [
+   98,
+   99
+  ],
+  [
+   98,
+   100
+  ],
+  [
+   98,
+   101
+  ],
+  [
+   98,
+   103
+  ],
+  [
+   98,
+   185
+  ],
+  [
+   98,
+   191
+  ],
+  [
+   98,
+   232
+  ],
+  [
+   98,
+   393
+  ],
+  [
+   98,
+   398
+  ],
+  [
+   99,
+   103
+  ],
+  [
+   99,
+   104
+  ],
+  [
+   99,
+   106
+  ],
+  [
+   100,
+   101
+  ],
+  [
+   100,
+   104
+  ],
+  [
+   100,
+   107
+  ],
+  [
+   102,
+   103
+  ],
+  [
+   102,
+   106
+  ],
+  [
+   102,
+   191
+  ],
+  [
+   102,
+   378
+  ],
+  [
+   103,
+   105
+  ],
+  [
+   103,
+   106
+  ],
+  [
+   103,
+   185
+  ],
+  [
+   103,
+   188
+  ],
+  [
+   103,
+   191
+  ],
+  [
+   103,
+   316
+  ],
+  [
+   103,
+   402
+  ],
+  [
+   103,
+   403
+  ],
+  [
+   104,
+   105
+  ],
+  [
+   104,
+   106
+  ],
+  [
+   104,
+   107
+  ],
+  [
+   104,
+   109
+  ],
+  [
+   105,
+   106
+  ],
+  [
+   105,
+   111
+  ],
+  [
+   106,
+   316
+  ],
+  [
+   106,
+   389
+  ],
+  [
+   107,
+   108
+  ],
+  [
+   107,
+   113
+  ],
+  [
+   108,
+   109
+  ],
+  [
+   108,
+   110
+  ],
+  [
+   108,
+   112
+  ],
+  [
+   108,
+   113
+  ],
+  [
+   108,
+   246
+  ],
+  [
+   109,
+   110
+  ],
+  [
+   109,
+   112
+  ],
+  [
+   110,
+   112
+  ],
+  [
+   110,
+   213
+  ],
+  [
+   110,
+   246
+  ],
+  [
+   111,
+   129
+  ],
+  [
+   111,
+   207
+  ],
+  [
+   111,
+   211
+  ],
+  [
+   111,
+   212
+  ],
+  [
+   111,
+   225
+  ],
+  [
+   111,
+   226
+  ],
+  [
+   111,
+   284
+  ],
+  [
+   112,
+   113
+  ],
+  [
+   112,
+   213
+  ],
+  [
+   112,
+   219
+  ],
+  [
+   112,
+   395
+  ],
+  [
+   114,
+   116
+  ],
+  [
+   114,
+   328
+  ],
+  [
+   115,
+   194
+  ],
+  [
+   115,
+   195
+  ],
+  [
+   115,
+   315
+  ],
+  [
+   115,
+   317
+  ],
+  [
+   117,
+   218
+  ],
+  [
+   117,
+   222
+  ],
+  [
+   117,
+   229
+  ],
+  [
+   117,
+   249
+  ],
+  [
+   118,
+   121
+  ],
+  [
+   118,
+   122
+  ],
+  [
+   118,
+   123
+  ],
+  [
+   118,
+   125
+  ],
+  [
+   118,
+   295
+  ],
+  [
+   119,
+   121
+  ],
+  [
+   119,
+   294
+  ],
+  [
+   119,
+   296
+  ],
+  [
+   120,
+   127
+  ],
+  [
+   120,
+   138
+  ],
+  [
+   120,
+   270
+  ],
+  [
+   120,
+   274
+  ],
+  [
+   120,
+   275
+  ],
+  [
+   120,
+   296
+  ],
+  [
+   120,
+   297
+  ],
+  [
+   121,
+   155
+  ],
+  [
+   121,
+   294
+  ],
+  [
+   122,
+   123
+  ],
+  [
+   122,
+   125
+  ],
+  [
+   122,
+   153
+  ],
+  [
+   122,
+   155
+  ],
+  [
+   122,
+   294
+  ],
+  [
+   122,
+   295
+  ],
+  [
+   122,
+   378
+  ],
+  [
+   123,
+   125
+  ],
+  [
+   123,
+   126
+  ],
+  [
+   123,
+   154
+  ],
+  [
+   124,
+   149
+  ],
+  [
+   124,
+   178
+  ],
+  [
+   124,
+   179
+  ],
+  [
+   124,
+   299
+  ],
+  [
+   125,
+   155
+  ],
+  [
+   126,
+   154
+  ],
+  [
+   126,
+   260
+  ],
+  [
+   126,
+   329
+  ],
+  [
+   126,
+   330
+  ],
+  [
+   126,
+   331
+  ],
+  [
+   127,
+   138
+  ],
+  [
+   127,
+   183
+  ],
+  [
+   127,
+   275
+  ],
+  [
+   128,
+   132
+  ],
+  [
+   128,
+   139
+  ],
+  [
+   128,
+   289
+  ],
+  [
+   128,
+   330
+  ],
+  [
+   128,
+   361
+  ],
+  [
+   128,
+   363
+  ],
+  [
+   129,
+   130
+  ],
+  [
+   129,
+   207
+  ],
+  [
+   129,
+   345
+  ],
+  [
+   130,
+   205
+  ],
+  [
+   130,
+   209
+  ],
+  [
+   130,
+   238
+  ],
+  [
+   130,
+   290
+  ],
+  [
+   130,
+   314
+  ],
+  [
+   130,
+   345
+  ],
+  [
+   131,
+   289
+  ],
+  [
+   131,
+   361
+  ],
+  [
+   131,
+   362
+  ],
+  [
+   131,
+   364
+  ],
+  [
+   132,
+   184
+  ],
+  [
+   132,
+   289
+  ],
+  [
+   132,
+   339
+  ],
+  [
+   132,
+   340
+  ],
+  [
+   133,
+   134
+  ],
+  [
+   133,
+   147
+  ],
+  [
+   133,
+   161
+  ],
+  [
+   133,
+   286
+  ],
+  [
+   134,
+   140
+  ],
+  [
+   134,
+   141
+  ],
+  [
+   134,
+   161
+  ],
+  [
+   134,
+   298
+  ],
+  [
+   135,
+   136
+  ],
+  [
+   135,
+   138
+  ],
+  [
+   135,
+   139
+  ],
+  [
+   135,
+   238
+  ],
+  [
+   135,
+   259
+  ],
+  [
+   135,
+   313
+  ],
+  [
+   136,
+   137
+  ],
+  [
+   136,
+   238
+  ],
+  [
+   136,
+   293
+  ],
+  [
+   136,
+   296
+  ],
+  [
+   136,
+   323
+  ],
+  [
+   137,
+   138
+  ],
+  [
+   137,
+   272
+  ],
+  [
+   137,
+   293
+  ],
+  [
+   137,
+   295
+  ],
+  [
+   137,
+   296
+  ],
+  [
+   137,
+   298
+  ],
+  [
+   138,
+   139
+  ],
+  [
+   138,
+   271
+  ],
+  [
+   138,
+   272
+  ],
+  [
+   138,
+   273
+  ],
+  [
+   138,
+   275
+  ],
+  [
+   138,
+   296
+  ],
+  [
+   138,
+   297
+  ],
+  [
+   138,
+   298
+  ],
+  [
+   138,
+   299
+  ],
+  [
+   139,
+   296
+  ],
+  [
+   139,
+   297
+  ],
+  [
+   139,
+   365
+  ],
+  [
+   140,
+   161
+  ],
+  [
+   140,
+   233
+  ],
+  [
+   140,
+   318
+  ],
+  [
+   141,
+   161
+  ],
+  [
+   141,
+   334
+  ],
+  [
+   141,
+   336
+  ],
+  [
+   142,
+   147
+  ],
+  [
+   142,
+   148
+  ],
+  [
+   142,
+   149
+  ],
+  [
+   142,
+   150
+  ],
+  [
+   142,
+   162
+  ],
+  [
+   142,
+   179
+  ],
+  [
+   142,
+   369
+  ],
+  [
+   143,
+   144
+  ],
+  [
+   143,
+   145
+  ],
+  [
+   143,
+   146
+  ],
+  [
+   143,
+   320
+  ],
+  [
+   144,
+   145
+  ],
+  [
+   144,
+   146
+  ],
+  [
+   144,
+   320
+  ],
+  [
+   145,
+   146
+  ],
+  [
+   145,
+   311
+  ],
+  [
+   146,
+   167
+  ],
+  [
+   146,
+   311
+  ],
+  [
+   147,
+   163
+  ],
+  [
+   147,
+   167
+  ],
+  [
+   147,
+   371
+  ],
+  [
+   148,
+   149
+  ],
+  [
+   148,
+   167
+  ],
+  [
+   148,
+   183
+  ],
+  [
+   148,
+   202
+  ],
+  [
+   148,
+   325
+  ],
+  [
+   148,
+   368
+  ],
+  [
+   148,
+   369
+  ],
+  [
+   149,
+   150
+  ],
+  [
+   149,
+   167
+  ],
+  [
+   149,
+   179
+  ],
+  [
+   149,
+   202
+  ],
+  [
+   149,
+   261
+  ],
+  [
+   149,
+   268
+  ],
+  [
+   149,
+   311
+  ],
+  [
+   149,
+   370
+  ],
+  [
+   150,
+   179
+  ],
+  [
+   150,
+   261
+  ],
+  [
+   151,
+   152
+  ],
+  [
+   151,
+   156
+  ],
+  [
+   151,
+   157
+  ],
+  [
+   151,
+   294
+  ],
+  [
+   151,
+   322
+  ],
+  [
+   152,
+   157
+  ],
+  [
+   152,
+   294
+  ],
+  [
+   152,
+   322
+  ],
+  [
+   153,
+   156
+  ],
+  [
+   153,
+   157
+  ],
+  [
+   153,
+   294
+  ],
+  [
+   153,
+   322
+  ],
+  [
+   154,
+   214
+  ],
+  [
+   154,
+   329
+  ],
+  [
+   154,
+   330
+  ],
+  [
+   154,
+   331
+  ],
+  [
+   155,
+   294
+  ],
+  [
+   156,
+   294
+  ],
+  [
+   156,
+   322
+  ],
+  [
+   157,
+   251
+  ],
+  [
+   157,
+   267
+  ],
+  [
+   157,
+   334
+  ],
+  [
+   158,
+   159
+  ],
+  [
+   158,
+   163
+  ],
+  [
+   158,
+   166
+  ],
+  [
+   159,
+   160
+  ],
+  [
+   159,
+   162
+  ],
+  [
+   159,
+   164
+  ],
+  [
+   159,
+   386
+  ],
+  [
+   160,
+   162
+  ],
+  [
+   160,
+   164
+  ],
+  [
+   160,
+   298
+  ],
+  [
+   162,
+   165
+  ],
+  [
+   163,
+   166
+  ],
+  [
+   163,
+   371
+  ],
+  [
+   164,
+   166
+  ],
+  [
+   165,
+   167
+  ],
+  [
+   165,
+   168
+  ],
+  [
+   165,
+   386
+  ],
+  [
+   166,
+   382
+  ],
+  [
+   167,
+   168
+  ],
+  [
+   167,
+   233
+  ],
+  [
+   167,
+   256
+  ],
+  [
+   169,
+   170
+  ],
+  [
+   169,
+   171
+  ],
+  [
+   169,
+   174
+  ],
+  [
+   169,
+   175
+  ],
+  [
+   169,
+   281
+  ],
+  [
+   170,
+   171
+  ],
+  [
+   170,
+   174
+  ],
+  [
+   170,
+   175
+  ],
+  [
+   170,
+   176
+  ],
+  [
+   170,
+   177
+  ],
+  [
+   170,
+   281
+  ],
+  [
+   170,
+   282
+  ],
+  [
+   170,
+   283
+  ],
+  [
+   171,
+   172
+  ],
+  [
+   171,
+   174
+  ],
+  [
+   171,
+   175
+  ],
+  [
+   171,
+   176
+  ],
+  [
+   171,
+   177
+  ],
+  [
+   171,
+   281
+  ],
+  [
+   172,
+   177
+  ],
+  [
+   173,
+   277
+  ],
+  [
+   174,
+   281
+  ],
+  [
+   175,
+   176
+  ],
+  [
+   176,
+   177
+  ],
+  [
+   178,
+   179
+  ],
+  [
+   178,
+   180
+  ],
+  [
+   178,
+   182
+  ],
+  [
+   178,
+   270
+  ],
+  [
+   179,
+   180
+  ],
+  [
+   180,
+   181
+  ],
+  [
+   180,
+   182
+  ],
+  [
+   180,
+   270
+  ],
+  [
+   181,
+   182
+  ],
+  [
+   181,
+   270
+  ],
+  [
+   181,
+   271
+  ],
+  [
+   182,
+   270
+  ],
+  [
+   182,
+   341
+  ],
+  [
+   183,
+   184
+  ],
+  [
+   183,
+   275
+  ],
+  [
+   184,
+   259
+  ],
+  [
+   184,
+   412
+  ],
+  [
+   185,
+   186
+  ],
+  [
+   185,
+   187
+  ],
+  [
+   185,
+   398
+  ],
+  [
+   186,
+   187
+  ],
+  [
+   188,
+   190
+  ],
+  [
+   188,
+   191
+  ],
+  [
+   189,
+   190
+  ],
+  [
+   189,
+   266
+  ],
+  [
+   189,
+   344
+  ],
+  [
+   189,
+   360
+  ],
+  [
+   192,
+   194
+  ],
+  [
+   192,
+   196
+  ],
+  [
+   192,
+   317
+  ],
+  [
+   192,
+   324
+  ],
+  [
+   192,
+   388
+  ],
+  [
+   193,
+   209
+  ],
+  [
+   193,
+   222
+  ],
+  [
+   193,
+   316
+  ],
+  [
+   193,
+   327
+  ],
+  [
+   194,
+   195
+  ],
+  [
+   194,
+   315
+  ],
+  [
+   194,
+   317
+  ],
+  [
+   194,
+   388
+  ],
+  [
+   195,
+   286
+  ],
+  [
+   195,
+   315
+  ],
+  [
+   195,
+   317
+  ],
+  [
+   195,
+   318
+  ],
+  [
+   195,
+   319
+  ],
+  [
+   196,
+   317
+  ],
+  [
+   197,
+   200
+  ],
+  [
+   198,
+   199
+  ],
+  [
+   198,
+   301
+  ],
+  [
+   198,
+   302
+  ],
+  [
+   198,
+   307
+  ],
+  [
+   198,
+   308
+  ],
+  [
+   199,
+   255
+  ],
+  [
+   199,
+   301
+  ],
+  [
+   199,
+   302
+  ],
+  [
+   199,
+   304
+  ],
+  [
+   199,
+   305
+  ],
+  [
+   199,
+   306
+  ],
+  [
+   199,
+   307
+  ],
+  [
+   200,
+   202
+  ],
+  [
+   201,
+   221
+  ],
+  [
+   201,
+   244
+  ],
+  [
+   201,
+   248
+  ],
+  [
+   201,
+   304
+  ],
+  [
+   202,
+   261
+  ],
+  [
+   202,
+   367
+  ],
+  [
+   202,
+   368
+  ],
+  [
+   203,
+   236
+  ],
+  [
+   203,
+   239
+  ],
+  [
+   203,
+   242
+  ],
+  [
+   203,
+   243
+  ],
+  [
+   203,
+   244
+  ],
+  [
+   204,
+   214
+  ],
+  [
+   204,
+   260
+  ],
+  [
+   204,
+   291
+  ],
+  [
+   204,
+   319
+  ],
+  [
+   204,
+   329
+  ],
+  [
+   205,
+   206
+  ],
+  [
+   205,
+   210
+  ],
+  [
+   205,
+   214
+  ],
+  [
+   206,
+   210
+  ],
+  [
+   206,
+   211
+  ],
+  [
+   206,
+   212
+  ],
+  [
+   207,
+   208
+  ],
+  [
+   207,
+   210
+  ],
+  [
+   207,
+   213
+  ],
+  [
+   207,
+   215
+  ],
+  [
+   207,
+   216
+  ],
+  [
+   207,
+   217
+  ],
+  [
+   207,
+   218
+  ],
+  [
+   207,
+   221
+  ],
+  [
+   207,
+   245
+  ],
+  [
+   208,
+   225
+  ],
+  [
+   208,
+   231
+  ],
+  [
+   208,
+   245
+  ],
+  [
+   208,
+   247
+  ],
+  [
+   209,
+   222
+  ],
+  [
+   209,
+   316
+  ],
+  [
+   209,
+   328
+  ],
+  [
+   209,
+   364
+  ],
+  [
+   210,
+   211
+  ],
+  [
+   211,
+   212
+  ],
+  [
+   211,
+   257
+  ],
+  [
+   212,
+   213
+  ],
+  [
+   212,
+   291
+  ],
+  [
+   213,
+   221
+  ],
+  [
+   213,
+   246
+  ],
+  [
+   213,
+   247
+  ],
+  [
+   213,
+   395
+  ],
+  [
+   214,
+   331
+  ],
+  [
+   215,
+   216
+  ],
+  [
+   215,
+   218
+  ],
+  [
+   215,
+   229
+  ],
+  [
+   216,
+   217
+  ],
+  [
+   216,
+   246
+  ],
+  [
+   217,
+   245
+  ],
+  [
+   217,
+   246
+  ],
+  [
+   217,
+   249
+  ],
+  [
+   218,
+   219
+  ],
+  [
+   218,
+   222
+  ],
+  [
+   218,
+   224
+  ],
+  [
+   218,
+   229
+  ],
+  [
+   218,
+   230
+  ],
+  [
+   218,
+   249
+  ],
+  [
+   218,
+   393
+  ],
+  [
+   218,
+   394
+  ],
+  [
+   218,
+   395
+  ],
+  [
+   219,
+   394
+  ],
+  [
+   219,
+   395
+  ],
+  [
+   220,
+   397
+  ],
+  [
+   220,
+   398
+  ],
+  [
+   221,
+   245
+  ],
+  [
+   221,
+   248
+  ],
+  [
+   221,
+   291
+  ],
+  [
+   222,
+   229
+  ],
+  [
+   222,
+   394
+  ],
+  [
+   222,
+   396
+  ],
+  [
+   223,
+   224
+  ],
+  [
+   223,
+   288
+  ],
+  [
+   223,
+   342
+  ],
+  [
+   223,
+   346
+  ],
+  [
+   223,
+   351
+  ],
+  [
+   224,
+   226
+  ],
+  [
+   224,
+   228
+  ],
+  [
+   224,
+   229
+  ],
+  [
+   224,
+   230
+  ],
+  [
+   224,
+   346
+  ],
+  [
+   224,
+   351
+  ],
+  [
+   225,
+   226
+  ],
+  [
+   225,
+   228
+  ],
+  [
+   225,
+   229
+  ],
+  [
+   225,
+   247
+  ],
+  [
+   225,
+   249
+  ],
+  [
+   225,
+   258
+  ],
+  [
+   225,
+   364
+  ],
+  [
+   226,
+   227
+  ],
+  [
+   226,
+   228
+  ],
+  [
+   227,
+   228
+  ],
+  [
+   227,
+   229
+  ],
+  [
+   227,
+   230
+  ],
+  [
+   227,
+   339
+  ],
+  [
+   228,
+   229
+  ],
+  [
+   229,
+   230
+  ],
+  [
+   229,
+   346
+  ],
+  [
+   230,
+   393
+  ],
+  [
+   231,
+   238
+  ],
+  [
+   231,
+   313
+  ],
+  [
+   231,
+   402
+  ],
+  [
+   231,
+   403
+  ],
+  [
+   232,
+   233
+  ],
+  [
+   232,
+   234
+  ],
+  [
+   232,
+   235
+  ],
+  [
+   233,
+   286
+  ],
+  [
+   234,
+   235
+  ],
+  [
+   234,
+   257
+  ],
+  [
+   234,
+   258
+  ],
+  [
+   234,
+   309
+  ],
+  [
+   234,
+   310
+  ],
+  [
+   234,
+   312
+  ],
+  [
+   234,
+   346
+  ],
+  [
+   235,
+   280
+  ],
+  [
+   235,
+   402
+  ],
+  [
+   236,
+   237
+  ],
+  [
+   236,
+   244
+  ],
+  [
+   236,
+   402
+  ],
+  [
+   237,
+   238
+  ],
+  [
+   237,
+   239
+  ],
+  [
+   237,
+   240
+  ],
+  [
+   237,
+   242
+  ],
+  [
+   237,
+   243
+  ],
+  [
+   237,
+   333
+  ],
+  [
+   238,
+   239
+  ],
+  [
+   238,
+   333
+  ],
+  [
+   238,
+   335
+  ],
+  [
+   238,
+   353
+  ],
+  [
+   239,
+   243
+  ],
+  [
+   239,
+   284
+  ],
+  [
+   239,
+   351
+  ],
+  [
+   240,
+   241
+  ],
+  [
+   240,
+   242
+  ],
+  [
+   240,
+   243
+  ],
+  [
+   241,
+   242
+  ],
+  [
+   241,
+   243
+  ],
+  [
+   241,
+   313
+  ],
+  [
+   241,
+   344
+  ],
+  [
+   241,
+   345
+  ],
+  [
+   242,
+   243
+  ],
+  [
+   242,
+   289
+  ],
+  [
+   242,
+   332
+  ],
+  [
+   242,
+   333
+  ],
+  [
+   242,
+   344
+  ],
+  [
+   243,
+   333
+  ],
+  [
+   244,
+   266
+  ],
+  [
+   245,
+   247
+  ],
+  [
+   245,
+   248
+  ],
+  [
+   245,
+   249
+  ],
+  [
+   247,
+   248
+  ],
+  [
+   249,
+   395
+  ],
+  [
+   249,
+   397
+  ],
+  [
+   250,
+   251
+  ],
+  [
+   250,
+   252
+  ],
+  [
+   250,
+   257
+  ],
+  [
+   250,
+   258
+  ],
+  [
+   250,
+   342
+  ],
+  [
+   250,
+   343
+  ],
+  [
+   250,
+   346
+  ],
+  [
+   251,
+   252
+  ],
+  [
+   251,
+   280
+  ],
+  [
+   251,
+   347
+  ],
+  [
+   252,
+   254
+  ],
+  [
+   252,
+   310
+  ],
+  [
+   253,
+   254
+  ],
+  [
+   253,
+   256
+  ],
+  [
+   254,
+   255
+  ],
+  [
+   254,
+   256
+  ],
+  [
+   255,
+   301
+  ],
+  [
+   255,
+   307
+  ],
+  [
+   256,
+   259
+  ],
+  [
+   257,
+   258
+  ],
+  [
+   257,
+   259
+  ],
+  [
+   257,
+   314
+  ],
+  [
+   258,
+   330
+  ],
+  [
+   258,
+   348
+  ],
+  [
+   259,
+   313
+  ],
+  [
+   259,
+   314
+  ],
+  [
+   260,
+   261
+  ],
+  [
+   260,
+   262
+  ],
+  [
+   260,
+   269
+  ],
+  [
+   260,
+   285
+  ],
+  [
+   260,
+   312
+  ],
+  [
+   260,
+   329
+  ],
+  [
+   260,
+   330
+  ],
+  [
+   260,
+   347
+  ],
+  [
+   261,
+   262
+  ],
+  [
+   261,
+   263
+  ],
+  [
+   261,
+   264
+  ],
+  [
+   261,
+   325
+  ],
+  [
+   261,
+   326
+  ],
+  [
+   261,
+   349
+  ],
+  [
+   261,
+   367
+  ],
+  [
+   262,
+   263
+  ],
+  [
+   262,
+   264
+  ],
+  [
+   262,
+   268
+  ],
+  [
+   262,
+   300
+  ],
+  [
+   262,
+   312
+  ],
+  [
+   262,
+   347
+  ],
+  [
+   262,
+   349
+  ],
+  [
+   263,
+   264
+  ],
+  [
+   264,
+   265
+  ],
+  [
+   264,
+   267
+  ],
+  [
+   264,
+   349
+  ],
+  [
+   265,
+   266
+  ],
+  [
+   265,
+   399
+  ],
+  [
+   265,
+   400
+  ],
+  [
+   265,
+   401
+  ],
+  [
+   265,
+   403
+  ],
+  [
+   266,
+   399
+  ],
+  [
+   266,
+   400
+  ],
+  [
+   266,
+   401
+  ],
+  [
+   266,
+   402
+  ],
+  [
+   267,
+   370
+  ],
+  [
+   268,
+   269
+  ],
+  [
+   269,
+   347
+  ],
+  [
+   269,
+   348
+  ],
+  [
+   270,
+   273
+  ],
+  [
+   270,
+   274
+  ],
+  [
+   271,
+   272
+  ],
+  [
+   271,
+   273
+  ],
+  [
+   272,
+   273
+  ],
+  [
+   273,
+   274
+  ],
+  [
+   274,
+   296
+  ],
+  [
+   274,
+   297
+  ],
+  [
+   275,
+   296
+  ],
+  [
+   275,
+   297
+  ],
+  [
+   275,
+   299
+  ],
+  [
+   276,
+   284
+  ],
+  [
+   276,
+   292
+  ],
+  [
+   276,
+   390
+  ],
+  [
+   277,
+   279
+  ],
+  [
+   277,
+   282
+  ],
+  [
+   277,
+   283
+  ],
+  [
+   277,
+   391
+  ],
+  [
+   278,
+   373
+  ],
+  [
+   279,
+   372
+  ],
+  [
+   279,
+   373
+  ],
+  [
+   280,
+   281
+  ],
+  [
+   280,
+   373
+  ],
+  [
+   282,
+   283
+  ],
+  [
+   282,
+   382
+  ],
+  [
+   284,
+   351
+  ],
+  [
+   285,
+   286
+  ],
+  [
+   287,
+   303
+  ],
+  [
+   288,
+   290
+  ],
+  [
+   288,
+   292
+  ],
+  [
+   288,
+   342
+  ],
+  [
+   289,
+   290
+  ],
+  [
+   289,
+   291
+  ],
+  [
+   290,
+   291
+  ],
+  [
+   293,
+   296
+  ],
+  [
+   293,
+   298
+  ],
+  [
+   294,
+   295
+  ],
+  [
+   294,
+   300
+  ],
+  [
+   294,
+   322
+  ],
+  [
+   294,
+   323
+  ],
+  [
+   294,
+   365
+  ],
+  [
+   296,
+   297
+  ],
+  [
+   296,
+   298
+  ],
+  [
+   296,
+   299
+  ],
+  [
+   297,
+   299
+  ],
+  [
+   297,
+   376
+  ],
+  [
+   301,
+   302
+  ],
+  [
+   301,
+   305
+  ],
+  [
+   301,
+   306
+  ],
+  [
+   301,
+   307
+  ],
+  [
+   301,
+   308
+  ],
+  [
+   302,
+   303
+  ],
+  [
+   302,
+   304
+  ],
+  [
+   302,
+   305
+  ],
+  [
+   302,
+   306
+  ],
+  [
+   302,
+   307
+  ],
+  [
+   302,
+   308
+  ],
+  [
+   302,
+   326
+  ],
+  [
+   303,
+   304
+  ],
+  [
+   303,
+   308
+  ],
+  [
+   305,
+   307
+  ],
+  [
+   306,
+   307
+  ],
+  [
+   307,
+   376
+  ],
+  [
+   309,
+   310
+  ],
+  [
+   309,
+   311
+  ],
+  [
+   309,
+   312
+  ],
+  [
+   309,
+   343
+  ],
+  [
+   310,
+   311
+  ],
+  [
+   310,
+   312
+  ],
+  [
+   310,
+   320
+  ],
+  [
+   310,
+   341
+  ],
+  [
+   310,
+   343
+  ],
+  [
+   313,
+   314
+  ],
+  [
+   313,
+   344
+  ],
+  [
+   313,
+   345
+  ],
+  [
+   315,
+   318
+  ],
+  [
+   315,
+   324
+  ],
+  [
+   316,
+   327
+  ],
+  [
+   317,
+   318
+  ],
+  [
+   317,
+   388
+  ],
+  [
+   318,
+   319
+  ],
+  [
+   318,
+   324
+  ],
+  [
+   319,
+   324
+  ],
+  [
+   321,
+   322
+  ],
+  [
+   321,
+   323
+  ],
+  [
+   321,
+   347
+  ],
+  [
+   321,
+   348
+  ],
+  [
+   322,
+   323
+  ],
+  [
+   324,
+   327
+  ],
+  [
+   324,
+   388
+  ],
+  [
+   325,
+   326
+  ],
+  [
+   326,
+   371
+  ],
+  [
+   327,
+   390
+  ],
+  [
+   329,
+   330
+  ],
+  [
+   329,
+   331
+  ],
+  [
+   332,
+   333
+  ],
+  [
+   332,
+   334
+  ],
+  [
+   332,
+   335
+  ],
+  [
+   332,
+   336
+  ],
+  [
+   333,
+   335
+  ],
+  [
+   333,
+   336
+  ],
+  [
+   334,
+   336
+  ],
+  [
+   335,
+   336
+  ],
+  [
+   337,
+   338
+  ],
+  [
+   337,
+   340
+  ],
+  [
+   337,
+   341
+  ],
+  [
+   337,
+   354
+  ],
+  [
+   338,
+   339
+  ],
+  [
+   338,
+   340
+  ],
+  [
+   338,
+   341
+  ],
+  [
+   338,
+   354
+  ],
+  [
+   339,
+   340
+  ],
+  [
+   340,
+   341
+  ],
+  [
+   340,
+   354
+  ],
+  [
+   342,
+   343
+  ],
+  [
+   342,
+   346
+  ],
+  [
+   342,
+   350
+  ],
+  [
+   346,
+   377
+  ],
+  [
+   346,
+   402
+  ],
+  [
+   347,
+   348
+  ],
+  [
+   347,
+   349
+  ],
+  [
+   348,
+   349
+  ],
+  [
+   350,
+   351
+  ],
+  [
+   350,
+   352
+  ],
+  [
+   350,
+   353
+  ],
+  [
+   350,
+   354
+  ],
+  [
+   350,
+   378
+  ],
+  [
+   351,
+   352
+  ],
+  [
+   352,
+   353
+  ],
+  [
+   352,
+   354
+  ],
+  [
+   353,
+   354
+  ],
+  [
+   355,
+   356
+  ],
+  [
+   355,
+   357
+  ],
+  [
+   356,
+   358
+  ],
+  [
+   356,
+   360
+  ],
+  [
+   357,
+   358
+  ],
+  [
+   358,
+   360
+  ],
+  [
+   358,
+   389
+  ],
+  [
+   361,
+   362
+  ],
+  [
+   361,
+   363
+  ],
+  [
+   361,
+   364
+  ],
+  [
+   361,
+   365
+  ],
+  [
+   362,
+   363
+  ],
+  [
+   362,
+   364
+  ],
+  [
+   362,
+   365
+  ],
+  [
+   363,
+   364
+  ],
+  [
+   367,
+   368
+  ],
+  [
+   368,
+   369
+  ],
+  [
+   372,
+   373
+  ],
+  [
+   374,
+   381
+  ],
+  [
+   374,
+   385
+  ],
+  [
+   374,
+   387
+  ],
+  [
+   375,
+   380
+  ],
+  [
+   376,
+   377
+  ],
+  [
+   376,
+   385
+  ],
+  [
+   379,
+   385
+  ],
+  [
+   381,
+   382
+  ],
+  [
+   381,
+   385
+  ],
+  [
+   381,
+   387
+  ],
+  [
+   382,
+   386
+  ],
+  [
+   383,
+   385
+  ],
+  [
+   383,
+   386
+  ],
+  [
+   383,
+   388
+  ],
+  [
+   383,
+   389
+  ],
+  [
+   383,
+   391
+  ],
+  [
+   384,
+   387
+  ],
+  [
+   384,
+   389
+  ],
+  [
+   385,
+   392
+  ],
+  [
+   387,
+   392
+  ],
+  [
+   394,
+   395
+  ],
+  [
+   396,
+   397
+  ],
+  [
+   397,
+   398
+  ],
+  [
+   399,
+   400
+  ],
+  [
+   399,
+   401
+  ],
+  [
+   399,
+   402
+  ],
+  [
+   400,
+   401
+  ],
+  [
+   400,
+   402
+  ],
+  [
+   402,
+   403
+  ],
+  [
+   404,
+   405
+  ],
+  [
+   404,
+   406
+  ],
+  [
+   404,
+   407
+  ],
+  [
+   404,
+   408
+  ],
+  [
+   404,
+   409
+  ],
+  [
+   404,
+   412
+  ],
+  [
+   404,
+   413
+  ],
+  [
+   405,
+   406
+  ],
+  [
+   405,
+   409
+  ],
+  [
+   405,
+   413
+  ],
+  [
+   406,
+   409
+  ],
+  [
+   406,
+   413
+  ],
+  [
+   407,
+   408
+  ],
+  [
+   407,
+   412
+  ],
+  [
+   407,
+   414
+  ],
+  [
+   408,
+   412
+  ],
+  [
+   408,
+   413
+  ],
+  [
+   409,
+   413
+  ],
+  [
+   409,
+   414
+  ],
+  [
+   409,
+   415
+  ],
+  [
+   410,
+   411
+  ],
+  [
+   410,
+   412
+  ],
+  [
+   410,
+   413
+  ],
+  [
+   410,
+   415
+  ],
+  [
+   411,
+   412
+  ],
+  [
+   411,
+   413
+  ],
+  [
+   411,
+   415
+  ],
+  [
+   412,
+   414
+  ],
+  [
+   412,
+   415
+  ],
+  [
+   413,
+   414
+  ],
+  [
+   413,
+   415
+  ]
+ ],
+ "queries": [
+  {
+   "q": "securing cluster traffic",
+   "xyz": [
+    -0.5917,
+    -0.1455,
+    -0.2874
+   ],
+   "nearest_docs": [
+    {
+     "id": "doc-010",
+     "title": "TLS encryption for cluster communications",
+     "cos": 0.4971
+    },
+    {
+     "id": "doc-009",
+     "title": "Set up security in self-managed Elasticsearch deployments",
+     "cos": 0.4346
+    },
+    {
+     "id": "doc-008",
+     "title": "Cluster-level shard allocation and routing settings",
+     "cos": 0.4187
+    },
+    {
+     "id": "doc-055",
+     "title": "Elasticsearch cluster management best practices",
+     "cos": 0.4079
+    },
+    {
+     "id": "doc-032",
+     "title": "Elasticsearch cross-cluster search",
+     "cos": 0.3862
+    }
+   ],
+   "bm25": [
+    {
+     "id": "doc-010",
+     "title": "TLS encryption for cluster communications",
+     "_score": 9.459383964538574
+    },
+    {
+     "id": "doc-032",
+     "title": "Elasticsearch cross-cluster search",
+     "_score": 5.293662071228027
+    },
+    {
+     "id": "doc-021",
+     "title": "Red or yellow cluster health status troubleshooting",
+     "_score": 4.3489460945129395
+    },
+    {
+     "id": "doc-055",
+     "title": "Elasticsearch cluster management best practices",
+     "_score": 4.335390567779541
+    },
+    {
+     "id": "doc-008",
+     "title": "Cluster-level shard allocation and routing settings",
+     "_score": 4.001727104187012
+    }
+   ],
+   "semantic": [
+    {
+     "id": "doc-010",
+     "title": "TLS encryption for cluster communications",
+     "_score": 0.7637863755226135
+    },
+    {
+     "id": "doc-009",
+     "title": "Set up security in self-managed Elasticsearch deployments",
+     "_score": 0.7262498140335083
+    },
+    {
+     "id": "doc-008",
+     "title": "Cluster-level shard allocation and routing settings",
+     "_score": 0.7104268074035645
+    },
+    {
+     "id": "doc-032",
+     "title": "Elasticsearch cross-cluster search",
+     "_score": 0.7045695781707764
+    },
+    {
+     "id": "doc-038",
+     "title": "Elasticsearch security overview",
+     "_score": 0.6973456144332886
+    }
+   ],
+   "rrf": [
+    {
+     "id": "doc-010",
+     "title": "TLS encryption for cluster communications",
+     "_score": 0.03278688524590164
+    },
+    {
+     "id": "doc-038",
+     "title": "Elasticsearch security overview",
+     "_score": 0.03125763125763126
+    },
+    {
+     "id": "doc-032",
+     "title": "Elasticsearch cross-cluster search",
+     "_score": 0.03125
+    },
+    {
+     "id": "doc-021",
+     "title": "Red or yellow cluster health status troubleshooting",
+     "_score": 0.030090497737556562
+    },
+    {
+     "id": "doc-039",
+     "title": "Elasticsearch deployment configuration guide",
+     "_score": 0.030017921146953404
+    }
+   ]
+  },
+  {
+   "q": "exit code 137",
+   "xyz": [
+    -0.5501,
+    -0.1596,
+    -0.7952
+   ],
+   "nearest_docs": [
+    {
+     "id": "doc-061",
+     "title": "Container exit codes when a process is killed (OOM and signals)",
+     "cos": 0.3934
+    },
+    {
+     "id": "doc-062",
+     "title": "Troubleshooting application crashes and restarts",
+     "cos": 0.3032
+    },
+    {
+     "id": "doc-021",
+     "title": "Red or yellow cluster health status troubleshooting",
+     "cos": 0.2938
+    },
+    {
+     "id": "doc-003",
+     "title": "Diagnose password setup and connection failures",
+     "cos": 0.2737
+    },
+    {
+     "id": "doc-025",
+     "title": "Troubleshoot snapshot and restore in Elasticsearch",
+     "cos": 0.2625
+    }
+   ],
+   "bm25": [
+    {
+     "id": "doc-061",
+     "title": "Container exit codes when a process is killed (OOM and signals)",
+     "_score": 10.573258399963379
+    },
+    {
+     "id": "doc-007",
+     "title": "JVM settings for Elasticsearch",
+     "_score": 8.368806838989258
+    },
+    {
+     "id": "doc-062",
+     "title": "Troubleshooting application crashes and restarts",
+     "_score": 2.5323822498321533
+    },
+    {
+     "id": "doc-045",
+     "title": "Elasticsearch aliases",
+     "_score": 2.1717731952667236
+    },
+    {
+     "id": "doc-013",
+     "title": "Hybrid search in Elasticsearch",
+     "_score": 2.0542025566101074
+    }
+   ],
+   "semantic": [
+    {
+     "id": "doc-007",
+     "title": "JVM settings for Elasticsearch",
+     "_score": 0.6802239418029785
+    },
+    {
+     "id": "doc-061",
+     "title": "Container exit codes when a process is killed (OOM and signals)",
+     "_score": 0.6760048866271973
+    },
+    {
+     "id": "doc-025",
+     "title": "Troubleshoot snapshot and restore in Elasticsearch",
+     "_score": 0.6531903743743896
+    },
+    {
+     "id": "doc-062",
+     "title": "Troubleshooting application crashes and restarts",
+     "_score": 0.6414419412612915
+    },
+    {
+     "id": "doc-021",
+     "title": "Red or yellow cluster health status troubleshooting",
+     "_score": 0.6299065351486206
+    }
+   ],
+   "rrf": [
+    {
+     "id": "doc-007",
+     "title": "JVM settings for Elasticsearch",
+     "_score": 0.03278688524590164
+    },
+    {
+     "id": "doc-061",
+     "title": "Container exit codes when a process is killed (OOM and signals)",
+     "_score": 0.03225806451612903
+    },
+    {
+     "id": "doc-062",
+     "title": "Troubleshooting application crashes and restarts",
+     "_score": 0.03149801587301587
+    },
+    {
+     "id": "doc-045",
+     "title": "Elasticsearch aliases",
+     "_score": 0.024799311926605505
+    },
+    {
+     "id": "doc-025",
+     "title": "Troubleshoot snapshot and restore in Elasticsearch",
+     "_score": 0.015873015873015872
+    }
+   ]
+  },
+  {
+   "q": "notify me when something goes wrong",
+   "xyz": [
+    -0.4026,
+    -0.1519,
+    -0.7372
+   ],
+   "nearest_docs": [
+    {
+     "id": "doc-049",
+     "title": "Elasticsearch Watcher alerting",
+     "cos": 0.5102
+    },
+    {
+     "id": "doc-062",
+     "title": "Troubleshooting application crashes and restarts",
+     "cos": 0.3163
+    },
+    {
+     "id": "doc-019",
+     "title": "Ingest pipelines in Elasticsearch",
+     "cos": 0.3003
+    },
+    {
+     "id": "doc-021",
+     "title": "Red or yellow cluster health status troubleshooting",
+     "cos": 0.2995
+    },
+    {
+     "id": "doc-042",
+     "title": "Elasticsearch circuit breaker settings",
+     "cos": 0.2846
+    }
+   ],
+   "bm25": [
+    {
+     "id": "doc-061",
+     "title": "Container exit codes when a process is killed (OOM and signals)",
+     "_score": 7.329440593719482
+    },
+    {
+     "id": "doc-002",
+     "title": "Troubleshoot authorization errors and role mapping",
+     "_score": 3.016505241394043
+    },
+    {
+     "id": "doc-022",
+     "title": "Data streams in Elasticsearch",
+     "_score": 2.881161689758301
+    },
+    {
+     "id": "doc-056",
+     "title": "Elasticsearch 9.x what's new overview",
+     "_score": 1.5047191381454468
+    },
+    {
+     "id": "doc-049",
+     "title": "Elasticsearch Watcher alerting",
+     "_score": 0.9663525819778442
+    }
+   ],
+   "semantic": [
+    {
+     "id": "doc-049",
+     "title": "Elasticsearch Watcher alerting",
+     "_score": 0.7491832375526428
+    },
+    {
+     "id": "doc-025",
+     "title": "Troubleshoot snapshot and restore in Elasticsearch",
+     "_score": 0.6517266035079956
+    },
+    {
+     "id": "doc-042",
+     "title": "Elasticsearch circuit breaker settings",
+     "_score": 0.6432884335517883
+    },
+    {
+     "id": "doc-017",
+     "title": "Index lifecycle management overview",
+     "_score": 0.6369604468345642
+    },
+    {
+     "id": "doc-019",
+     "title": "Ingest pipelines in Elasticsearch",
+     "_score": 0.6369359493255615
+    }
+   ],
+   "rrf": [
+    {
+     "id": "doc-049",
+     "title": "Elasticsearch Watcher alerting",
+     "_score": 0.03177805800756621
+    },
+    {
+     "id": "doc-025",
+     "title": "Troubleshoot snapshot and restore in Elasticsearch",
+     "_score": 0.030834914611005692
+    },
+    {
+     "id": "doc-061",
+     "title": "Container exit codes when a process is killed (OOM and signals)",
+     "_score": 0.02976190476190476
+    },
+    {
+     "id": "doc-019",
+     "title": "Ingest pipelines in Elasticsearch",
+     "_score": 0.02967032967032967
+    },
+    {
+     "id": "doc-056",
+     "title": "Elasticsearch 9.x what's new overview",
+     "_score": 0.0293236301369863
+    }
+   ]
+  },
+  {
+   "q": "how do I make search results more relevant",
+   "xyz": [
+    0.6439,
+    0.2736,
+    -0.2314
+   ],
+   "nearest_docs": [
+    {
+     "id": "doc-014",
+     "title": "Retrievers in Elasticsearch",
+     "cos": 0.4945
+    },
+    {
+     "id": "doc-013",
+     "title": "Hybrid search in Elasticsearch",
+     "cos": 0.4929
+    },
+    {
+     "id": "doc-059",
+     "title": "Elasticsearch relevance tuning and explain API",
+     "cos": 0.4709
+    },
+    {
+     "id": "doc-012",
+     "title": "Semantic text field type reference",
+     "cos": 0.4682
+    },
+    {
+     "id": "doc-060",
+     "title": "Elasticsearch search after and pagination",
+     "cos": 0.4564
+    }
+   ],
+   "bm25": [
+    {
+     "id": "doc-032",
+     "title": "Elasticsearch cross-cluster search",
+     "_score": 13.864730834960938
+    },
+    {
+     "id": "doc-013",
+     "title": "Hybrid search in Elasticsearch",
+     "_score": 11.64763355255127
+    },
+    {
+     "id": "doc-060",
+     "title": "Elasticsearch search after and pagination",
+     "_score": 11.317306518554688
+    },
+    {
+     "id": "doc-026",
+     "title": "Vector search with kNN in Elasticsearch",
+     "_score": 8.790389060974121
+    },
+    {
+     "id": "doc-016",
+     "title": "Semantic search with semantic_text tutorial",
+     "_score": 7.57051420211792
+    }
+   ],
+   "semantic": [
+    {
+     "id": "doc-059",
+     "title": "Elasticsearch relevance tuning and explain API",
+     "_score": 0.7515476942062378
+    },
+    {
+     "id": "doc-013",
+     "title": "Hybrid search in Elasticsearch",
+     "_score": 0.7387773990631104
+    },
+    {
+     "id": "doc-014",
+     "title": "Retrievers in Elasticsearch",
+     "_score": 0.7363395690917969
+    },
+    {
+     "id": "doc-026",
+     "title": "Vector search with kNN in Elasticsearch",
+     "_score": 0.7323927879333496
+    },
+    {
+     "id": "doc-016",
+     "title": "Semantic search with semantic_text tutorial",
+     "_score": 0.7284590005874634
+    }
+   ],
+   "rrf": [
+    {
+     "id": "doc-013",
+     "title": "Hybrid search in Elasticsearch",
+     "_score": 0.03225806451612903
+    },
+    {
+     "id": "doc-059",
+     "title": "Elasticsearch relevance tuning and explain API",
+     "_score": 0.03131881575727918
+    },
+    {
+     "id": "doc-060",
+     "title": "Elasticsearch search after and pagination",
+     "_score": 0.03007688828584351
+    },
+    {
+     "id": "doc-026",
+     "title": "Vector search with kNN in Elasticsearch",
+     "_score": 0.029910714285714284
+    },
+    {
+     "id": "doc-050",
+     "title": "Elasticsearch ES|QL query language",
+     "_score": 0.029709507042253523
+    }
+   ]
+  }
+ ],
+ "idf": {
+  "exit": {
+   "df": 3,
+   "idf": 2.89
+  },
+  "code": {
+   "df": 4,
+   "idf": 2.639
+  },
+  "137": {
+   "df": 1,
+   "idf": 3.738
+  },
+  "the": {
+   "df": 62,
+   "idf": 0.008
+  },
+  "cluster": {
+   "df": 33,
+   "idf": 0.632
+  },
+  "traffic": {
+   "df": 1,
+   "idf": 3.738
+  },
+  "securing": {
+   "df": 1,
+   "idf": 3.738
+  },
+  "notify": {
+   "df": 0,
+   "idf": 4.836
+  },
+  "alert": {
+   "df": 2,
+   "idf": 3.227
+  }
+ }
+}

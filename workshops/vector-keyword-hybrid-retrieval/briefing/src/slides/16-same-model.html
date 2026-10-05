@@ -1,0 +1,30 @@
+<section class="slide" id="s16" data-steps="4" data-foot="Same model, different retrieval">
+  <div class="z">
+    <div class="eyebrow in1">Lab 4 · <b>Live run</b></div>
+    <h1 class="in2">Same model. Same question. <span class="b">Only the retrieval changed.</span></h1>
+  </div>
+  <div class="q16 in3"><span class="tag">Question</span><span class="qt">How does Index Lifecycle Management move data through hot, warm, and cold phases?</span></div>
+  <div class="cols16 in4">
+    <div class="col16 good">
+      <div class="hd16"><span class="chipf vec">Good retrieval</span></div>
+      <div class="ret16"><span class="rl">Retrieved</span><b>doc-017</b> Index lifecycle management overview</div>
+      <div class="ans16 rv" data-s="2">
+        <div class="al">Answer (excerpt)</div>
+        <p>ILM moves indices through phases based on configurable criteria such as index age, size, or document count.</p>
+        <p><b>Hot:</b> actively written to and searched; rollover creates a new index when thresholds are met (50GB, 30 days, 200 million docs). <b>Warm:</b> no longer written to but still queried; force merge and shrink apply. <b>Cold:</b> queried infrequently; searchable snapshots reduce local storage.</p>
+      </div>
+    </div>
+    <div class="col16 bad">
+      <div class="hd16"><span class="chipf rr">Bad retrieval</span><span class="forced">forced off-topic</span></div>
+      <div class="ret16"><span class="rl">Retrieved</span><b>doc-056</b> Elasticsearch 9.x what’s new overview</div>
+      <div class="ans16 rv" data-s="3">
+        <div class="al">Answer</div>
+        <p><b>I do not have enough information.</b> The document mentions ILM only in the context of Elasticsearch 9.4 highlights, where it states that “ILM downsampling force merge disabled by default.” However, it does not contain details about how ILM moves data through hot, warm, and cold phases.</p>
+      </div>
+    </div>
+  </div>
+  <div class="foot16 rv" data-s="4">
+    <div class="big">The model didn’t get dumber. <span class="b">The retrieval got worse.</span></div>
+    <div class="sp mono">.anthropic-claude-4.5-haiku-completion · live run, workshop index</div>
+  </div>
+</section>

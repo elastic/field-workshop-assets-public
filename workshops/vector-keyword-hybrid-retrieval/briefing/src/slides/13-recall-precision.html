@@ -1,0 +1,34 @@
+<section class="slide" id="s13" data-steps="3" data-foot="Recall, then precision">
+  <div class="z">
+    <div class="eyebrow in1">Vector search basics · <b>Two jobs</b> <span class="illus">Illustrative</span></div>
+    <h1 class="in2">Recall first, then <span class="rrt">precision.</span></h1>
+  </div>
+  <div class="s1p in3">
+    <div class="hd"><span class="chipf rrf">Stage 1 · Recall</span></div>
+    <p class="lead">Get the right doc somewhere into the top 50.</p>
+    <div class="cw"><div class="bar"><i></i><i></i><i></i><span>ES|QL</span></div>
+<pre class="code"><span class="k">FORK</span> ( … ) ( … ) <span class="k">| FUSE</span> <span class="k">| LIMIT</span> 50</pre></div>
+    <div class="slots"><i class="slot" style="animation-delay:0ms"></i><i class="slot" style="animation-delay:12ms"></i><i class="slot" style="animation-delay:24ms"></i><i class="slot" style="animation-delay:36ms"></i><i class="slot" style="animation-delay:48ms"></i><i class="slot" style="animation-delay:60ms"></i><i class="slot" style="animation-delay:72ms"></i><i class="slot" style="animation-delay:84ms"></i><i class="slot" style="animation-delay:96ms"></i><i class="slot" style="animation-delay:108ms"></i><i class="slot" style="animation-delay:120ms"></i><i class="slot" style="animation-delay:132ms"></i><i class="slot" style="animation-delay:144ms"></i><i class="slot" style="animation-delay:156ms"></i><i class="slot" style="animation-delay:168ms"></i><i class="slot" style="animation-delay:180ms"></i><i class="slot" style="animation-delay:192ms"></i><i class="slot" style="animation-delay:204ms"></i><i class="slot" style="animation-delay:216ms"></i><i class="slot" style="animation-delay:228ms"></i><i class="slot" style="animation-delay:240ms"></i><i class="slot hit" style="animation-delay:252ms">{{STAR}}</i><i class="slot" style="animation-delay:264ms"></i><i class="slot" style="animation-delay:276ms"></i><i class="slot" style="animation-delay:288ms"></i><i class="slot" style="animation-delay:300ms"></i><i class="slot" style="animation-delay:312ms"></i><i class="slot" style="animation-delay:324ms"></i><i class="slot" style="animation-delay:336ms"></i><i class="slot" style="animation-delay:348ms"></i><i class="slot" style="animation-delay:360ms"></i><i class="slot" style="animation-delay:372ms"></i><i class="slot" style="animation-delay:384ms"></i><i class="slot" style="animation-delay:396ms"></i><i class="slot" style="animation-delay:408ms"></i><i class="slot" style="animation-delay:420ms"></i><i class="slot" style="animation-delay:432ms"></i><i class="slot" style="animation-delay:444ms"></i><i class="slot" style="animation-delay:456ms"></i><i class="slot" style="animation-delay:468ms"></i><i class="slot" style="animation-delay:480ms"></i><i class="slot" style="animation-delay:492ms"></i><i class="slot" style="animation-delay:504ms"></i><i class="slot" style="animation-delay:516ms"></i><i class="slot" style="animation-delay:528ms"></i><i class="slot" style="animation-delay:540ms"></i><i class="slot" style="animation-delay:552ms"></i><i class="slot" style="animation-delay:564ms"></i><i class="slot" style="animation-delay:576ms"></i><i class="slot" style="animation-delay:588ms"></i></div>
+    <p class="gc">The right doc <b>is</b> in the top 50, but nobody has said <b>where</b>.</p>
+  </div>
+  <div class="s2p rv" data-s="2">
+    <div class="hd"><span class="chipf rr">Stage 2 · Precision</span></div>
+    <p class="lead">A cross-encoder reads query + doc together.</p>
+    <div class="cw"><div class="bar"><i></i><i></i><i></i><span>ES|QL</span></div>
+<pre class="code"><span class="k">RERANK</span> … <span class="k">| SORT</span> _score DESC</pre></div>
+    <div class="rl">
+      <div class="sl"><i>1</i><i>2</i><i>3</i><i>4</i><i>5</i></div>
+      <div class="it i1"><span>Related doc</span></div>
+      <div class="it i2"><span>Related doc</span></div>
+      <div class="it i3"><span>Related doc</span></div>
+      <div class="it i4 ans">{{STAR}}<span>The doc that answers it</span></div>
+      <div class="it i5"><span>Related doc</span></div>
+    </div>
+    <p class="gc2"><span class="b3">Fused order: the right doc sits at #4.</span><span class="a3">Reranked: it moves from <b>#4 to #1</b>.</span></p>
+  </div>
+  <div class="vers rv" data-s="3">
+    <div><span class="chipf rr lc">v2</span> pointwise: scores each query + doc pair alone</div>
+    <div><span class="chipf rr lc">v3</span> listwise: scores the candidates together</div>
+  </div>
+  <div class="gotcha12 rv" data-s="3"><b class="mono">RERANK</b> rewrites <span class="mono">_score</span> but doesn’t reorder. Always add <b class="mono">| SORT _score DESC</b>.</div>
+</section>

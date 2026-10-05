@@ -1,0 +1,14 @@
+{
+ "question": "How does Index Lifecycle Management move data through hot, warm, and cold phases?",
+ "model": ".anthropic-claude-4.5-haiku-completion",
+ "good": {
+  "id": "doc-017",
+  "title": "Index lifecycle management overview",
+  "answer": "Based on the document, Index Lifecycle Management (ILM) moves indices through phases based on **configurable criteria such as index age, size, or document count**.\n\nSpecifically:\n\n- **Hot phase**: The index is actively written to and searched. A rollover action creates a new index when thresholds are met (such as max primary shard size of 50GB, max age of 30 days, or max documents of 200 million).\n\n- **Warm phase**: Once the index is no longer written to but still queried, it moves to this phase where optimization actions like force merge and shrink can be applied.\n\n- **Cold phase**: The index is queried infrequently and moves to this phase, where searchable snapshots can reduce local storage.\n\nThe document indicates that indices progress through these phases automatically based on the criteria defined in the ILM policy, but it does not provide detailed information about the specific mechanisms or timing that trigger the transitions between phases beyond the rollover action in the hot phase."
+ },
+ "bad": {
+  "id": "doc-056",
+  "title": "Elasticsearch 9.x what's new overview",
+  "answer": "I do not have enough information. The document mentions ILM (Index Lifecycle Management) only in the context of Elasticsearch 9.4 highlights, where it states that \"ILM downsampling force merge disabled by default.\" However, it does not contain details about how ILM moves data through hot, warm, and cold phases."
+ }
+}

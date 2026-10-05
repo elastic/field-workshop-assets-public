@@ -1,0 +1,28 @@
+<section class="slide" id="s18" data-steps="1" data-foot="One engine">
+  <div class="z">
+    <div class="eyebrow in1">The point of the workshop · <b>One engine</b></div>
+    <h1 class="in2">Elasticsearch is the vector database<br><span class="b">and the search engine.</span></h1>
+    <p class="sub in3">One engine, one query language, zero ML code.</p>
+  </div>
+  <svg id="hero18" class="iso" viewBox="0 0 520 400"></svg>
+  <div class="caps18 in4">
+    <div class="cap18 kw"><span class="chipf kw">Lab 2</span><div><b>BM25 keyword</b><span>exact tokens, rare words, field boosts</span></div></div>
+    <div class="cap18 vec"><span class="chipf vec">Lab 1</span><div><b>Vector search</b><span><span class="mono">semantic_text</span> + Jina v5 on EIS</span></div></div>
+    <div class="cap18 rrf"><span class="chipf rrf">Lab 3</span><div><b>Hybrid</b><span><span class="mono">FORK</span> | <span class="mono">FUSE</span> in one query</span></div></div>
+    <div class="cap18 rr"><span class="chipf rr">Lab 5</span><div><b>Rerank</b><span><span class="mono">RERANK</span> with a cross-encoder</span></div></div>
+    <div class="cap18 key"><span class="chipf key">Lab 4</span><div><b>LLM and agents</b><span><span class="mono">COMPLETION</span> and Agent Builder tools</span></div></div>
+    <div class="cap18 sl"><span class="chipf sl">Scale</span><div><b>BBQ and DiskBBQ</b><span>smaller vectors, past RAM, automatic</span></div></div>
+  </div>
+  <script type="text/plain" class="init">
+    const sc = EW.iso(slide.querySelector('#hero18'), {ox: 250, oy: 90, s: .86});
+    sc.rect({x: -26, y: -26, w: 322, d: 322, z: 0, delay: .1});
+    sc.box({x: 0, y: 0, w: 270, d: 270, h: 46, c: 'blue', delay: .15, drop: 120, order: -1000});
+    const poppy = {top: '#FFFFFF', left: '#FF957D', right: '#343741'};
+    const cubes = [
+      [22, 34, 'yellow', 92], [105, 34, 'teal', 72], [188, 34, 'pink', 52],
+      [22, 150, poppy, 70], [105, 150, 'blue', 56], [188, 150, 'slate', 40]
+    ];
+    cubes.forEach(([x, y, c, h], i) => sc.box({x, y, w: 60, d: 60, h, z: 46, c, delay: .55 + i * .12, drop: 100, float: 2.5, floatSpeed: 1.1 + i * .07, phase: i, order: 10 + i}));
+    sc.run();
+  </script>
+</section>

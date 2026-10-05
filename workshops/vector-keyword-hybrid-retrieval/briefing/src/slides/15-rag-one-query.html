@@ -1,0 +1,20 @@
+<section class="slide" id="s15" data-steps="5" data-foot="RAG in one query">
+  <div class="z">
+    <div class="eyebrow in1">Lab 4 · <b>RAG</b></div>
+    <h1 class="in2">The whole RAG pipeline is <span class="b">one ES|QL query.</span></h1>
+  </div>
+  <div class="q15 in3"><span class="tag">Question</span><span class="qt">How does Index Lifecycle Management move data through hot, warm, and cold phases?</span></div>
+  <div class="pipe15 in4">
+    <div class="st15 s1" data-s="1"><span class="kwd ink">FROM</span><div class="num">62</div><p>docs in the index</p></div>
+    <span class="a15" data-s="2">{{ARW}}</span>
+    <div class="st15 s2" data-s="2"><span class="kwd fork">FORK</span><div class="num two">50 + 50</div><p><i class="dot kwc"></i>BM25 top 50<br><i class="dot vecc"></i>vector top 50</p></div>
+    <span class="a15" data-s="3">{{ARW}}</span>
+    <div class="st15 s3" data-s="3"><span class="kwd fuse">FUSE</span><div class="num">20</div><p>top 20 by rank (RRF)</p></div>
+    <span class="a15" data-s="4">{{ARW}}</span>
+    <div class="st15 s4" data-s="4"><span class="kwd rer">RERANK</span><div class="num">1</div><p><b>doc-017</b> Index lifecycle management overview</p></div>
+    <span class="a15" data-s="5">{{ARW}}</span>
+    <div class="st15 s5" data-s="5"><span class="kwd llm">COMPLETION</span><div class="num sm">answer</div><p>grounded in doc-017</p></div>
+  </div>
+  <div class="cw code15 in5"><div class="bar"><i></i><i></i><i></i><span>ES|QL · the shape of the Lab 4 query</span></div>
+<pre class="code"><span class="ln l1"><span class="k">FROM</span> aiewf-workshop-docs</span><span class="ln l2"><span class="k">| FORK</span> ( … BM25 top 50 … ) ( … vector top 50 … )</span><span class="ln l3"><span class="k">| FUSE</span> <span class="k">| LIMIT</span> 20</span><span class="ln l4"><span class="k">| RERANK</span> … <span class="k">WITH</span> { "inference_id": ".jina-reranker-v3" } <span class="k">| SORT</span> _score <span class="k">DESC</span> <span class="k">| LIMIT</span> 1</span><span class="ln l5"><span class="k">| COMPLETION</span> … <span class="k">WITH</span> { "inference_id": ".anthropic-claude-4.5-haiku-completion" }</span></pre></div>
+</section>

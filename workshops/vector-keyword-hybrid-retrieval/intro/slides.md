@@ -115,7 +115,7 @@ The experiment: same model, same question — good retrieval vs deliberately bad
 ## 14. Lab 4 brief — Then hand it to an agent  [concept]
 - The same hybrid query becomes an **Agent Builder tool**.
 - A multi-hop agent: search the symptom → search the fix → cited answer.
-- In the **Agent Builder** tab: pick **Anthropic Claude Sonnet 4.5** in the model picker under the chat box.
+- In the **Agent Builder** tab: leave the default model. The agent's **Diagnose and Fix** skill drives the searches.
 - Ask a two-part question. Watch for **two** `tool: search-workshop-docs-hybrid` chips.
 
 ## 15. Lab 4 recap  [problem]
@@ -147,6 +147,6 @@ One-shot RAG → hand-rolled loop → real agent: the framework is swappable. Re
 ## 19. Troubleshooting (backup slide)  [problem]
 - Discover shows a classic KQL bar → switch the query language to ES|QL.
 - Query error near `--` → ES|QL comments are `//`.
-- Agent did only one search → New chat, check model = Claude Sonnet 4.5, ask again.
+- Agent did only one search → New chat, ask again.
 - Notebook cell failed → re-run the setup cell at the top, then continue.
 - Lab 4 Discover peek spins for a while → expected: reranker + LLM call.
