@@ -1,0 +1,55 @@
+<style>
+/* elastic-web kit (fslides) tokens; system font fallbacks (panel sandbox blocks web fonts) */
+.ew{--blue:#0B64DD;--teal-d:#02BCB7;--red:#E0352B;--ink:#1D1E24;--char:#343741;--grey:#69707D;--grey-l:#98A2B3;--line:#D3DAE6;--bg:#F5F7FA;--slate:#B5BFCE;
+  --sans:'Inter',-apple-system,system-ui,'Segoe UI',sans-serif;--mono:'IBM Plex Mono',ui-monospace,'SF Mono',Menlo,monospace;
+  position:fixed;inset:0;overflow:hidden;background:#fff;color:var(--ink);font-family:var(--sans);-webkit-font-smoothing:antialiased;padding:14px 20px 10px}
+.ew *{box-sizing:border-box;margin:0;padding:0}
+.ew-eyebrow{font:500 10.5px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--grey);display:flex;align-items:center;gap:8px}
+.ew-eyebrow::before{content:'';width:8px;height:8px;background:var(--ink);transform:rotate(45deg)}
+.ew-eyebrow b{color:var(--ink);font-weight:600}
+.ew-q{font-size:13px;line-height:1.35;color:var(--char);margin-top:8px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.ew-who{font:600 10.5px var(--mono);letter-spacing:.06em;text-transform:uppercase;margin-top:8px}
+.ew-big{display:flex;align-items:baseline;gap:8px;margin-top:2px}
+.ew-stat{font:600 40px/1 var(--sans);letter-spacing:-1.5px;color:var(--blue)}
+.ew-stat.raw{color:var(--char)}
+.ew-post{font-size:12px;color:var(--char)}
+.chips{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.chip{font:600 10px var(--mono);letter-spacing:.04em;text-transform:uppercase;border:1px solid var(--line);padding:2px 6px;white-space:nowrap}
+.chip.ok{border-color:var(--teal-d);color:#027a76}
+.chip.no{border-color:var(--red);color:var(--red)}
+.range{margin-top:10px;padding-top:8px;border-top:1px dashed var(--line)}
+.range p{font:400 11.5px/1.45 var(--sans);color:var(--char)}
+.range p b{color:var(--ink)}
+.pos{font:700 11px var(--mono);letter-spacing:.04em;text-transform:uppercase}
+.pos.inside{color:#027a76}.pos.below{color:var(--blue)}.pos.above{color:var(--red)}
+.why{font:400 11px/1.35 var(--sans);color:var(--grey);margin-top:6px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.empty{margin-top:12px;font-size:13px;line-height:1.5;color:var(--char)}
+.empty b{color:var(--ink)}
+</style>
+<div class="ew">
+{% if rows.size == 0 %}
+  <div class="ew-eyebrow">Your latest run · <b>none yet</b></div>
+  <div class="empty">Ask <b>either agent</b> one of the four eval questions in Agent Builder. It is scored in about 15 seconds and shows up here, next to the recorded runs.</div>
+{% else %}{% assign row = rows[0] %}
+  <div class="ew-eyebrow">Your latest run · <b>{{ row["your_runs"].value }} scored</b></div>
+  <div class="ew-q">“{{ row["q"].value }}”</div>
+  <div class="ew-who">{{ row["agent_name"].value | remove: "Precision CS " }} · {% if row["scenario"].value contains "c-" %}your test case{% else %}{{ row["scenario"].value | upcase }}{% endif %}</div>
+  {% if row["status"].value == "ok" %}
+  <div class="ew-big"><span class="ew-stat{% if row["mode"].value == "raw" %} raw{% endif %}">{{ row["llm_calls"].value }}</span><span class="ew-post">LLM calls · {{ row["eff_k"].value | round }}K eff. tokens</span></div>
+  <div class="chips">
+    {% if row["judge_verdict"].value == "unverified" %}<span class="chip">unverified: no ground truth</span>
+    {% else %}<span class="chip {% if row["correct"].value %}ok{% else %}no{% endif %}">{% if row["correct"].value %}correct{% else %}wrong{% endif %}</span>
+    {% if row["checks_pass"].value == true %}<span class="chip ok">checks ✓</span>{% elsif row["checks_pass"].value == false %}<span class="chip no">checks ✗</span>{% endif %}
+    <span class="chip" title="LLM judge scores, 1-5">judge: correct {{ row["judge_correctness"].value }} · complete {{ row["judge_completeness"].value }} /5</span>{% endif %}
+  </div>
+  {% if row["rec_n"].value > 0 %}
+  <div class="range">
+    <p><span class="pos {{ row["rec_position"].value }}">{% if row["rec_position"].value == "inside" %}inside{% elsif row["rec_position"].value == "below" %}fewer than{% else %}more than{% endif %} the recorded range</span></p>
+    <p>Recorded {{ row["agent_name"].value | remove: "Precision CS " }}: median <b>{{ row["rec_median"].value | round }}</b>, range {{ row["rec_min"].value }}–{{ row["rec_max"].value }} ({{ row["rec_n"].value }} runs).
+    {% if row["rec_other_min"].value >= 0 and row["rec_other_max"].value > 0 %}The other agent: median <b>{{ row["rec_other_median"].value | round }}</b> ({{ row["rec_other_min"].value }}–{{ row["rec_other_max"].value }}).{% endif %}</p>
+  </div>
+  {% endif %}
+  <div class="why">Judge: {{ row["judge_reason"].value }}</div>
+  {% else %}<div class="empty">That run failed; it is kept in the results.</div>{% endif %}
+{% endif %}
+</div>

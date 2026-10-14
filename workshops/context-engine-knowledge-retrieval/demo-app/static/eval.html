@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Add a test case · Context Engine eval</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* elastic-web kit (fslides) tokens */
+:root{--blue:#0B64DD;--blue-d:#0A4FB0;--blue-l:#D9E8FF;--teal-d:#02BCB7;--red:#E0352B;--ink:#1D1E24;--char:#343741;--grey:#69707D;--grey-l:#98A2B3;
+  --line:#D3DAE6;--bg:#F5F7FA;--slate:#B5BFCE;--sans:'Inter',-apple-system,system-ui,sans-serif;--mono:'IBM Plex Mono',ui-monospace,Menlo,monospace}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#fff;color:var(--ink);font-family:var(--sans);-webkit-font-smoothing:antialiased;padding:28px 32px 48px;max-width:980px}
+.eyebrow{font:500 11px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--grey);display:flex;align-items:center;gap:10px}
+.eyebrow::before{content:'';width:8px;height:8px;background:var(--blue)}
+.eyebrow b{color:var(--ink);font-weight:600}
+h1{font-weight:600;font-size:30px;line-height:1.1;letter-spacing:-.8px;margin-top:10px}
+h1 .b{color:var(--blue)}
+.sub{font-size:15px;line-height:1.5;color:var(--grey);margin-top:10px;max-width:760px}
+.step{margin-top:24px;padding-top:16px;border-top:1px solid var(--line)}
+.step-h{display:flex;align-items:baseline;gap:10px}
+.num{font:600 12px var(--mono);color:#fff;background:var(--ink);width:22px;height:22px;display:inline-flex;align-items:center;justify-content:center;flex:none}
+.step-h h2{font-size:16px;font-weight:600}
+.hint{font-size:13px;line-height:1.45;color:var(--grey);margin:6px 0 8px 32px}
+.field{margin-left:32px}
+textarea,input[type=text],select{width:100%;font:400 14px/1.45 var(--sans);color:var(--ink);border:1px solid var(--line);padding:10px 12px;background:#fff;outline:none}
+textarea:focus,input:focus,select:focus{border-color:var(--blue);box-shadow:0 0 0 3px var(--blue-l)}
+textarea.code{font:400 13px/1.5 var(--mono);min-height:110px}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:10px}
+.btn{font:500 14px var(--sans);color:var(--blue);border:1.5px solid var(--blue);border-radius:4px;padding:9px 18px;background:#fff;cursor:pointer}
+.btn.fill{background:var(--blue);color:#fff}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+.link{font:500 12px var(--mono);color:var(--blue);background:none;border:none;cursor:pointer;text-decoration:underline;padding:0}
+.msgs{margin-top:10px;display:flex;flex-direction:column;gap:6px}
+.msg{font-size:13px;line-height:1.4;padding:8px 10px;border-left:3px solid var(--line);background:var(--bg)}
+.msg.err{border-color:var(--red);color:#9b1c14}
+.msg.warn{border-color:#FEC514}
+.msg.ok{border-color:var(--teal-d);color:#026e6a}
+table{border-collapse:collapse;margin-top:10px;font:400 12.5px var(--mono);width:100%}
+th{font:600 11px var(--mono);letter-spacing:.04em;text-transform:uppercase;color:var(--grey);text-align:left;padding:6px 8px;border-bottom:1px solid var(--ink)}
+td{padding:5px 8px;border-bottom:1px solid var(--line)}
+.more{font:400 12px var(--mono);color:var(--grey);margin-top:6px}
+.chips{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.chip{display:inline-flex;align-items:center;gap:6px;font:500 12px var(--mono);border:1px solid var(--line);padding:4px 8px;background:#fff}
+.chip.on{border-color:var(--blue);color:var(--blue)}
+.chip button{border:none;background:none;color:var(--grey);cursor:pointer;font-size:13px}
+.chip.sugg{cursor:pointer;border-style:dashed}
+.prog{height:6px;background:var(--bg);margin-top:12px}
+.prog i{display:block;height:100%;background:var(--blue);width:0;transition:width .4s}
+.res{margin-top:12px;display:flex;flex-direction:column;gap:10px}
+.run{border:1px solid var(--line);padding:12px 14px}
+.run.ce{border-left:3px solid var(--blue)}
+.run.raw{border-left:3px solid var(--slate)}
+.run-h{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.who{font:600 12px var(--mono);letter-spacing:.05em;text-transform:uppercase}
+.stat{font:600 22px var(--sans);color:var(--blue);letter-spacing:-.5px}
+.run.raw .stat{color:var(--char)}
+.tagc{font:600 10.5px var(--mono);letter-spacing:.04em;text-transform:uppercase;border:1px solid var(--line);padding:2px 6px}
+.tagc.ok{border-color:var(--teal-d);color:#027a76}
+.tagc.no{border-color:var(--red);color:var(--red)}
+.why{font-size:13px;line-height:1.45;color:var(--char);margin-top:6px}
+details{margin-top:6px}
+summary{font:500 12px var(--mono);color:var(--blue);cursor:pointer}
+pre{font:400 12px/1.5 var(--mono);white-space:pre-wrap;background:var(--bg);padding:8px 10px;margin-top:6px;max-height:280px;overflow:auto}
+.pending{color:var(--grey);font:400 13px var(--mono)}
+.replay{margin-top:18px;padding:12px 14px;background:var(--bg);font-size:13.5px;line-height:1.5;color:var(--char)}
+.replay b{color:var(--ink)}
+.done{margin-top:14px;padding:12px 14px;border:1px solid var(--ink);box-shadow:6px 6px 0 var(--blue);font-size:14px;line-height:1.5}
+</style>
+</head>
+<body>
+<div class="eyebrow">Lab 4 · <b>Context Engine eval</b> · add a test case</div>
+<h1>Add a question that matters to you. <span class="b">Define the right answer first.</span></h1>
+<p class="sub">A test case is a question plus the ES|QL query that computes its correct answer. The query is your ground truth: both agents answer the question, and every answer is graded against the query's rows. That is how a real eval set grows.</p>
+
+<div class="replay">
+  <div><b>Optional: replay the recorded eval.</b> Clears the 50 recorded runs from the dashboard and streams them back, one every 3 seconds (about 2.5 minutes), so you can watch the medians settle. No LLM calls; every run is labelled REPLAY.</div>
+  <div class="row" style="margin-top:8px"><button class="btn" id="replay">Start the replay</button><span class="pending" id="replaynote"></span></div>
+</div>
+
+<div class="step">
+  <div class="step-h"><span class="num">1</span><h2>Your question</h2><button class="link" id="example">fill in an example</button></div>
+  <p class="hint">Ask something about the Precision Labs data (accounts, tickets, KB articles) that is not one of the four eval questions.</p>
+  <div class="field"><textarea id="q" rows="2" placeholder="Which industry has the most Enterprise accounts, and how many?"></textarea></div>
+</div>
+
+<div class="step">
+  <div class="step-h"><span class="num">2</span><h2>Ground truth: the ES|QL that computes the right answer</h2></div>
+  <p class="hint">Keep it small: aggregate with STATS or add a LIMIT (at most 50 rows). Checking the query costs no LLM calls.</p>
+  <div class="field">
+    <textarea id="esql" class="code" spellcheck="false" placeholder='FROM precision-crm-accounts | WHERE account_tier == "Enterprise" | STATS n = COUNT(*) BY industry | SORT n DESC | LIMIT 3'></textarea>
+    <div class="row"><button class="btn" id="check">Check the query</button><span class="pending" id="checking"></span></div>
+    <div class="msgs" id="msgs"></div>
+    <div id="rows"></div>
+  </div>
+</div>
+
+<div class="step">
+  <div class="step-h"><span class="num">3</span><h2>Must mention (optional)</h2></div>
+  <p class="hint">Terms a correct answer has to name. Without them, only the LLM judge grades the answers. Click a suggestion from your first row, or type and press Enter.</p>
+  <div class="field">
+    <div class="chips" id="expect"></div>
+    <div class="row"><input type="text" id="term" placeholder="e.g. Manufacturing" style="max-width:280px"><span class="chips" id="sugg"></span></div>
+  </div>
+</div>
+
+<div class="step">
+  <div class="step-h"><span class="num">4</span><h2>Run it on both agents</h2></div>
+  <p class="hint">Each run is a real Agent Builder conversation, scored the same way as the recorded eval. 2 runs per agent takes about a minute.</p>
+  <div class="field">
+    <div class="row">
+      <label class="pending" for="n">runs per agent</label>
+      <select id="n" style="width:80px"><option>1</option><option selected>2</option><option>3</option></select>
+      <button class="btn fill" id="run" disabled>Run on both agents</button>
+      <span class="pending" id="runnote">Check the query first.</span>
+    </div>
+    <div class="prog" id="prog" hidden><i></i></div>
+    <div class="res" id="res"></div>
+  </div>
+</div>
+
+<script>
+const $ = (id) => document.getElementById(id);
+const esc = (s) => String(s ?? '').replace(/[&<>"]/g, (c) => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+let expect = [], validatedKey = null;
+const key = () => $('q').value.trim() + '\u0000' + $('esql').value.trim();
+
+function drawExpect() {
+  $('expect').innerHTML = expect.length ? expect.map((t, i) =>
+    `<span class="chip on">${esc(t)}<button data-i="${i}" title="remove">×</button></span>`).join('')
+    : '<span class="pending">none yet</span>';
+}
+$('expect').onclick = (e) => { if (e.target.dataset.i !== undefined) { expect.splice(+e.target.dataset.i, 1); drawExpect(); } };
+$('term').onkeydown = (e) => {
+  if (e.key === 'Enter' && e.target.value.trim()) { expect.push(e.target.value.trim()); e.target.value = ''; drawExpect(); }
+};
+function gate() {
+  const ok = validatedKey !== null && validatedKey === key();
+  $('run').disabled = !ok;
+  $('runnote').textContent = ok ? '' : (validatedKey ? 'You changed the question or query: check it again.' : 'Check the query first.');
+}
+$('q').oninput = gate; $('esql').oninput = gate;
+
+$('example').onclick = () => {
+  $('q').value = 'Which industry has the most Enterprise accounts, and how many?';
+  $('esql').value = 'FROM precision-crm-accounts\n| WHERE account_tier == "Enterprise"\n| STATS n = COUNT(*) BY industry\n| SORT n DESC\n| LIMIT 3';
+  validatedKey = null; gate();
+};
+
+$('check').onclick = async () => {
+  $('checking').textContent = 'running the query…'; $('msgs').innerHTML = ''; $('rows').innerHTML = ''; $('sugg').innerHTML = '';
+  const r = await fetch('api/eval/validate', {method: 'POST', headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({question: $('q').value, truth_esql: $('esql').value})}).then((x) => x.json());
+  $('checking').textContent = '';
+  const m = [];
+  (r.errors || []).forEach((e) => m.push(`<div class="msg err">${esc(e)}</div>`));
+  (r.warnings || []).forEach((w) => m.push(`<div class="msg warn">${esc(w)}</div>`));
+  if (r.ok) m.push(`<div class="msg ok">The query runs and returns ${r.rows.length} row(s). This is what the judge will grade against.</div>`);
+  $('msgs').innerHTML = m.join('');
+  if (r.rows && r.rows.length) {
+    const cols = r.columns, shown = r.rows.slice(0, 10);
+    $('rows').innerHTML = `<table><tr>${cols.map((c) => `<th>${esc(c)}</th>`).join('')}</tr>${
+      shown.map((row) => `<tr>${cols.map((c) => `<td>${esc(row[c])}</td>`).join('')}</tr>`).join('')}</table>` +
+      (r.rows.length > 10 ? `<div class="more">+ ${r.rows.length - 10} more rows</div>` : '');
+    $('sugg').innerHTML = (r.suggested || []).filter((s) => !expect.includes(s))
+      .map((s) => `<span class="chip sugg" data-s="${esc(s)}">+ ${esc(s)}</span>`).join('');
+  }
+  validatedKey = r.ok ? key() : null; gate();
+};
+$('sugg').onclick = (e) => {
+  const s = e.target.dataset.s; if (s && !expect.includes(s)) { expect.push(s); drawExpect(); e.target.remove(); }
+};
+
+function card(d) {
+  const ce = d.mode === 'ce', who = ce ? 'Context Engine' : 'Baseline';
+  if (d.status !== 'ok') return `<div class="run ${d.mode}"><div class="run-h"><span class="who">${who} #${d.run}</span>
+    <span class="tagc no">error</span></div><div class="why">${esc(d.error)}</div></div>`;
+  const checks = d.checks_pass === true ? '<span class="tagc ok">checks ✓</span>' : d.checks_pass === false ? '<span class="tagc no">checks ✗</span>' : '';
+  return `<div class="run ${d.mode}"><div class="run-h"><span class="who">${who} #${d.run}</span>
+    <span class="stat">${d.llm_calls}</span><span class="pending">LLM calls · ${Math.round(d.effective_tokens / 1000)}K eff. tokens</span>
+    <span class="tagc ${d.correct ? 'ok' : 'no'}">${d.correct ? 'correct' : 'wrong'}</span>${checks}
+    <span class="tagc">judge: correct ${d.judge_correctness} · complete ${d.judge_completeness} /5</span></div>
+    <div class="why"><b>Judge:</b> ${esc(d.judge_reason)}</div>
+    <details><summary>show the answer and the checks</summary><pre>${esc(d.answer)}</pre><pre>${esc(d.checks_text)}</pre></details></div>`;
+}
+
+$('run').onclick = async () => {
+  $('run').disabled = true; $('runnote').textContent = 'running…'; $('res').innerHTML = ''; $('prog').hidden = false;
+  const start = await fetch('api/eval/run', {method: 'POST', headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({question: $('q').value, truth_esql: $('esql').value, expect, n: +$('n').value})});
+  const s = await start.json();
+  if (!start.ok) { $('runnote').textContent = 'validation failed: check the query again'; validatedKey = null; return; }
+  const poll = async () => {
+    const j = await fetch(`api/eval/job/${s.job_id}`).then((x) => x.json());
+    $('prog').firstElementChild.style.width = (100 * j.results.length / j.total) + '%';
+    $('runnote').textContent = `${j.results.length} of ${j.total} runs scored`;
+    const sorted = [...j.results].sort((a, b) => (a.run - b.run) || a.mode.localeCompare(b.mode));
+    $('res').innerHTML = sorted.map(card).join('') +
+      Array.from({length: j.total - j.results.length}, () => '<div class="run"><span class="pending">waiting for an agent…</span></div>').join('');
+    if (j.status === 'running') return setTimeout(poll, 2000);
+    if (j.status === 'error') { $('runnote').textContent = 'error: ' + j.error; return; }
+    const ok = (m) => j.results.filter((d) => d.mode === m && d.correct).length, n = j.total / 2;
+    const calls = (m) => j.results.filter((d) => d.mode === m).map((d) => d.llm_calls).join(', ');
+    $('res').insertAdjacentHTML('beforeend', `<div class="done"><b>Done.</b> Baseline: ${ok('raw')}/${n} correct, LLM calls ${calls('raw')}.
+      Context Engine: ${ok('ce')}/${n} correct, LLM calls ${calls('ce')}. Your case is now on the eval dashboard as <b>Your case</b>,
+      and its ground truth is in <b>How each question is scored</b>.</div>`);
+    gate();
+  };
+  poll();
+};
+async function replayStatus() {
+  const r = await fetch('api/eval/replay').then((x) => x.json());
+  if (r.status === 'running') { $('replay').disabled = true; $('replaynote').textContent = `${r.done} of ${r.total || 50} runs replayed… (refresh the dashboard)`; setTimeout(replayStatus, 3000); }
+  else if (r.status === 'done') { $('replay').disabled = false; $('replaynote').textContent = 'Replay finished.'; }
+  else if (r.status === 'error') { $('replay').disabled = false; $('replaynote').textContent = 'Replay error: ' + r.error; }
+}
+$('replay').onclick = async () => { await fetch('api/eval/replay', {method: 'POST'}); replayStatus(); };
+replayStatus();
+drawExpect(); gate();
+</script>
+</body>
+</html>

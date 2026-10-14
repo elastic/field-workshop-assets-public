@@ -1,0 +1,7 @@
+FROM ce-eval-results
+| EVAL run_kind = CASE(source == "you", "you", replayed == true, "replay", "recorded"),
+       agent = CASE(mode == "ce", "Context Engine", "Baseline"),
+       result = CASE(judge_verdict == "unverified", "unverified", status != "ok", "error", correct == true, "correct", "wrong")
+| KEEP @timestamp, run_kind, scenario, agent, result, llm_calls, effective_tokens, checks_pass, checks_text, judge_correctness, judge_completeness, judge_reason, question, answer, tool_seq, conversation_id, trace_id, rec_position, judge_model, model, eval_id
+| SORT @timestamp DESC
+| LIMIT 500

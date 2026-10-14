@@ -13,13 +13,17 @@ Environment:
     CE_AI_INDEX         — AI index id (default: ai-index-idx-precision-corpus)
     DEMO_LIVE_ENABLED   — "true" to enable live agent calls (default: false)
     DEMO_PORT           — port to listen on (default: 5001)
+    CE_EVAL_DIR         — path to tools/eval (default: ../eval); enables the /eval page
 """
 import json
 import os
 import pathlib
+import sys
+import threading
 import time
+import uuid
 
-from flask import Flask, jsonify, abort
+from flask import Flask, jsonify, abort, request
 
 BASE = pathlib.Path(__file__).parent
 app = Flask(__name__, static_folder='static')
@@ -229,6 +233,102 @@ def live_run(scenario, mode):
         return jsonify(_ab_to_replay_shape(ab_resp, scenario, mode, elapsed))
     except Exception as exc:
         return jsonify({"error": str(exc), "fallback": "replay"})
+
+
+# ── Eval: learner test cases (Lab 4) ─────────────────────────────────────────
+# Reuses tools/eval (validate -> save_case -> run_case), the same code as add_case.py.
+EVAL_DIR = pathlib.Path(os.environ.get("CE_EVAL_DIR", BASE.parent / "eval"))
+_jobs: dict[str, dict] = {}
+
+
+def _eval_mods():
+    if str(EVAL_DIR) not in sys.path:
+        sys.path.insert(0, str(EVAL_DIR))
+    import add_case
+    from common import Env
+    return add_case, Env()
+
+
+@app.route("/eval")
+def eval_page():
+    return app.send_static_file('eval.html')
+
+
+@app.route("/api/eval/validate", methods=["POST"])
+def eval_validate():
+    body = request.get_json(force=True) or {}
+    try:
+        add_case, env = _eval_mods()
+        return jsonify(add_case.validate(env, body.get("question", ""), body.get("truth_esql", "")))
+    except Exception as exc:
+        return jsonify({"ok": False, "errors": [f"Eval tools unavailable: {exc}"], "warnings": [], "rows": []})
+
+
+@app.route("/api/eval/run", methods=["POST"])
+def eval_run():
+    body = request.get_json(force=True) or {}
+    add_case, env = _eval_mods()
+    v = add_case.validate(env, body.get("question", ""), body.get("truth_esql", ""))
+    if not v["ok"]:  # never spend LLM calls on a case that fails validation
+        return jsonify({"error": "validation failed", "validation": v}), 400
+    n = max(1, min(int(body.get("n", 2)), 3))
+    case = add_case.save_case(env, body["question"], body["truth_esql"], body.get("expect", []))
+    job_id = uuid.uuid4().hex[:10]
+    job = {"id": job_id, "case": case, "total": 2 * n, "results": [], "status": "running", "error": None}
+    _jobs[job_id] = job
+
+    def keep(d):
+        job["results"].append({k: d.get(k) for k in (
+            "mode", "run", "status", "llm_calls", "effective_tokens", "correct", "checks_pass", "checks_text",
+            "judge_correctness", "judge_completeness", "judge_reason", "answer", "error")})
+
+    def work():
+        try:
+            add_case.run_case(env, case, n, keep)
+            job["status"] = "done"
+        except Exception as exc:
+            job.update({"status": "error", "error": str(exc)[:500]})
+
+    threading.Thread(target=work, daemon=True).start()
+    return jsonify({"job_id": job_id, "case_id": case["case_id"], "total": job["total"]})
+
+
+_replay = {"status": "idle", "done": 0, "total": 0}
+
+
+@app.route("/api/eval/replay", methods=["POST", "GET"])
+def eval_replay():
+    """Optional: clear the recorded runs and stream them back, one every 3 s, so the dashboard
+    fills in live. Every replayed run is labelled REPLAY on the dashboard; no LLM calls."""
+    if request.method == "GET" or _replay["status"] == "running":
+        return jsonify(_replay)
+    if str(EVAL_DIR) not in sys.path:
+        sys.path.insert(0, str(EVAL_DIR))
+    import load_recorded
+    from common import Env
+    env = Env()
+    _replay.update({"status": "running", "done": 0, "total": 0})
+
+    def tick(i, n, d):
+        _replay.update({"done": i, "total": n})
+
+    def work():
+        try:
+            load_recorded.load(env, pace=3, on_doc=tick)
+            _replay["status"] = "done"
+        except Exception as exc:
+            _replay.update({"status": "error", "error": str(exc)[:300]})
+
+    threading.Thread(target=work, daemon=True).start()
+    return jsonify(_replay)
+
+
+@app.route("/api/eval/job/<job_id>")
+def eval_job(job_id):
+    job = _jobs.get(job_id)
+    if not job:
+        abort(404)
+    return jsonify({k: job[k] for k in ("id", "total", "results", "status", "error")} | {"case_id": job["case"]["case_id"]})
 
 
 @app.route("/api/runs/count")

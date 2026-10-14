@@ -1,0 +1,11 @@
+FROM ce-eval-results
+| WHERE status == "ok" AND scenario != "other"
+| INLINE STATS sc_ts = MAX(@timestamp) BY scenario
+| EVAL case_ts = CASE(scenario LIKE "c-*", sc_ts, null)
+| INLINE STATS last_case = MAX(case_ts)
+| WHERE scenario NOT LIKE "c-*" OR sc_ts == last_case
+| EVAL wrong = CASE(correct == false, 1, 0), you = CASE(source == "you", 1, 0), you_wrong = CASE(source == "you" AND correct == false, 1, 0)
+| STATS n = COUNT(*), n_wrong = SUM(wrong), n_you = SUM(you), n_you_wrong = SUM(you_wrong)
+  BY scenario, scenario_label, q = question.kw, mode, llm_calls
+| SORT scenario, mode, llm_calls
+| LIMIT 1000

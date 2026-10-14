@@ -1,0 +1,5 @@
+FROM ce-eval-questions
+| EVAL checks_all = MV_CONCAT(checks, " ;; ")
+| KEEP scenario, label, question, truth_esql, checks_all, notes, judge, kind
+| SORT kind DESC, scenario
+| LIMIT 20

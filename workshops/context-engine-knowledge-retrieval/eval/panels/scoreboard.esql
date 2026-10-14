@@ -1,0 +1,15 @@
+FROM ce-eval-results
+| WHERE status == "ok" AND source == "recorded"
+| EVAL ok = CASE(correct, 1, 0)
+| STATS raw_llm = MEDIAN(llm_calls) WHERE mode == "raw", ce_llm = MEDIAN(llm_calls) WHERE mode == "ce",
+        raw_min = MIN(llm_calls) WHERE mode == "raw", raw_max = MAX(llm_calls) WHERE mode == "raw",
+        ce_min = MIN(llm_calls) WHERE mode == "ce", ce_max = MAX(llm_calls) WHERE mode == "ce",
+        raw_eff = MEDIAN(effective_tokens) WHERE mode == "raw", ce_eff = MEDIAN(effective_tokens) WHERE mode == "ce",
+        raw_ok = SUM(ok) WHERE mode == "raw", ce_ok = SUM(ok) WHERE mode == "ce",
+        raw_n = COUNT(*) WHERE mode == "raw", ce_n = COUNT(*) WHERE mode == "ce",
+        model = MAX(model), n_idx = MAX(n_indices)
+  BY scenario, scenario_label, question = question.kw
+| EVAL calls_x = ROUND(raw_llm / ce_llm * 2) / 2, tok_x = ROUND(raw_eff / ce_eff * 2) / 2,
+       raw_eff_k = ROUND(raw_eff / 1000), ce_eff_k = ROUND(ce_eff / 1000),
+       n_min = LEAST(raw_n, ce_n), provisional = LEAST(raw_n, ce_n) < 3
+| SORT scenario

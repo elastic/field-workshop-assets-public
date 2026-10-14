@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>How the eval works</title>
+<link rel="stylesheet" href="style/eweb.css">
+<link rel="stylesheet" href="style/deck.css">
+<style>
+  .flow{position:absolute;left:72px;right:72px;top:250px;display:grid;grid-template-columns:1fr 24px 1fr 24px 1fr 24px 1fr 24px 1fr;align-items:stretch;z-index:2}
+  .node{min-height:236px;border:1px solid var(--line);background:#fff;padding:14px 14px 12px;display:flex;flex-direction:column;gap:7px}
+  .node .tag{color:var(--grey)}
+  .node h3{font:600 17px/1.2 var(--sans);letter-spacing:-.3px}
+  .node p{font-size:12.5px;line-height:1.45;color:var(--char)}
+  .node code{font:400 11px/1.45 var(--mono);color:var(--ink);background:var(--bg);padding:6px 7px;display:block;white-space:pre-wrap}
+  .node.hot{border-color:var(--ink);box-shadow:6px 6px 0 var(--blue)}
+  .node.ai{border-color:var(--ink);box-shadow:6px 6px 0 var(--pink)}
+  .ar{display:flex;align-items:center;justify-content:center;font:500 16px var(--mono);color:var(--ink)}
+  .two{display:flex;gap:6px;flex-wrap:wrap}
+  .live{position:absolute;left:72px;right:72px;top:530px;display:grid;grid-template-columns:1fr 1fr;gap:18px;z-index:2}
+  .live .card{padding:14px 16px;display:flex;gap:12px;align-items:flex-start}
+  .live .card b{font:600 15px var(--sans)}
+  .live .card p{font-size:13px;line-height:1.45;color:var(--char);margin-top:3px}
+  .live .k{font:700 11px var(--mono);color:#fff;background:var(--ink);padding:3px 7px;white-space:nowrap}
+</style>
+</head>
+<body data-foot="The workshop · How the eval works">
+<div class="z">
+  <div class="eyebrow in1">The workshop · <b>How the eval works</b></div>
+  <h1 class="in2">Fixed questions, repeated runs, every answer scored. <span class="b">All in Elasticsearch.</span></h1>
+</div>
+<div class="flow">
+  <div class="node in3"><div class="tag">01 · Questions</div><h3>A fixed set, each with a right answer</h3><p>5 business questions. Each has the ES|QL that computes its correct answer.</p><code>FROM precision-crm-accounts
+| WHERE account_tier == "Enterprise"
+| SORT arr DESC | LIMIT 5</code></div>
+  <div class="ar in3">→</div>
+  <div class="node in4"><div class="tag">02 · Runs</div><h3>Both agents, 5 times each</h3><p>Real Agent Builder conversations. LLM calls and tokens come from each run's usage report.</p><div class="two"><span class="pill">Baseline</span><span class="pill b">Context Engine</span></div></div>
+  <div class="ar in4">→</div>
+  <div class="node ai in4"><div class="tag">03 · Score</div><h3>Checks, then a judge</h3><p><b>Deterministic checks</b> against the ES|QL ground truth: did it name the right accounts?</p><p><b>LLM judge</b> via the Elasticsearch <code style="display:inline;padding:0 3px">_inference</code> API: correctness and completeness, 1 to 5.</p></div>
+  <div class="ar in5">→</div>
+  <div class="node in5"><div class="tag">04 · Store</div><h3>One document per run</h3><p>An Elasticsearch index: question, agent, calls, tokens, check results, judge reason, the full answer.</p><div class="two"><span class="pill">ce-eval-results</span></div></div>
+  <div class="ar in5">→</div>
+  <div class="node hot in6"><div class="tag">05 · See</div><h3>A Kibana dashboard</h3><p>Medians and ranges per question, every run as a dot, and a Discover session to read any answer.</p></div>
+</div>
+<div class="live">
+  <div class="card in6"><span class="k">LAB 4</span><div><b>Your own chats are scored too.</b><p>Ask either agent an eval question: within seconds it lands on the dashboard next to the 50 recorded runs.</p></div></div>
+  <div class="card in6"><span class="k">LAB 4</span><div><b>Add your own test case.</b><p>Write a question and the ES|QL that answers it. Both agents run, and the judge grades them against your query.</p></div></div>
+</div>
+<script src="style/eweb.js"></script>
+<aside class="notes">
+<p>This is the eval loop you will use in Lab 4, and it is the same loop you would run on your own agents.</p>
+<ul><li><b>Questions</b>: a fixed set, and each one has a right answer written as ES|QL. That query is the ground truth.</li>
+<li><b>Runs</b>: both agents answer every question several times. LLM calls and tokens come straight from the run's usage report.</li>
+<li><b>Score</b>: deterministic checks first (did the answer name the right accounts, categories, articles?), then an LLM judge called through Elasticsearch's inference API, which reads the ground truth. An answer is correct only if both agree.</li>
+<li><b>Store</b>: one document per run in an Elasticsearch index.</li>
+<li><b>See</b>: a Kibana dashboard, plus Discover to read any single answer.</li></ul>
+<p>We recorded 50 runs ahead of time so a room full of people does not repeat the same LLM calls. Your own runs are scored live on top of them, and you can add your own test case.</p>
+</aside>
+</body>
+</html>

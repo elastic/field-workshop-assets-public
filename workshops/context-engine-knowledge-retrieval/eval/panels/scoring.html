@@ -1,0 +1,45 @@
+<style>
+/* elastic-web kit (fslides) tokens; system font fallbacks (panel sandbox blocks web fonts) */
+.ew{--blue:#0B64DD;--ink:#1D1E24;--char:#343741;--grey:#69707D;--grey-l:#98A2B3;--line:#D3DAE6;--bg:#F5F7FA;
+  --sans:'Inter',-apple-system,system-ui,'Segoe UI',sans-serif;--mono:'IBM Plex Mono',ui-monospace,'SF Mono',Menlo,monospace;
+  position:fixed;inset:0;overflow:auto;background:#fff;color:var(--ink);font-family:var(--sans);-webkit-font-smoothing:antialiased;padding:14px 24px 14px}
+.ew *{box-sizing:border-box;margin:0;padding:0}
+.ew-eyebrow{font:500 10.5px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--grey);display:flex;align-items:center;gap:8px}
+.ew-eyebrow::before{content:'';width:8px;height:8px;background:var(--blue)}
+.ew-eyebrow b{color:var(--ink);font-weight:600}
+.judge{font-size:12px;line-height:1.45;color:var(--char);margin-top:6px;max-width:1100px}
+.judge b{color:var(--ink)}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px;margin-top:12px;align-items:start}
+.card{border:1px solid var(--line);padding:10px 12px;display:flex;flex-direction:column;gap:6px}
+.card.case{border-color:var(--ink);box-shadow:4px 4px 0 var(--blue)}
+.tag{font:600 10.5px var(--mono);letter-spacing:.06em;text-transform:uppercase}
+.q{font-size:12px;line-height:1.35;color:var(--char)}
+.h{font:600 9.5px var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--grey);margin-top:2px}
+.ew pre{font:400 10.5px/1.45 var(--mono);white-space:pre-wrap;word-break:break-word;background:var(--bg);border-left:2px solid var(--blue);padding:6px 8px;color:var(--ink)}
+.ew ul{list-style:none;display:flex;flex-direction:column;gap:3px}
+.ew li{font-size:11.5px;line-height:1.35;color:var(--char);padding-left:18px;position:relative}
+.ew li::before{content:'✓';position:absolute;left:0;color:var(--blue);font-weight:700}
+.n{font-size:11px;line-height:1.35;color:var(--grey)}
+</style>
+<div class="ew">
+{% if rows.size == 0 %}
+  <div class="ew-eyebrow">How each question is scored · <b>no data</b></div>
+{% else %}
+  <div class="ew-eyebrow">How each question is scored · <b>ground truth, checks, judge</b></div>
+  <div class="judge"><b>Every answer gets two independent grades.</b> 1) Deterministic checks compare it with ground truth computed by the ES|QL below (run it yourself in Discover). 2) {{ rows[0]["judge"].value }}</div>
+  <div class="grid">
+  {% for row in rows %}
+    <div class="card{% if row["kind"].value == "case" %} case{% endif %}">
+      <div class="tag">{% if row["kind"].value == "case" %}Your test case{% else %}{{ row["scenario"].value | upcase }} · {{ row["label"].value }}{% endif %}</div>
+      <div class="q">“{{ row["question"].value }}”</div>
+      <div class="h">Ground truth (ES|QL)</div>
+      <pre>{{ row["truth_esql"].value }}</pre>
+      <div class="h">Checks</div>
+      {% assign cs = row["checks_all"].value | split: " ;; " %}
+      <ul>{% for c in cs %}<li>{{ c }}</li>{% else %}<li>Judge only (no expected terms given)</li>{% endfor %}</ul>
+      <div class="n">{{ row["notes"].value }}</div>
+    </div>
+  {% endfor %}
+  </div>
+{% endif %}
+</div>

@@ -11,8 +11,8 @@
   .idx .card .n{font:500 30px/1 var(--sans);letter-spacing:-1px;color:var(--blue)}
   .idx .card .n small{font:400 13px var(--sans);color:var(--grey);letter-spacing:0;margin-left:6px}
   .idx .card p{font-size:13.5px;line-height:1.45;color:var(--char)}
-  .qs{position:absolute;left:72px;right:72px;top:420px;z-index:2;border-top:1px solid var(--ink)}
-  .qr{display:grid;grid-template-columns:52px 1fr 250px;gap:14px;align-items:center;padding:10px 0;border-bottom:1px solid var(--line);font-size:14.5px;color:var(--ink)}
+  .qs{position:absolute;left:72px;right:72px;top:400px;z-index:2;border-top:1px solid var(--ink)}
+  .qr{display:grid;grid-template-columns:52px 1fr 250px;gap:14px;align-items:center;padding:8px 0;border-bottom:1px solid var(--line);font-size:14.5px;color:var(--ink)}
   .qr .id{font:600 12px var(--mono);color:var(--grey)}
   .qr .t{display:flex;gap:5px;justify-content:flex-end}
   .qr .t span{font:500 10px var(--mono);letter-spacing:.04em;text-transform:uppercase;border:1px solid var(--line);padding:2px 6px;color:var(--char)}
@@ -23,7 +23,7 @@
 <body data-foot="The workshop · Scenario">
 <div class="z">
   <div class="eyebrow in1">The workshop · <b>Scenario</b></div>
-  <h1 class="in2">Meet Precision Labs. <span class="b">Three indices, four questions.</span></h1>
+  <h1 class="in2">Meet Precision Labs. <span class="b">Three indices, five questions.</span></h1>
   <p class="sub in3" style="max-width:900px">You are on the customer-success team. Accounts are churning, and the answers are spread across three sources.</p>
 </div>
 <div class="idx">
@@ -36,11 +36,12 @@
   <div class="qr hot"><span class="id">S02</span><span>Which Enterprise accounts renewing in the next 60 days have open P1 tickets, and which KB articles cover their issues?</span><span class="t"><span>CRM</span><span>Tickets</span><span>KB</span></span></div>
   <div class="qr"><span class="id">S03</span><span>Which accounts have open P1 tickets and high churn risk right now?</span><span class="t"><span>CRM</span><span>Tickets</span></span></div>
   <div class="qr"><span class="id">S04</span><span>What does the knowledge base say about our top support ticket categories?</span><span class="t"><span>Tickets</span><span>KB</span></span></div>
+  <div class="qr"><span class="id">S05</span><span>Which Enterprise accounts have the highest annual recurring revenue, and who owns them?</span><span class="t"><span>CRM</span></span></div>
 </div>
 <script src="style/eweb.js"></script>
 <aside class="notes">
 <p>The scenario: Precision Labs, a SaaS company with a churn problem. Three Elasticsearch indices: CRM accounts, support tickets, and knowledge base articles.</p>
-<p>Four questions you will see all day. <b>S02 is the one to watch</b>: it crosses all three indices, so it is the hardest for an agent with no context.</p>
+<p>Five questions you will see all day. <b>S02 is the one to watch</b>: it crosses all three indices, so it is the hardest for an agent with no context. <b>S05</b> is the control: one index, no join.</p>
 <p>Note the field names: the revenue field is called <code>arr</code>, deliberately terse, just like real data.</p>
 </aside>
 </body>

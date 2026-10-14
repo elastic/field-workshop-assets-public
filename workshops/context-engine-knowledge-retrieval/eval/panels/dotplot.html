@@ -1,0 +1,70 @@
+<style>
+/* elastic-web kit (fslides) tokens; system font fallbacks (panel sandbox blocks web fonts) */
+.ew{--blue:#0B64DD;--red:#E0352B;--ink:#1D1E24;--char:#343741;--grey:#69707D;--grey-l:#98A2B3;--line:#D3DAE6;--slate:#B5BFCE;
+  --sans:'Inter',-apple-system,system-ui,'Segoe UI',sans-serif;--mono:'IBM Plex Mono',ui-monospace,'SF Mono',Menlo,monospace;
+  position:fixed;inset:0;overflow:hidden;background:#fff;color:var(--ink);font-family:var(--sans);-webkit-font-smoothing:antialiased;padding:14px 20px 8px;display:flex;flex-direction:column}
+.ew *{box-sizing:border-box;margin:0;padding:0}
+.ew-top{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.ew-eyebrow{font:500 10.5px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--grey);display:flex;align-items:center;gap:8px}
+.ew-eyebrow::before{content:'';width:8px;height:8px;background:var(--blue)}
+.ew-eyebrow b{color:var(--ink);font-weight:600}
+.lg{display:flex;gap:12px;font:500 9.5px var(--mono);letter-spacing:.05em;text-transform:uppercase;color:var(--char)}
+.lg span{display:flex;align-items:center;gap:5px}
+.rows{flex:1;display:flex;flex-direction:column;justify-content:space-evenly;margin-top:6px}
+.sc{display:grid;grid-template-columns:110px 1fr;align-items:stretch;border-top:1px solid var(--line);flex:1;max-height:84px}
+.nm{font:600 10.5px var(--mono);letter-spacing:.05em;text-transform:uppercase;align-self:center}
+.nm small{display:block;font:400 11px var(--sans);letter-spacing:0;text-transform:none;color:var(--grey)}
+.lanes{display:flex;flex-direction:column}
+.lane{position:relative;flex:1;min-height:18px}
+.lane+.lane{border-top:1px dashed var(--line)}
+.tag{position:absolute;left:0;bottom:4px;font:400 9px var(--mono);letter-spacing:.05em;text-transform:uppercase;color:var(--grey-l)}
+.trk,.grid{position:absolute;left:58px;right:10px;top:0;bottom:0}
+.grid i{position:absolute;top:0;bottom:0;border-left:1px dotted var(--line)}
+.st{position:absolute;bottom:3px;transform:translateX(-50%);display:flex;flex-direction:column-reverse;gap:1px;align-items:center}
+.d{width:7px;height:7px;display:block}
+.raw{background:var(--slate)}.ce{background:var(--blue)}
+.bad{background:#fff;border:1.5px solid var(--red)}
+.you{width:10px;height:10px;transform:rotate(45deg);outline:2px solid var(--ink);outline-offset:1px;margin:3px 0}
+.ax{display:grid;grid-template-columns:110px 1fr;border-top:1px solid var(--ink);font:500 9.5px var(--mono);color:var(--grey);letter-spacing:.05em;text-transform:uppercase}
+.tk{position:relative;height:18px;margin-left:58px;margin-right:10px}
+.tk span{position:absolute;top:3px;transform:translateX(-50%)}
+.k{display:inline-block;width:9px;height:9px}
+</style>
+<div class="ew">
+{% if rows.size == 0 %}
+  <div class="ew-eyebrow">Every run · <b>no data</b></div>
+{% else %}
+{% assign m = 0 %}{% for row in rows %}{% if row["llm_calls"].value > m %}{% assign m = row["llm_calls"].value %}{% endif %}{% endfor %}
+{% if m <= 25 %}{% assign step = 5 %}{% elsif m <= 60 %}{% assign step = 10 %}{% else %}{% assign step = 20 %}{% endif %}
+{% assign scs = "" %}{% for row in rows %}{% assign key = row["scenario"].value | append: "," %}{% unless scs contains key %}{% assign scs = scs | append: key %}{% endunless %}{% endfor %}
+{% assign scs = scs | split: "," %}
+  <div class="ew-top">
+    <div class="ew-eyebrow">Every run · <b>LLM calls per answer, one square per run</b></div>
+    <div class="lg"><span><i class="k raw"></i>Baseline</span><span><i class="k ce"></i>CE</span><span><i class="k bad"></i>Wrong</span><span><i class="k ce" style="transform:rotate(45deg);outline:2px solid #1D1E24;outline-offset:1px"></i>You</span></div>
+  </div>
+  <div class="rows">
+{% for sc in scs %}
+  {% assign label = "" %}{% assign q = "" %}{% for row in rows %}{% if row["scenario"].value == sc %}{% assign label = row["scenario_label"].value %}{% assign q = row["q"].value %}{% endif %}{% endfor %}
+  <div class="sc">
+    <div class="nm">{% if sc contains "c-" %}Your latest case{% else %}{{ sc | upcase }}{% endif %}<small>{% if sc contains "c-" %}{{ q | truncate: 28 }}{% else %}{{ label }}{% endif %}</small></div>
+    <div class="lanes">
+    {% for lane in (1..2) %}{% if lane == 1 %}{% assign mode = "raw" %}{% assign tag = "Base" %}{% else %}{% assign mode = "ce" %}{% assign tag = "CE" %}{% endif %}
+      <div class="lane"><span class="tag">{{ tag }}</span>
+        <div class="grid">{% for t in (0..m) %}{% assign r = t | modulo: step %}{% if r == 0 %}<i style="left:{{ t | times: 100.0 | divided_by: m }}%"></i>{% endif %}{% endfor %}</div>
+        <div class="trk">
+        {% for row in rows %}{% if row["scenario"].value == sc and row["mode"].value == mode %}
+          {% assign n = row["n"].value %}{% assign yw = row["n_you_wrong"].value %}{% assign yo = row["n_you"].value %}{% assign ow = row["n_wrong"].value | minus: yw | plus: yo %}
+          <div class="st" style="left:{{ row["llm_calls"].value | times: 100.0 | divided_by: m }}%" title="{{ n }} run(s) with {{ row["llm_calls"].value }} LLM calls">
+          {% for i in (1..n) %}<i class="d {{ mode }}{% if i <= yo %} you{% if i <= yw %} bad{% endif %}{% elsif i <= ow %} bad{% endif %}"></i>{% endfor %}
+          </div>
+        {% endif %}{% endfor %}
+        </div>
+      </div>
+    {% endfor %}
+    </div>
+  </div>
+{% endfor %}
+  </div>
+  <div class="ax"><span style="padding-top:3px">LLM calls</span><div class="tk">{% for t in (0..m) %}{% assign r = t | modulo: step %}{% if r == 0 %}<span style="left:{{ t | times: 100.0 | divided_by: m }}%">{{ t }}</span>{% endif %}{% endfor %}</div></div>
+{% endif %}
+</div>

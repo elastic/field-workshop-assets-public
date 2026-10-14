@@ -1,0 +1,7 @@
+FROM ce-eval-results
+| WHERE source == "you"
+| INLINE STATS your_runs = COUNT(*)
+| SORT @timestamp DESC
+| LIMIT 1
+| EVAL eff_k = ROUND(effective_tokens / 1000), q = question.kw
+| KEEP @timestamp, your_runs, scenario, scenario_label, q, mode, agent_name, status, llm_calls, eff_k, checks_pass, judge_correctness, judge_completeness, judge_verdict, judge_reason, correct, rec_median, rec_min, rec_max, rec_n, rec_position, rec_other_median, rec_other_min, rec_other_max

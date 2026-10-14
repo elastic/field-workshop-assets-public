@@ -1,0 +1,54 @@
+<style>
+/* elastic-web kit (fslides) tokens; system font fallbacks (panel sandbox blocks web fonts) */
+.ew{--blue:#0B64DD;--red:#E0352B;--ink:#1D1E24;--char:#343741;--grey:#69707D;--grey-l:#98A2B3;--line:#D3DAE6;--slate:#B5BFCE;
+  --sans:'Inter',-apple-system,system-ui,'Segoe UI',sans-serif;--mono:'IBM Plex Mono',ui-monospace,'SF Mono',Menlo,monospace;
+  position:fixed;inset:0;overflow:hidden;background:#fff;color:var(--ink);font-family:var(--sans);-webkit-font-smoothing:antialiased;padding:14px 24px 10px;display:flex;flex-direction:column}
+.ew *{box-sizing:border-box;margin:0;padding:0}
+.ew-top{display:flex;align-items:baseline;gap:16px;flex-wrap:wrap}
+.ew-eyebrow{font:500 10.5px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--grey);display:flex;align-items:center;gap:8px}
+.ew-eyebrow::before{content:'';width:8px;height:8px;background:var(--blue)}
+.ew-eyebrow b{color:var(--ink);font-weight:600}
+.ew-h{font-weight:600;font-size:19px;letter-spacing:-.4px}
+.ew-h .b{color:var(--blue)}
+.ew-cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));margin-top:10px;flex:1}
+.ew-col{padding:0 12px;border-left:1px solid var(--ink);min-width:0}
+.ew-col:first-child{padding-left:0;border-left:0}
+.ew-tag{font:600 10.5px var(--mono);letter-spacing:.06em;text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ew-q{font:400 11.5px/1.35 var(--sans);color:var(--char);margin-top:3px;min-height:46px;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.ew-tag i{font-style:normal;color:var(--grey-l);font-weight:400}
+.ew-idx{display:inline-block;font:500 9.5px var(--mono);letter-spacing:.05em;text-transform:uppercase;color:var(--grey);border:1px solid var(--line);padding:0 5px;margin-top:3px}
+.ew-stat{font:600 26px/1.05 var(--sans);letter-spacing:-1px;color:var(--blue);margin-top:4px}
+.ew-stat small{display:block;font:500 11.5px var(--sans);letter-spacing:0;color:var(--char);margin-top:1px}
+.ew-l{font:400 10.5px/1.5 var(--mono);color:var(--char);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ew-l b{color:var(--ink);font-weight:600}
+.ew-acc{margin-top:3px;font:600 10.5px var(--mono);color:var(--ink);white-space:nowrap}
+.prov .ew-stat{color:var(--grey-l)}
+.prov-tag{font:600 9.5px var(--mono);letter-spacing:.04em;text-transform:uppercase;color:var(--red);margin-left:6px}
+.ew-foot{font:400 10px/1.4 var(--mono);color:var(--grey);margin-top:4px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.ew-empty{font:500 12px var(--mono);color:var(--grey);text-transform:uppercase;letter-spacing:.06em;margin-top:12px}
+</style>
+<div class="ew">
+{% if rows.size == 0 %}
+  <div class="ew-eyebrow">Recorded eval · <b>no data</b></div>
+  <div class="ew-empty">No recorded runs in this time range. Widen the time picker.</div>
+{% else %}
+  <div class="ew-top">
+    <div class="ew-eyebrow">Recorded eval · <b>same {{ rows.size }} questions, both agents, up to 5 runs each</b> · {{ rows[0]["model"].value }}</div>
+  </div>
+  <div class="ew-h" style="margin-top:4px">Baseline vs Context Engine, <span class="b">medians across repeated runs.</span></div>
+  <div class="ew-cols">
+  {% for row in rows %}
+    <div class="ew-col{% if row["provisional"].value == true %} prov{% endif %}">
+      <div class="ew-tag">{{ row["scenario"].value | upcase }} · {{ row["scenario_label"].value }}</div>
+      <div class="ew-idx">{{ row["n_idx"].value }} {% if row["n_idx"].value == 1 %}index{% else %}indices{% endif %}</div>
+      <div class="ew-q">“{{ row["question"].value }}”</div>
+      <div class="ew-stat">{% if row["calls_x"].value >= 1.5 %}~{{ row["calls_x"].value | remove: ".0" }}× <small>fewer LLM calls</small>{% elsif row["calls_x"].value <= 0.67 %}more <small>LLM calls</small>{% else %}≈ <small>same LLM calls</small>{% endif %}{% if row["provisional"].value == true %}<span class="prov-tag">provisional n={{ row["n_min"].value }}</span>{% endif %}</div>
+      <div class="ew-l">calls <b>{{ row["raw_llm"].value | round }}</b> → <b>{{ row["ce_llm"].value | round }}</b> <span style="color:#98A2B3">({{ row["raw_min"].value }}–{{ row["raw_max"].value }} → {{ row["ce_min"].value }}–{{ row["ce_max"].value }})</span></div>
+      <div class="ew-l">eff. tokens <b>{{ row["raw_eff_k"].value | round }}K</b> → <b>{{ row["ce_eff_k"].value | round }}K</b></div>
+      <div class="ew-acc">Correct: Base {{ row["raw_ok"].value }}/{{ row["raw_n"].value }} · CE {{ row["ce_ok"].value }}/{{ row["ce_n"].value }}</div>
+    </div>
+  {% endfor %}
+  </div>
+  <div class="ew-foot">Baseline → Context Engine, medians (range). Correct = deterministic checks pass AND LLM judge ≥4/5 correctness, ≥3/5 completeness; the judge is one LLM's opinion. Eff. tokens = uncached input + 10% of cached (list-price proxy, not your bill).</div>
+{% endif %}
+</div>

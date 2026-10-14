@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Why evals</title>
+<link rel="stylesheet" href="style/eweb.css">
+<link rel="stylesheet" href="style/deck.css">
+<style>
+  .strip{position:absolute;left:72px;right:72px;top:190px;z-index:2}
+  .strip .tag{color:var(--grey);display:block;margin-bottom:12px}
+  .q{font-size:15px;color:var(--char);margin-bottom:16px}
+  .lane{display:grid;grid-template-columns:150px 1fr;align-items:center;height:78px;border-bottom:1px dashed var(--line)}
+  .lane .who{font:600 12px var(--mono);letter-spacing:.06em;text-transform:uppercase}
+  .track{position:relative;height:100%}
+  .track .g{position:absolute;top:0;bottom:0;border-left:1px dotted var(--line)}
+  .sq{position:absolute;top:50%;width:18px;height:18px;margin:-9px 0 0 -9px;animation:pop .35s cubic-bezier(.2,.7,.2,1) both}
+  .sq.raw{background:var(--slate)}.sq.ce{background:var(--blue)}
+  .sq.bad{background:#fff;border:2.5px solid #E0352B}
+  @keyframes pop{from{opacity:0;transform:scale(.3)}to{opacity:1;transform:none}}
+  .axis{display:grid;grid-template-columns:150px 1fr;border-top:1px solid var(--ink);font:500 11px var(--mono);color:var(--grey);letter-spacing:.06em;text-transform:uppercase}
+  .ticks{position:relative;height:26px}
+  .ticks span{position:absolute;top:6px;transform:translateX(-50%)}
+  .leg{display:flex;gap:18px;margin-top:12px;font:500 11px var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--char)}
+  .leg i{display:inline-block;width:12px;height:12px;margin-right:6px;vertical-align:-2px}
+  .take{position:absolute;left:72px;right:72px;top:528px;display:grid;grid-template-columns:repeat(3,1fr);gap:18px;z-index:2}
+  .take .card{padding:14px 16px}
+  .take h3{font:600 16px/1.25 var(--sans);letter-spacing:-.2px}
+  .take p{font-size:13px;line-height:1.45;color:var(--char);margin-top:4px}
+  .take .hot{border-color:var(--ink);box-shadow:6px 6px 0 var(--blue)}
+</style>
+</head>
+<body data-foot="The workshop · Why evals">
+<div class="z">
+  <div class="eyebrow in1">The workshop · <b>Why evals</b></div>
+  <h1 class="in2">One run is an anecdote. <span class="b">An eval is evidence.</span></h1>
+</div>
+<div class="strip in3">
+  <span class="tag">Same question, same agents, 5 runs each · LLM calls per answer</span>
+  <div class="q">S03 · “Which accounts have open P1 tickets and high churn risk right now?”</div>
+  <div class="lane"><span class="who">Baseline</span><div class="track" id="raw"></div></div>
+  <div class="lane"><span class="who" style="color:var(--blue)">Context Engine</span><div class="track" id="ce"></div></div>
+  <div class="axis"><span style="padding-top:6px">LLM calls</span><div class="ticks" id="ticks"></div></div>
+  <div class="leg"><span><i style="background:var(--slate)"></i>Baseline run</span><span><i style="background:var(--blue)"></i>Context Engine run</span><span><i style="border:2.5px solid #E0352B;background:#fff;width:9px;height:9px"></i>Wrong answer</span></div>
+</div>
+<div class="take">
+  <div class="card in5"><h3>Pick one pair of runs</h3><p>and the Context Engine "saves" 15 calls, or costs 3. Either story is true for that pair.</p></div>
+  <div class="card in5"><h3>Repeat and take the median</h3><p>Baseline 10, Context Engine 6. The spread tells you as much as the median.</p></div>
+  <div class="card hot in6"><h3>Score every answer</h3><p>Cheaper is worthless if it is wrong. On S03, both agents miss accounts in some runs.</p></div>
+</div>
+<div class="src">Recorded eval · learner-built agents · google-gemini-3.0-flash · 2026-10-14 · S03, 5 runs per agent</div>
+<script src="style/eweb.js"></script>
+<script>
+(function(){
+  const M = 22, x = v => (v / M * 100) + '%';
+  const RAW = [[9,1],[9,1],[10,1],[11,0],[21,0]], CE = [[6,1],[6,0],[6,0],[8,1],[12,0]];
+  const draw = (id, runs, cls, d0) => {
+    const count = {}, seen = {};
+    runs.forEach(([v]) => { count[v] = (count[v] || 0) + 1; });
+    runs.forEach(([v, bad], k) => {
+      const off = (seen[v] = (seen[v] || 0) + 1) - 1;   // ties stack vertically, centred on the lane
+      const i = document.createElement('i');
+      i.className = 'sq ' + cls + (bad ? ' bad' : '');
+      i.style.left = x(v);
+      i.style.top = `calc(50% + ${(off - (count[v] - 1) / 2) * 21}px)`;
+      i.style.animationDelay = (d0 + k * .12) + 's';
+      document.getElementById(id).appendChild(i);
+    });
+  };
+  ['raw', 'ce'].forEach(id => { for (let t = 0; t <= 20; t += 5) { const g = document.createElement('i'); g.className = 'g'; g.style.left = x(t); document.getElementById(id).appendChild(g); } });
+  for (let t = 0; t <= 20; t += 5) { const s = document.createElement('span'); s.style.left = x(t); s.textContent = t; document.getElementById('ticks').appendChild(s); }
+  draw('raw', RAW, 'raw', .6); draw('ce', CE, 'ce', 1.0);
+})();
+</script>
+<aside class="notes">
+<p>This is why Lab 4 exists. Same question, same two agents, five runs each, straight from the recorded eval.</p>
+<p>The baseline took 9, 9, 10, 11 and 21 LLM calls. The Context Engine agent took 6, 6, 6, 8 and 12. If you compared one pair of runs, you could tell any story you like: the Context Engine saves 15 calls, or it costs 3.</p>
+<p>So you repeat the runs and take the median: 10 versus 6. And you look at the spread.</p>
+<p>Then you score every answer. Red squares are wrong answers. Fewer calls only matters if the answer is right, and on this question both agents sometimes miss accounts. We do not claim the Context Engine is more accurate.</p>
+</aside>
+</body>
+</html>
