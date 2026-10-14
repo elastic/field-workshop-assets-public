@@ -8,7 +8,7 @@ Timings are suggestions for a ~2.5–3h slot — adjust to the room.
 
 ## 1. Title  [title]
 Vector Search: Vector, Keyword, and Hybrid Retrieval
-Hands-on with Elasticsearch ES|QL · ElasticON New York
+Hands-on with Elasticsearch ES|QL · Elastic{ON}
 Jeff Vestal · Elastic
 
 ## 2. Show of hands  [problem]
