@@ -69,12 +69,22 @@ def one_pass(env: Env, gt: GroundTruth, facts: dict, since: str = "", workers: i
                                        "query": {"term": {"source": "you"}}})["hits"]["hits"]}
     cases = load_cases(env)
     todo = []  # (started_at, agent, conversation_id, round number, round)
+    # Conversations are private to their owner: list as the API key (eval runs, solve scripts,
+    # demo-app Live mode) AND as the Kibana UI user (the learner's own chats), then merge.
+    identities = [False] + ([True] if env.kibana_basic else [])
     for agent in (RAW_AGENT, CE_AGENT):
-        convs = env.kb("GET", f"/api/agent_builder/conversations?agent_id={agent}").get("results", [])
-        for c in convs:
+        convs = {}
+        for as_user in identities:
+            try:
+                for c in env.kb("GET", f"/api/agent_builder/conversations?agent_id={agent}",
+                                as_user=as_user).get("results", []):
+                    convs.setdefault(c["id"], (c, as_user))
+            except RuntimeError as e:
+                print(f"list conversations as_user={as_user} failed: {e}", flush=True)
+        for c, as_user in convs.values():
             if c["id"] in done or c.get("status") != "completed" or c.get("updated_at", "") < since:
                 continue
-            full = env.kb("GET", f"/api/agent_builder/conversations/{c['id']}")
+            full = env.kb("GET", f"/api/agent_builder/conversations/{c['id']}", as_user=as_user)
             for k, rd in enumerate(full.get("rounds", []), 1):
                 if (f'{c["id"]}-{rd["id"]}' in have or rd.get("status") != "completed"
                         or rd.get("started_at", "") < since):

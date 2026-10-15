@@ -6,6 +6,7 @@ Never commit credentials; nothing here writes them anywhere.
 """
 from __future__ import annotations
 
+import base64
 import json
 import os
 import pathlib
@@ -35,8 +36,22 @@ class Env:
         self.kibana = kb.rstrip("/").removesuffix(":443")
         self.es = es.rstrip("/")
         self.api_key = os.environ.get("ES_API_KEY", "")
+        # Kibana UI user. In the sandbox the Kibana tabs log in as `admin` (nginx injects Basic
+        # auth), and Agent Builder conversations are private to their owner, so the learner's
+        # chats are only visible as admin, not via the API key. Optional; None on test projects.
+        self.kibana_basic = os.environ.get("CE_KIBANA_BASIC", "") or self._sandbox_admin()
         if not (self.kibana and self.es and self.api_key):
             raise SystemExit("ERROR: need KIBANA_URL, ES_URL, ES_API_KEY (or --env-file)")
+
+    @staticmethod
+    def _sandbox_admin() -> str:
+        pr = pathlib.Path("/tmp/project_results.json")
+        try:
+            d = json.loads(pr.read_text())
+            pw = next(iter(d.values()))["credentials"]["password"]
+            return f"admin:{pw}" if pw else ""
+        except Exception:
+            return ""
 
     # ── HTTP ──────────────────────────────────────────────────────────────────
     def _req(self, method: str, url: str, body=None, headers=None, timeout=60):
@@ -54,8 +69,14 @@ class Env:
             detail = e.read().decode(errors="replace")[:800]
             raise RuntimeError(f"{method} {url} -> {e.code}: {detail}") from None
 
-    def kb(self, method: str, path: str, body=None, timeout=60, internal=False, version=None):
+    def kb(self, method: str, path: str, body=None, timeout=60, internal=False, version=None,
+           as_user=False):
+        """as_user=True: authenticate as the Kibana UI user (see kibana_basic) instead of the API key."""
         h = {"kbn-xsrf": "true"}
+        if as_user:
+            if not self.kibana_basic:
+                raise RuntimeError("no Kibana UI credentials available")
+            h["Authorization"] = "Basic " + base64.b64encode(self.kibana_basic.encode()).decode()
         if internal:
             h["x-elastic-internal-origin"] = "Kibana"
         if version:
